@@ -64,6 +64,17 @@ body {
     color: var(--primary-color) !important;
 }
 
+/* 修復：確保透明導覽列中的下拉選單文字是深色的 */
+.navbar.transparent-navbar .dropdown-menu .dropdown-item,
+.navbar.transparent-navbar .dropdown-menu a {
+    color: var(--text-color) !important;
+}
+
+.navbar.transparent-navbar .dropdown-menu .dropdown-item:hover,
+.navbar.transparent-navbar .dropdown-menu a:hover {
+    color: var(--primary-color) !important;
+}
+
 /* 透明導覽列時 (最上方) */
 .navbar.transparent-navbar {
     background-color: transparent !important;
