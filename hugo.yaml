@@ -1,5 +1,7 @@
 # ⚠️ If hosting under a repo path, use full URL (e.g. https://<github_username>.github.io/<repo_name>) or images won’t display correctly
 baseURL: https://chunyunglo.github.io/
+relativeURLs: true
+canonifyURLs: false
 
 languageCode: zh-tw
 title: "Chun Yung's Hub"
@@ -11,6 +13,14 @@ module:
   mounts:
   - source: assets
     target: assets
+  - source: layouts
+    target: layouts
+  - source: content
+    target: content
+  - source: data
+    target: data
+  - source: static
+    target: static
   - source: static/files
     target: static/files
   - source: static/js
@@ -132,7 +142,7 @@ params:
       enable: false
       services:
         disqus:
-          shortName: toha-example-site
+          shortName: chunyunglo
         # valine:
         #   appId: HTV6askWxVo3vOxlqjjaq2hd-MsYXbMMI
         #   appKey: pVrT3C85KGIuk27t07eh6bUC
