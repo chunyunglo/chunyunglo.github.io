@@ -1,8 +1,8 @@
-# ⚠️ If hosting under a repo path, use full URL (e.g. https://<github_username>.github.io/<repo_name>) or images won’t display correctly
-baseURL: https://chunyunglo.github.io/
+baseURL: /
 relativeURLs: true
 canonifyURLs: false
 
+# Language Code
 languageCode: zh-tw
 title: "Chun Yung's Hub"
 
@@ -13,14 +13,6 @@ module:
   mounts:
   - source: assets
     target: assets
-  - source: layouts
-    target: layouts
-  - source: content
-    target: content
-  - source: data
-    target: data
-  - source: static
-    target: static
   - source: static/files
     target: static/files
   - source: static/js
