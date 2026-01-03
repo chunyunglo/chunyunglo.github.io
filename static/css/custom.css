@@ -104,13 +104,19 @@ body {
     border-bottom-color: #FFFFFF !important;
 }
 
+/* 導覽列分隔線基礎樣式 */
+#top-navbar-divider {
+    transition: background-color 0.3s ease !important;
+}
+
 /* 透明導覽列時的分隔線：白色 */
+.top-navbar.transparent-navbar #top-navbar-divider,
 .navbar.transparent-navbar #top-navbar-divider {
-    background-color: #FFFFFF !important;
-    opacity: 0.5 !important;
+    background-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 /* 滑動後的分隔線：恢復預設顏色 */
+.top-navbar:not(.transparent-navbar) #top-navbar-divider,
 .navbar:not(.transparent-navbar) #top-navbar-divider {
     background-color: var(--border-color) !important;
 }
