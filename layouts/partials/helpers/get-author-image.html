@@ -1,0 +1,47 @@
+{{ $author:= site.Data.author }}
+{{ if (index site.Data site.Language.Lang).author }}
+{{ $author = (index site.Data site.Language.Lang).author }}
+{{ end }}
+
+{{/* default author image path */}}
+{{ $authorImagePath:= "images/author/john.png" }}
+{{ if $author.image }}
+{{ $authorImagePath = $author.image }}
+{{ end }}
+
+{{/* if author image is provided in author's data, then use that */}}
+{{ if eq (printf "%T" .Params.author ) "maps.Params" }}
+{{ with .Params.author }}
+{{ if .image }}
+{{ $authorImagePath = .image }}
+{{ end }}
+{{ end }}
+{{ end }}
+
+{{/* Try to get resource */}}
+{{ $authorImageResource:= resources.Get $authorImagePath }}
+
+{{/* Fallback if not found */}}
+{{ if not $authorImageResource }}
+{{ warnf "Author image resource not found: %s. Trying fallback to images/author/john.png" $authorImagePath }}
+{{ $authorImagePath = "images/author/john.png" }}
+{{ $authorImageResource = resources.Get $authorImagePath }}
+{{ end }}
+
+{{ $permalink := "" }}
+
+{{ if $authorImageResource }}
+{{/* apply image processing. don't use "Fit" in svg or gif because its not supported */}}
+{{ if and (ne $authorImageResource.MediaType.SubType "svg") ( ne $authorImageResource.MediaType.SubType "gif") }}
+{{/* Use a reasonable size for author avatars in lists/posts */}}
+{{ $authorImageResource = $authorImageResource.Fit "120x120 q100" }}
+{{ end }}
+{{ $permalink = $authorImageResource.RelPermalink }}
+{{ else }}
+{{ warnf "Fallback author image also not found. Returning empty string." }}
+{{/* Return empty string or some placeholder if even the fallback is missing (unlikely given we checked) */}}
+{{ $permalink = "" }}
+{{ end }}
+
+{{/* return the author image link */}}
+{{ return $permalink }}

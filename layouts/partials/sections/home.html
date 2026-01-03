@@ -1,0 +1,208 @@
+{{ $author:= site.Data.author }}
+{{ if (index site.Data site.Language.Lang).author }}
+{{ $author = (index site.Data site.Language.Lang).author }}
+{{ end }}
+
+{{ $name:="Jane Doe" }}
+{{ if $author.nickname }}
+{{ $name = $author.nickname }}
+{{ else if $author.name }}
+{{ $name = $author.name }}
+{{ end }}
+
+{{ $sections:= site.Data.sections }}
+{{ if (index site.Data site.Language.Lang).sections }}
+{{ $sections = (index site.Data site.Language.Lang).sections }}
+{{ end }}
+
+{{ $backgroundImage:= "/images/default-background.jpg" }}
+{{ if site.Params.background }}
+{{ $backgroundImage = site.Params.background }}
+{{ end }}
+
+{{ $darkBackgroundImage:= $backgroundImage }}
+{{ if site.Params.darkBackground }}
+{{ $darkBackgroundImage = site.Params.darkBackground }}
+{{ end }}
+
+{{ $authorImage:= "/images/default-avatar.png" }}
+{{ if $author.image }}
+{{ $authorImage = $author.image }}
+{{ end }}
+{{ $authorImageResource := resources.Get $authorImage }}
+
+{{/* Fallback if image not found */}}
+{{ if not $authorImageResource }}
+{{ warnf "Author image not found: %s, using fallback" $authorImage }}
+{{ $authorImageResource = resources.Get "images/author/john.png" }}
+{{ end }}
+
+{{/* apply image processing. don't use "Fit" in svg or gif because its not supported */}}
+{{ if and $authorImageResource (and (ne $authorImageResource.MediaType.SubType "svg") ( ne
+$authorImageResource.MediaType.SubType "gif")) }}
+{{ $authorImageResource = $authorImageResource.Fit "1200x1200 q100" }}
+{{ end }}
+{{/* get file that matches the filename as specified as src="" in shortcode */}}
+{{ $src := resources.Get $backgroundImage }}
+
+{{/* set image sizes with maximum quality q100 */}}
+
+{{ $tinyw := "1200x q100" }}
+{{ $smallw := "1920x q100" }}
+{{ $mediumw := "2560x q100" }}
+{{ $largew := "3840x q100" }}
+
+{{/* resize the src image to the given sizes */}}
+
+{{ $tiny := $src.Resize $tinyw }}
+{{ $small := $src.Resize $smallw }}
+{{ $medium := $src.Resize $mediumw }}
+{{ $large := $src.Resize $largew }}
+
+{{/* Use Scratch to ensure variables are updated across if-block scopes */}}
+{{ .Scratch.Set "tiny" $tiny }}
+{{ .Scratch.Set "small" $small }}
+{{ .Scratch.Set "medium" $medium }}
+{{ .Scratch.Set "large" $large }}
+
+{{ if lt $src.Width 1200 }}
+{{ .Scratch.Set "tiny" $src }}
+{{ .Scratch.Set "small" $src }}
+{{ .Scratch.Set "medium" $src }}
+{{ .Scratch.Set "large" $src }}
+{{ else if lt $src.Width 1920 }}
+{{ .Scratch.Set "small" $src }}
+{{ .Scratch.Set "medium" $src }}
+{{ .Scratch.Set "large" $src }}
+{{ else if lt $src.Width 2560 }}
+{{ .Scratch.Set "medium" $src }}
+{{ .Scratch.Set "large" $src }}
+{{ else if lt $src.Width 3840 }}
+{{ .Scratch.Set "large" $src }}
+{{ end }}
+
+{{/* Assign back from scratch */}}
+{{ $tiny = .Scratch.Get "tiny" }}
+{{ $small = .Scratch.Get "small" }}
+{{ $medium = .Scratch.Get "medium" }}
+{{ $large = .Scratch.Get "large" }}
+
+{{/* get file that matches the filename as specified as src="" in shortcode */}}
+{{ $darkSrc := resources.Get $darkBackgroundImage }}
+
+{{/* resize the src image to the given sizes */}}
+
+{{ $darkTiny := $darkSrc.Resize $tinyw }}
+{{ $darkSmall := $darkSrc.Resize $smallw }}
+{{ $darkMedium := $darkSrc.Resize $mediumw }}
+{{ $darkLarge := $darkSrc.Resize $largew }}
+
+{{ .Scratch.Set "darkTiny" $darkTiny }}
+{{ .Scratch.Set "darkSmall" $darkSmall }}
+{{ .Scratch.Set "darkMedium" $darkMedium }}
+{{ .Scratch.Set "darkLarge" $darkLarge }}
+
+{{ if lt $darkSrc.Width 1200 }}
+{{ .Scratch.Set "darkTiny" $src }}
+{{ .Scratch.Set "darkSmall" $src }}
+{{ .Scratch.Set "darkMedium" $src }}
+{{ .Scratch.Set "darkLarge" $src }}
+{{ else if lt $darkSrc.Width 1920 }}
+{{ .Scratch.Set "darkSmall" $src }}
+{{ .Scratch.Set "darkMedium" $src }}
+{{ .Scratch.Set "darkLarge" $src }}
+{{ else if lt $darkSrc.Width 2560 }}
+{{ .Scratch.Set "darkMedium" $src }}
+{{ .Scratch.Set "darkLarge" $src }}
+{{ else if lt $darkSrc.Width 3840 }}
+{{ .Scratch.Set "darkLarge" $src }}
+{{ end }}
+
+{{ $darkTiny = .Scratch.Get "darkTiny" }}
+{{ $darkSmall = .Scratch.Get "darkSmall" }}
+{{ $darkMedium = .Scratch.Get "darkMedium" }}
+{{ $darkLarge = .Scratch.Get "darkLarge" }}
+
+<div class="container-fluid home" id="home">
+  <style>
+    /* 0 to 599px screen: load 1200px image */
+    #homePageBackgroundImageDivStyled {
+      background-image: url('{{ $tiny.RelPermalink }}') !important;
+    }
+
+    /* 600 to 1199px screen: load 1920px image */
+    @media (min-width: 600px) {
+      #homePageBackgroundImageDivStyled {
+        background-image: url('{{ $small.RelPermalink }}') !important;
+      }
+    }
+
+    /* 1200 to 1919px screen: load 2560px image */
+    @media (min-width: 1200px) {
+      #homePageBackgroundImageDivStyled {
+        background-image: url('{{ $medium.RelPermalink }}') !important;
+      }
+    }
+
+    /* 1920px and above: load 3840px or original image */
+    @media (min-width: 1920px) {
+      #homePageBackgroundImageDivStyled {
+        background-image: url('{{ $large.RelPermalink }}') !important;
+      }
+    }
+
+    html[data-theme='dark'] {
+      #homePageBackgroundImageDivStyled {
+        background-image: url('{{ $darkTiny.RelPermalink }}') !important;
+      }
+
+      @media (min-width: 600px) {
+        #homePageBackgroundImageDivStyled {
+          background-image: url('{{ $darkSmall.RelPermalink }}') !important;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        #homePageBackgroundImageDivStyled {
+          background-image: url('{{ $darkMedium.RelPermalink }}') !important;
+        }
+      }
+
+      @media (min-width: 1920px) {
+        #homePageBackgroundImageDivStyled {
+          background-image: url('{{ $darkLarge.RelPermalink }}') !important;
+        }
+      }
+    }
+  </style>
+  <span class="on-the-fly-behavior"></span>
+  <div id="homePageBackgroundImageDivStyled" class="background container-fluid"></div>
+  <div class="container content text-center">
+    <img src="{{ $authorImageResource.RelPermalink }}" class="rounded-circle mx-auto d-block img-fluid"
+      alt="Author Image" />
+    <h1 class="greeting"> {{ $author.greeting }} {{ $name }}</h1>
+    {{ if $author.subtitle }}
+    <h2 class="greeting-subtitle">{{ $author.subtitle }}</h2>
+    {{ end }}
+    <div class="typing-carousel">
+      <span id="typed" class="typed"></span>
+    </div>
+    <ul id="typing-carousel-data">
+      {{ if $author.summary }}
+      {{ range $author.summary }}
+      <li>{{ . }}</li>
+      {{ end}}
+      {{ end }}
+    </ul>
+    {{ if $sections }}
+    {{ range first 1 (where (sort $sections "section.weight") ".section.enable" true) }}
+    {{ $sectionID := replace (lower .section.name) " " "-" }}
+    {{ if .section.id }}
+    {{ $sectionID = .section.id }}
+    {{ end }}
+    <a href="#{{ $sectionID }}" class="arrow-center" aria-label="{{ i18n " read" }} {{ i18n "more" }} - {{ $name }}"> <i
+        class="arrow bounce fa fa-chevron-down"></i></a>
+    {{ end }}
+    {{ end }}
+  </div>
+</div>

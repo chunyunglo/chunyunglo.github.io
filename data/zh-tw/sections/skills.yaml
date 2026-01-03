@@ -1,0 +1,69 @@
+# section information
+section:
+  name: 技能與認證
+  id: skills
+  enable: true
+  weight: 2
+  showOnNavbar: true
+  filter: true
+  # Can optionally hide the title in sections
+  # hideTitle: true
+
+# filter buttons
+buttons:
+- name: 全部
+  filter: "all"
+- name: 語言能力
+  filter: "language"
+- name: 程式與資料處理
+  filter: "programming"
+- name: 研究與分析
+  filter: "research"
+
+
+# Your Skills.
+# Give a summary of you each skill in the summary section.
+skills:
+- name: 英文
+  # logo: /images/sections/skills/english.png
+  summary: >
+    TOEIC 935、IELTS 7.5。可進行全英文學術閱讀、研究討論與跨國合作溝通，熟悉研究論文、技術文件與資料科學相關文獻之閱讀與整理。
+  categories: ["language"]
+
+- name: 中文
+  # logo: /images/sections/skills/chinese.png
+  summary: >
+    母語程度。可進行高密度概念表達、研究寫作與跨領域知識轉譯，擅長將技術與研究內容轉換為可溝通的敘事。
+  categories: ["language"]
+
+- name: Python
+  # logo: /images/sections/skills/python.png
+  summary: >
+    熟悉 pandas、numpy、scipy 進行資料清理與數值運算，使用 scikit-learn 進行監督與非監督式模型建構，以 seaborn 進行探索式資料視覺化。
+  categories: ["programming"]
+- name: 機器學習實務
+  # logo: /images/sections/skills/kaggle.png
+  summary: >
+    完成 Kaggle 認證課程：Intro to Machine Learning、Intermediate Machine Learning、Intro to Deep Learning。理解特徵工程、模型選擇、cross-validation、overfitting 與模型效能評估，具備以模型回應研究問題的實務經驗。
+  categories: ["programming"]
+- name: 資料處理
+  # logo: /images/sections/skills/data.png
+  summary: >
+    實際處理過問卷資料、行為資料、語義資料與時間序列資料。熟悉不同資料型態對分析方法、模型假設與解釋框架的影響。
+  categories: ["programming"]
+- name: 統計與行為資料分析
+  # logo: /images/sections/skills/statistics.png
+  summary: >
+    熟悉多種統計與行為資料分析方法，能根據研究問題選擇合適模型，並關注模型假設、可解釋性與研究限制。
+  categories: ["research"]
+- name: 時間序列分析
+  # logo: /images/sections/skills/timeseries.png
+  summary: >
+    使用去趨勢波動分析 (DFA) 與傅立葉分析探索行為與互動資料中的長期相關性與頻率結構。
+  categories: ["research"]
+
+
+
+
+
+

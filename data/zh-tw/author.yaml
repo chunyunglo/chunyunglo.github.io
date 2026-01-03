@@ -1,0 +1,20 @@
+# some information about you
+name: "羅俊詠"
+nickname: "俊詠"
+# greeting message before your name. it will default to "Hi! I am" if not provided
+greeting: "嗨，我是"
+image: "images/author/chunyung.png"
+# give your some contact information. they will be used in the footer
+contactInfo:
+  email: "chunyunglo2005@gmail.com"
+  phone: "+886901039269"
+  github: Chun-Yung Yong Lo
+  linkedin: Chun-Yung Lo 
+
+# some summary about what you do
+summary:
+  - 我現在就讀於臺大心理學系
+  - 專注於行為資料、互動資料與多模態分析
+  - 關注行為、互動與複雜系統中的動態模式
+  - 有豐富的英文與跨國交流能力
+  - 熱衷於具挑戰性的跨領域計畫

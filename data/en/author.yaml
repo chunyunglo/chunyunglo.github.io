@@ -1,0 +1,20 @@
+# some information about you
+name: "Chun-Yung Lo"
+nickname: "Yong"
+# greeting message before your name. it will default to "Hi! I am" if not provided
+greeting: "Hi, I am"
+image: "images/author/chunyung.png"
+# give your some contact information. they will be used in the footer
+contactInfo:
+  email: "chunyunglo2005@gmail.com"
+  phone: "+886901039269"
+  github: Chun-Yung Yong Lo
+  linkedin: Chun-Yung Lo 
+
+# some summary about what you do
+summary:
+  - Psychology student at National Taiwan University (NTU).
+  - Specializing in behavioral data and multimodal analysis.
+  - Researching dynamic patterns in human behavior and interactions.
+  - Fluent in English and with strong cross-cultural communication skills.
+  - Passionate about challenging, interdisciplinary projects.

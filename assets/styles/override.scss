@@ -1,0 +1,427 @@
+/* Cold Morandi Color Scheme - Refined Version (修正版冷色調莫蘭迪) */
+:root {
+    /* === 主要顏色 (Primary Colors) === */
+    --primary-color: #889CA9;
+    /* 莫蘭迪灰藍 */
+    --secondary-color: #DDE4E8;
+    /* 極淺灰藍 */
+    --accent-color: #5F7380;
+    /* 深岩灰 */
+    --background-color: #F4F6F7;
+    /* 冷雲白 */
+
+    /* === 文字顏色 (Text Colors) === */
+    --text-color: #47545E;
+    /* 岩石灰 */
+    --text-dark: #2C353C;
+    /* 深炭灰 */
+
+    /* === 輔助顏色 (Auxiliary Colors) === */
+    --border-color: #CFD8DC;
+    /* 淺灰邊框 */
+    --highlight-bg: #E8ECEF;
+    /* 高亮背景 */
+    --shadow-color: rgba(95, 115, 128, 0.1);
+}
+
+/* ==================== 基礎樣式 & 字體 ==================== */
+
+body {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* ==================== 導覽列 (Navbar) ==================== */
+
+.navbar {
+    background-color: rgba(244, 246, 247, 0.98) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    /* 移除陰影 */
+    transition: background-color 0.3s ease;
+}
+
+/* 下拉選單修正：靠右對齊，無陰影 */
+.dropdown-menu {
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0 !important;
+    border-radius: 4px !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    /* 移除下拉選單陰影 */
+    background-color: #FFFFFF !important;
+}
+
+.dropdown-item {
+    color: var(--text-color) !important;
+    text-shadow: none !important;
+}
+
+.dropdown-item:hover {
+    background-color: var(--highlight-bg) !important;
+    color: var(--primary-color) !important;
+}
+
+/* 透明導覽列時 (最上方) */
+.navbar.transparent-navbar {
+    background-color: transparent !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+/* 透明導覽列的文字顏色：全部強制變白，無陰影 */
+.navbar.transparent-navbar .nav-link,
+.navbar.transparent-navbar .navbar-brand,
+.navbar.transparent-navbar #languageSelector,
+.navbar.transparent-navbar i,
+.navbar.transparent-navbar span,
+.navbar.transparent-navbar a {
+    color: #FFFFFF !important;
+    text-shadow: none !important;
+}
+
+/* 滑動後的導覽列文字顏色：回歸深色 */
+.navbar:not(.transparent-navbar) .nav-link,
+.navbar:not(.transparent-navbar) .navbar-brand {
+    color: var(--text-dark) !important;
+}
+
+.nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+.nav-link.active {
+    font-weight: 700;
+    background-color: transparent !important;
+    border-bottom: 3px solid var(--primary-color) !important;
+}
+
+/* 透明導覽列時的 Active 狀態 */
+.navbar.transparent-navbar .nav-link.active {
+    color: #FFFFFF !important;
+    border-bottom-color: #FFFFFF !important;
+}
+
+/* 隱藏主題切換器 */
+.theme-toggler,
+#theme-toggler {
+    display: none !important;
+}
+
+.nav-link.active::before,
+.nav-link.active::after {
+    display: none !important;
+}
+
+/* ==================== 首頁 Banner 優化 ==================== */
+
+/* 極致強制：首頁 Hero 區域的所有文字都變白 */
+#home,
+#home .home-section-background,
+#home .home-section-background *,
+#home .hero-content,
+#home .hero-content *,
+#home .hero-text,
+#home .hero-text *,
+#home #typed,
+#home #typed-strings,
+#home #home-title,
+#home .home-section-title,
+#home .mk-headline,
+#home .hero-section *,
+#home .greeting,
+#home .greeting-subtitle {
+    color: #FFFFFF !important;
+    text-shadow: none !important;
+}
+
+#home-title span,
+#home-title b,
+#home-title strong {
+    color: #FFFFFF !important;
+}
+
+.typed-cursor {
+    color: #FFFFFF !important;
+}
+
+/* 確保非首頁的文字顏色正確 */
+body:not(.home) .content,
+body:not(.home) .hero-text {
+    color: var(--text-color) !important;
+}
+
+/* 移除遮罩 */
+.home-section-background div,
+.home-section-overlay,
+#home::before,
+#home::after {
+    background-color: transparent !important;
+    background: transparent !important;
+    opacity: 0 !important;
+}
+
+/* 圖片優化：移除強制屬性，讓瀏覽器自然渲染 */
+img {
+    -webkit-font-smoothing: antialiased;
+}
+
+.author-image img {
+    width: 250px !important;
+    height: 250px !important;
+    object-fit: cover !important;
+    border-radius: 50%;
+    box-shadow: none !important;
+}
+
+.header-image {
+    width: auto;
+    max-width: 100%;
+}
+
+/* ==================== 篩選按鈕 (Filter Buttons) - Underline Style ==================== */
+
+/* 修正：針對技能與專案的篩選按鈕 class */
+.skill-filtr-control,
+.project-filtr-control {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    border-radius: 0 !important;
+    padding: 8px 16px !important;
+    margin: 5px 10px !important;
+    color: var(--text-color) !important;
+    /* 預設較淺色 */
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* 滑鼠懸停：顏色變深，底線出現 */
+.skill-filtr-control:hover,
+.project-filtr-control:hover {
+    color: var(--text-dark) !important;
+    /* 變深 */
+    border-bottom: 3px solid var(--text-dark) !important;
+    /* 底線同步變深 */
+    background: transparent !important;
+    text-decoration: none !important;
+}
+
+/* 選中狀態：維持深色與底線，移除任何藍色背景 */
+.skill-filtr-control.active,
+.project-filtr-control.active,
+.skill-filtr-control:focus,
+.project-filtr-control:focus {
+    color: var(--text-dark) !important;
+    /* 選中時維持最深色 */
+    border-bottom: 3px solid var(--text-dark) !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 強力覆蓋：移除 Bootstrap 可能產生的藍色背景 (btn-dark 或 btn-primary) */
+.btn-dark.skill-filtr-control.active,
+.btn-dark.project-filtr-control.active,
+.btn-dark.skill-filtr-control:active,
+.btn-dark.project-filtr-control:active {
+    background-color: transparent !important;
+    color: var(--text-dark) !important;
+    border-color: transparent !important;
+    border-bottom: 3px solid var(--text-dark) !important;
+}
+
+/* 移除 Button Group 的預設背景與外框 */
+.btn-group {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    margin-bottom: 2rem !important;
+}
+
+/* ==================== 經歷 vs 教育 ==================== */
+
+#experiences .experience-timeline {
+    border-left: none !important;
+}
+
+#experiences .timeline-item::before,
+#experiences .vertical-line,
+#experiences .hline,
+#experiences .corner {
+    display: none !important;
+}
+
+#experiences .timeline-item {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 2rem;
+}
+
+#experiences .icon-holder {
+    display: none !important;
+}
+
+/* 卡片與通用樣式 */
+.card {
+    background-color: white !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    /* 移除陰影 */
+    border-radius: 12px !important;
+}
+
+.card-body,
+.card-text,
+p {
+    color: var(--text-color) !important;
+    line-height: 1.7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-title {
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+    text-shadow: none !important;
+}
+
+/* Footer & Buttons */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.btn {
+    border-radius: 6px !important;
+    font-weight: 600;
+    box-shadow: none !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    transform: translateY(-1px);
+}
+
+.badge {
+    background-color: var(--highlight-bg) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--border-color) !important;
+    font-weight: 500;
+}
+
+/* Footer 加深文字顏色 - 終極強制方案 (使用極高優先權選擇器) */
+html body footer#footer,
+html body footer#footer p,
+html body footer#footer span,
+html body footer#footer li,
+html body footer#footer a,
+html body footer#footer #disclaimer,
+html body footer#footer #disclaimer *,
+html body footer#footer #theme,
+html body footer#footer #theme *,
+html body footer#footer #hugo,
+html body footer#footer #hugo * {
+    color: #000000 !important;
+    opacity: 1 !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+}
+
+html body footer#footer #disclaimer strong,
+html body footer#footer h5 {
+    color: #000000 !important;
+    font-weight: 800 !important;
+}
+
+html body footer#footer Hr {
+    border-top: 1px solid #000000 !important;
+    opacity: 0.2;
+}
+
+footer {
+    background-color: var(--secondary-color) !important;
+    border-top: 1px solid var(--border-color) !important;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+/* 強制首頁 Hero 區域的所有文字都變白，避免被通用樣式覆蓋 */
+#home h1,
+#home h2,
+#home h3,
+#home h4,
+#home h5,
+#home h6,
+#home p,
+#home span,
+#home div,
+#home #typed,
+#home .typing-carousel {
+    color: #FFFFFF !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: inline-block !important;
+}
+
+/* 恢復 Banner 高度為預設 (100vh) */
+#home.home {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    position: relative !important;
+}
+
+/* 調整區塊間距：從 6vh 調小至 4vh，確保整體非常緊湊 */
+.section-holder {
+    padding-top: 4vh !important;
+    padding-bottom: 4vh !important;
+    min-height: 40vh !important;
+}
+
+#home .content {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    top: 0 !important;
+    /* Override theme's negative top */
+    z-index: 2 !important;
+    position: relative !important;
+}
+
+#home #homePageBackgroundImageDivStyled {
+    z-index: 1 !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    filter: none !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
