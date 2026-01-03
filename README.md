@@ -1,41 +1,109 @@
-# toha-example-site
+# chunyunglo.github.io
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b1b93b02-f278-440b-ae1b-304e9f4c4ab5/deploy-status)](https://app.netlify.com/sites/toha/deploys) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhugo-toha%2Fhugo-toha.github.io%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/hugo-toha/hugo-toha.github.io/goto?ref=main) ![Repository Size](https://img.shields.io/github/repo-size/hugo-themes/toha-example-site) ![Contributor](https://img.shields.io/github/contributors/hugo-themes/toha-example-site) ![Last Commit](https://img.shields.io/github/last-commit/hugo-themes/toha-example-site) ![License](https://img.shields.io/github/license/hugo-themes/toha-example-site) ![Open Issues](https://img.shields.io/github/issues/hugo-themes/toha-example-site?color=important) ![Open Pull Requests](https://img.shields.io/github/issues-pr/hugo-themes/toha-example-site?color=yellowgreen) ![Security Headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fhugo-themes.github.io/toha-example-site%2F) [![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/b7cb60ab/hugo-themes.github.io/toha-example-site)
+Personal portfolio website built with Hugo and the Toha theme, featuring a cold Morandi color scheme.
 
-An example hugo static site with Toha theme.
+## Overview
 
-Attributions:
+This repository contains the source code for a professional portfolio website deployed on GitHub Pages. The site showcases personal information, skills, experiences, and projects with a minimalist design aesthetic.
 
-- <a href='https://www.freepik.com/vectors/business'>Business vector created by studiogstock - www.freepik.com</a>
+## Technology Stack
 
-## Requirements
+- **Static Site Generator**: Hugo (Extended v0.154+)
+- **Theme**: [Toha v4](https://github.com/hugo-toha/toha)
+- **Deployment**: GitHub Actions → GitHub Pages
+- **Styling**: Custom CSS with cold Morandi color palette
+- **Languages**: Traditional Chinese (zh-tw) and English
 
-We use [jdx/mise](https://github.com/jdx/mise) to manage dependencies. Mise takes care of installing `hugo`, `go`, `nodes` and other tools to appropriate versions. Please, install it following the instruction from [here](https://mise.jdx.dev/getting-started.html).
-
-## Running Locally
-
-- Install dependencies
-
-```
-mise install
-```
-
-- Run hugo server
+## Project Structure
 
 ```
-mise run server
+.
+├── .github/workflows/    # GitHub Actions deployment configuration
+├── content/             # Markdown content files
+├── data/                # YAML data files for sections
+├── layouts/             # Custom layout overrides
+├── static/              # Static assets (CSS, JS, images)
+├── hugo.yaml            # Hugo configuration
+└── go.mod              # Go module dependencies
 ```
 
-## Updating theme
+## Local Development
 
-- To update theme to latest release, run:
+### Prerequisites
 
-```
-mise run update
+- Hugo Extended (v0.154 or later)
+- Go (v1.22 or later)
+- Node.js (v20 or later)
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/chunyunglo/chunyunglo.github.io.git
+cd chunyunglo.github.io
 ```
 
-- To update theme to latest commit from `main` brnach, run:
+2. Install dependencies:
+```bash
+npm install
+hugo mod tidy
+```
 
+3. Run the development server:
+```bash
+hugo server -p 1313 --bind 0.0.0.0 --noHTTPCache --disableFastRender
 ```
-mise run update-to-main
-```
+
+4. Visit `http://localhost:1313` in your browser.
+
+## Deployment
+
+The site automatically deploys to GitHub Pages when changes are pushed to the `main` branch. The deployment workflow:
+
+1. Builds the site using Hugo
+2. Generates static files in the `public/` directory
+3. Deploys to GitHub Pages via GitHub Actions
+
+View the live site at: [https://chunyunglo.github.io](https://chunyunglo.github.io)
+
+## Customization
+
+### Color Scheme
+
+The site uses a custom cold Morandi color palette defined in `static/css/custom.css`:
+
+- Primary: #889CA9 (Morandi grey-blue)
+- Secondary: #DDE4E8 (Light grey-blue)
+- Accent: #5F7380 (Deep rock grey)
+- Background: #F4F6F7 (Cold cloud white)
+
+### Content Management
+
+- **Personal Info**: Edit `data/zh-tw/author.yaml` and `data/en/author.yaml`
+- **Sections**: Modify files in `data/zh-tw/sections/` and `data/en/sections/`
+- **Site Config**: Update `hugo.yaml` for global settings
+
+### Custom Layouts
+
+Custom layout overrides are located in the `layouts/` directory:
+- `layouts/partials/navigators/lang-selector.html` - Language selector without flags
+- `layouts/partials/navigators/navbar.html` - Custom navigation bar
+
+## Key Features
+
+- Bilingual support (Traditional Chinese / English)
+- Responsive design optimized for all devices
+- Custom navigation bar with transparent-to-solid transition
+- Minimalist card-based layout
+- No shadows or heavy visual effects
+- Extended homepage banner (150vh height)
+
+## License
+
+This project is based on the Toha theme. Please refer to the original theme's license for usage terms.
+
+## References
+
+- [Hugo Documentation](https://gohugo.io/documentation/)
+- [Toha Theme Guide](https://toha-guides.netlify.app/)
+- [GitHub Pages Documentation](https://docs.github.com/en/pages)
