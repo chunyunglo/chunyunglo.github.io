@@ -104,6 +104,17 @@ body {
     border-bottom-color: #FFFFFF !important;
 }
 
+/* 透明導覽列時的分隔線：白色 */
+.navbar.transparent-navbar #top-navbar-divider {
+    background-color: #FFFFFF !important;
+    opacity: 0.5 !important;
+}
+
+/* 滑動後的分隔線：恢復預設顏色 */
+.navbar:not(.transparent-navbar) #top-navbar-divider {
+    background-color: var(--border-color) !important;
+}
+
 /* 隱藏主題切換器 */
 .theme-toggler,
 #theme-toggler {
