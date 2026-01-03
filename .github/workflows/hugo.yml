@@ -43,7 +43,7 @@ jobs:
         run: |
           curl -L https://github.com/sass/dart-sass/releases/download/1.77.8/dart-sass-1.77.8-linux-x64.tar.gz -o dart-sass.tar.gz
           tar -xzf dart-sass.tar.gz
-          sudo cp -r dart-sass/* /usr/local/bin/
+          sudo cp dart-sass/sass /usr/local/bin/sass
           rm -rf dart-sass dart-sass.tar.gz
 
       - name: Setup Node
