@@ -28,14 +28,23 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.140.0' # Using a stable recent version
+          hugo-version: 'latest'
           extended: true
 
       - name: Setup Dart Sass
-        run: sudo apt-get update && sudo apt-get install -y ruby-sass || (wget https://github.com/sass/dart-sass/releases/download/1.77.8/dart-sass-1.77.8-linux-x64.tar.gz && tar -xzf dart-sass-1.77.8-linux-x64.tar.gz && sudo cp -r dart-sass/* /usr/local/bin/)
+        run: |
+          curl -L https://github.com/sass/dart-sass/releases/download/1.77.8/dart-sass-1.77.8-linux-x64.tar.gz -o dart-sass.tar.gz
+          tar -xzf dart-sass.tar.gz
+          sudo cp -r dart-sass/* /usr/local/bin/
+          rm -rf dart-sass dart-sass.tar.gz
 
       - name: Setup Node
         uses: actions/setup-node@v4

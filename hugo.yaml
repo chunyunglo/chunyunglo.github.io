@@ -1,4 +1,4 @@
-baseURL: /
+baseURL: https://chunyunglo.github.io/
 relativeURLs: true
 canonifyURLs: false
 
@@ -13,6 +13,14 @@ module:
   mounts:
   - source: assets
     target: assets
+  - source: layouts
+    target: layouts
+  - source: content
+    target: content
+  - source: data
+    target: data
+  - source: static
+    target: static
   - source: static/files
     target: static/files
   - source: static/js
