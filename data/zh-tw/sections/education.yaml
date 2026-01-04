@@ -46,7 +46,7 @@ degrees:
   institution:
     name: 國立新竹高級中學
     url: "https://www.hchs.hc.edu.tw/home"
-    logo: /images/sections/education/sHCHS_logo.png
+    logo: /images/sections/education/HCHS_logo.png
   grade:
     scale: Average Grade
     achieved: 90.7
