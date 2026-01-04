@@ -121,6 +121,47 @@ body {
     background-color: var(--border-color) !important;
 }
 
+/* 手機版選單展開時的文字顏色修正 */
+@media (max-width: 1199px) {
+
+    /* 當選單展開時，確保文字為深色以便在白色背景上閱讀 */
+    .navbar-collapse.show .nav-link,
+    .navbar-collapse.show .navbar-brand,
+    .navbar-collapse.show #languageSelector,
+    .navbar-collapse.show a,
+    .navbar-collapse.collapsing .nav-link,
+    .navbar-collapse.collapsing a {
+        color: var(--text-dark) !important;
+    }
+
+    /* 展開的選單背景 */
+    .navbar-collapse.show,
+    .navbar-collapse.collapsing {
+        background-color: rgba(244, 246, 247, 0.98) !important;
+    }
+
+    /* 透明導覽列時，漢堡選單圖示也要是白色 */
+    .navbar.transparent-navbar .navbar-toggler,
+    .navbar.transparent-navbar .navbar-toggler i {
+        color: #FFFFFF !important;
+    }
+}
+
+/* 首頁箭頭位置修正 - 因為首頁高度為 150vh，需要調整箭頭位置 */
+#home .arrow {
+    position: absolute;
+    bottom: 5vh !important;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 確保箭頭在較小螢幕上也能正確顯示 */
+@media (max-width: 768px) {
+    #home .arrow {
+        bottom: 8vh !important;
+    }
+}
+
 /* 隱藏主題切換器 */
 .theme-toggler,
 #theme-toggler {
