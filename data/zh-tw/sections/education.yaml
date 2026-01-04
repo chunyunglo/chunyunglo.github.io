@@ -23,7 +23,7 @@ degrees:
     outOf: 4.3
   takenCourses:
     showGrades: false
-    collapseAfter: 5
+    collapseAfter: 2
     courses:
       - name: 心理統計學
       - name: 心理實驗法
