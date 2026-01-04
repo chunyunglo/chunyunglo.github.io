@@ -124,22 +124,24 @@ body {
 /* 手機版選單展開時的文字顏色修正 */
 @media (max-width: 1199px) {
 
-    /* 當選單展開時，確保文字為深色以便在白色背景上閱讀 */
+    /* 增加權重：確保選單展開時，所有類型的連結（包含 active）都變深色 */
+    .navbar.transparent-navbar .navbar-collapse.show .nav-link,
+    .navbar.transparent-navbar .navbar-collapse.show .nav-link.active,
+    .navbar.transparent-navbar .navbar-collapse.show .navbar-brand,
+    .navbar.transparent-navbar .navbar-collapse.show #languageSelector,
+    .navbar.transparent-navbar .navbar-collapse.show a,
     .navbar-collapse.show .nav-link,
-    .navbar-collapse.show .navbar-brand,
-    .navbar-collapse.show #languageSelector,
-    .navbar-collapse.show a,
+    .navbar-collapse.show .nav-link.active,
     .navbar-collapse.show .dropdown-item,
     .navbar-collapse.collapsing .nav-link,
-    .navbar-collapse.collapsing a,
-    .navbar-collapse.collapsing .dropdown-item {
+    .navbar-collapse.collapsing a {
         color: var(--text-dark) !important;
+        text-shadow: none !important;
     }
 
-    /* 特別處理 active 狀態的連結 */
+    /* 特別處理手機版 active 狀態的底線 */
     .navbar-collapse.show .nav-link.active,
     .navbar-collapse.collapsing .nav-link.active {
-        color: var(--text-dark) !important;
         border-bottom-color: var(--primary-color) !important;
     }
 
@@ -149,9 +151,10 @@ body {
         background-color: rgba(244, 246, 247, 0.98) !important;
     }
 
-    /* 透明導覽列時，漢堡選單圖示也要是白色 */
+    /* 透明導覽列時，漢堡選單圖示（三條線）保持白色 */
     .navbar.transparent-navbar .navbar-toggler,
-    .navbar.transparent-navbar .navbar-toggler i {
+    .navbar.transparent-navbar .navbar-toggler i,
+    .navbar.transparent-navbar .navbar-toggler span {
         color: #FFFFFF !important;
     }
 }
