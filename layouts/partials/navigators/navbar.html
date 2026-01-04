@@ -80,7 +80,7 @@
       <i data-feather="sidebar"></i>
     </button>
     {{ end }}
-    <a class="navbar-brand" href="{{ " /" | relLangURL }}">
+    <a class="navbar-brand" href="{{ "/" | relLangURL }}">
       {{ if $logo }}
       <img src="{{ $logo }}" id="logo" alt="Logo">
       {{ end }}
@@ -94,7 +94,7 @@
     <div class="collapse navbar-collapse dynamic-navbar" id="top-nav-items">
       <ul class="nav navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ if .IsHome }}#home{{else}}{{ " /" | relLangURL }}#home{{end}}">{{ i18n
+          <a class="nav-link" href="{{ if .IsHome }}#home{{else}}{{ "/" | relLangURL }}#home{{end}}">{{ i18n
             "home" }}</a>
         </li>
         {{ if $sections }}
@@ -134,14 +134,14 @@
         {{/*
         {{ if $blogEnabled }}
         <li class="nav-item">
-          <a class="nav-link" id="blog-link" href="{{ path.Join (site.BaseURL | relLangURL) " posts" }}">{{ $blogTitle
+          <a class="nav-link" id="blog-link" href="{{ path.Join (site.BaseURL | relLangURL) "posts" }}">{{ $blogTitle
             }}</a>
         </li>
         {{ end }}
         */}}
         {{ if $notesEnabled }}
         <li class="nav-item">
-          <a class="nav-link" id="note-link" href="{{ path.Join (site.BaseURL | relLangURL) " notes" }}">{{ $notesTitle
+          <a class="nav-link" id="note-link" href="{{ path.Join (site.BaseURL | relLangURL) "notes" }}">{{ $notesTitle
             }}</a>
         </li>
         {{ end }}
