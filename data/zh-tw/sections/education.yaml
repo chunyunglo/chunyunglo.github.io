@@ -4,101 +4,64 @@ section:
   id: education
   template: sections/education.html # Use "sections/education-alt.html for alternate template.
   enable: true
-  weight: 4
+  weight: 2
   showOnNavbar: true
   # Can optionally hide the title in sections
   # hideTitle: true
 
 degrees:
-- name: Ph.D in Quantum Cryptography
-  icon: fa-microscope
-  timeframe: 2016-2020
+- name: 心理學系理學士
+  icon: fa-graduation-cap
+  timeframe: 2023-2027
   institution:
-    name: ABC University of Technology
-    url: "#"
-    logo: /images/sections/education/tech_college.png
+    name: 國立臺灣大學
+    url: "https://www.ntu.edu.tw"
+    logo: /images/sections/education/ntulogo.png
     # Can optionally show a different logo for dark theme
     # darkLogo: /images/sections/education/tech_college.png
   grade: #(optional)
-    scale: CGPA
-    achieved: 3.6
-    outOf: 4
-  publications: #(optional)
-  - title: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    url: "#"
-  - title: Fusce eu augue ut odio porttitor pulvinar.
-    url: "#"
-  - title: Nullam vitae orci tincidunt purus viverra pulvinar.
-    url: "#"
-- name: B.Sc. in Computer Science & Engineering
-  icon: fa-graduation-cap
-  timeframe: 2012-2016
-  institution:
-    name: University of XYZ
-    url: "#"
-    logo: /images/sections/education/university.jpg
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/education/university.jpg
-  grade: #(optional)
-    scale: CGPA
-    achieved: 3.5
-    outOf: 4
+    scale: GPA
+    achieved: 4.13
+    outOf: 4.3
   takenCourses: #(optional)
     # if true, the courses will be rendered as a table otherwise it will render as a list and the grades will be hidden.
-    showGrades: true
-    collapseAfter: 3
+    showGrades: false
+    collapseAfter: 2
     courses:
-    - name: Data Structures and Algorithm
-      achieved: 3.75
-      outOf: 4
-    - name: Network Security
-      achieved: 3.80
-      outOf: 4
-    - name: Operating System
-      achieved: 3.5
-      outOf: 4
-    - name: Artificial Intelligent
-      achieved: 3.75
-      outOf: 4
-  publications: #(optional)
-  - title: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    url: "#"
-  - title: Fusce eu augue ut odio porttitor pulvinar.
-    url: "#"
-  extracurricularActivities: #(optional)
-  - In vitae facilisis est, eget porta sem.
-  - Vestibulum consectetur lorem justo, at laoreet lorem feugiat et.
-  - Duis sed massa feugiat, ornare justo et, aliquam est.
-  - Pellentesque ut fringilla magna.
+      - name: 心理統計學
+      - name: 心理實驗法
+      - name: 心理學數理方法
+      - name: 社會機器人
+      - name: 研究入門
   customSections: #(optional)
-    - name: Thesis
-      content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    - name: Supervisor
-      content: Fusce eu augue ut odio porttitor pulvinar.
-- name: Higher Secondary School Certificate
+    - name: 課外活動
+      content:
+        - 心理學系系學會學術部，部長：舉辦講座與每週討論讀書會
+        - 杜鵑花節影音組，組長：製作杜鵑花節校系學長姐採訪影片
+        - 財團法人一滴優臺灣教育協會育才推廣組，組員：透過講座活動推動學生賦權
+    - name: 相關獎項
+      content: 書卷獎 (2024)
+- name: 普通科
   icon: fa-university
-  timeframe: 2010-2012
+  timeframe: 2020-2023
   institution:
-    name: MST College of Science
-    url: "#"
-    logo: /images/sections/education/science_college.png
+    name: 國立新竹高級中學
+    url: "https://www.hchs.hc.edu.tw/home"
+    logo: /images/sections/education/sHCHS_logo.png
     # Can optionally show a different logo for dark theme
     # darkLogo: /images/sections/education/science_college.png
   grade: #(optional)
-    scale: GPA
-    achieved: 5
-    outOf: 5
-  extracurricularActivities: #(optional)
-  - In vitae facilisis est, eget porta sem.
-  - Vestibulum consectetur lorem justo, at laoreet lorem feugiat et.
-  - Duis sed massa feugiat, ornare justo et, aliquam est.
-  - Pellentesque ut fringilla magna.
-- name: Secondary School Certificate
-  icon: fa-school
-  timeframe: 2005-2010
-  institution:
-    name: JK School of Science
-  grade: #(optional)
-    scale: GPA
-    achieved: 4.5
-    outOf: 5
+    scale: Average Grade
+    achieved: 90.7
+    outOf: 100
+  customSections: #(optional)
+    - name: 課外活動
+      content:
+        - 心理學系系學會學術部，部長：舉辦講座與每週討論讀書會
+        - 杜鵑花節影音組，組長：製作杜鵑花節校系學長姐採訪影片
+        - 財團法人一滴優臺灣教育協會育才推廣組，組員：透過講座活動推動學生賦權
+    - name: 相關獎項
+      content: 
+        - Third Prize, ASIA-PACIFIC ENGLISH ESSAY CONTEST, (2022)
+        - 辛志平先生獎學金 (2022)
+        - 國立陽明交通大學中學人才培育計畫，人文社會人才培育 (2021)
