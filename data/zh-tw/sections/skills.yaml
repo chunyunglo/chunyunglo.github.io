@@ -3,7 +3,7 @@ section:
   name: 技能與認證
   id: skills
   enable: true
-  weight: 2
+  weight: 5
   showOnNavbar: true
   filter: true
   # Can optionally hide the title in sections

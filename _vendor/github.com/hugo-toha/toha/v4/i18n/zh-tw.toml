@@ -66,7 +66,7 @@ other = "/"
 other = "著作"
 
 [taken_courses]
-other = "修課內容"
+other = "相關課程"
 
 [course_name]
 other = "課程名稱"
