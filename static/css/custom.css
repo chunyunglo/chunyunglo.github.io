@@ -129,9 +129,18 @@ body {
     .navbar-collapse.show .navbar-brand,
     .navbar-collapse.show #languageSelector,
     .navbar-collapse.show a,
+    .navbar-collapse.show .dropdown-item,
     .navbar-collapse.collapsing .nav-link,
-    .navbar-collapse.collapsing a {
+    .navbar-collapse.collapsing a,
+    .navbar-collapse.collapsing .dropdown-item {
         color: var(--text-dark) !important;
+    }
+
+    /* 特別處理 active 狀態的連結 */
+    .navbar-collapse.show .nav-link.active,
+    .navbar-collapse.collapsing .nav-link.active {
+        color: var(--text-dark) !important;
+        border-bottom-color: var(--primary-color) !important;
     }
 
     /* 展開的選單背景 */
