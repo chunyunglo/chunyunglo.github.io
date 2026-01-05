@@ -21,20 +21,20 @@ section:
 
 # your publications
 publications:
-- title: An Example Paper on Machine Learning
+- title: From watching together to thinking alike: Semantic convergence in shared experience.
   publishedIn:
-    name: 2020 IEEE Region Symposium (TENSYMP)
-    date: 7 June 2020
-    url: https://example.com
+    name: Oral presentation at Taiwanese Psychological Association 2025 Annual Conference
+    date: 2025-10-18
+    url: https://www.tpa-tw.org
   authors:
-  - name: Dr. Madman
-    url: https://example.com
-  - name: Dr. Lessmad
-    url: https://example.com
-  - name: Dr. Moremad
-    url: https://example.com
-  - name: Dr. Goodman
-    url: https://example.com
+  - name: Lo, C.-Y. Y.
+  - name: Chou, F.-C. B.
+    url: https://scholar.google.com/citations?user=oZ5rsb0AAAAJ&hl=en
+  - name: Chang, C.-Y. E.
+  - name: Wu, P.-Y. S.
+  - name: Wang, T.-R. H.
+  - name: Chen, P.-H. A.
+    url: https://scholar.google.com/citations?user=wXNCX4EAAAAJ&hl=en
   paper:
     summary: Voluptate in id id voluptate laboris. Minim mollit aliquip sit aliqua ut exercitation voluptate eiusmod consequat pariatur sunt enim veniam. Velit esse tempor laboris anim tempor officia. Magna non labore duis do esse sit do ipsum culpa. Officia consequat id non duis culpa dolor. Excepteur magna non nostrud cupidatat aute aliqua aliquip.
     url: https://example.com
