@@ -11,9 +11,9 @@ section:
 # Your experiences
 experiences:
 - company:
-    name: Example Co.
-    url: "https://www.example.com"
-    location: Dhaka Branch
+    name: Computational Human-sociocultural Experimental Neuroscience (CHEN) Lab
+    url: "https://www.chenlaboratory.com"
+    location: 台北，台灣
     logo: /images/sections/experiences/company1.jpg
     # Can optionally show a different logo for dark theme
     # darkLogo: /images/sections/experiences/company1.jpg
