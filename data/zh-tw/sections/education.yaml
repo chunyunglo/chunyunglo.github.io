@@ -39,7 +39,13 @@ degrees:
     - name: 相關獎項
       content: |
         * 國立臺灣大學書卷獎 (2024)
-
+- name: 交換學生
+  icon: fa-graduation-cap
+  timeframe: 2026
+  institution:
+    name: 蒙納許大學
+    url: "https://www.monash.edu/"
+    logo: /images/sections/education/monashlogo.png
 - name: 普通科
   icon: fa-university
   timeframe: 2020-2023
