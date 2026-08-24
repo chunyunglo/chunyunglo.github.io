@@ -1,82 +1,69 @@
-# section information
 section:
-  name: Publications
+  name: Research & Presentations
   id: publications
   enable: true
-  weight: 6
+  weight: 4
   showOnNavbar: true
-  # Can optionally hide the title in sections
-  # hideTitle: true
 
-# filter buttons
-buttons:
-- name: All
-  filter: "all"
-- name: "Machine Learning"
-  filter: "machinelearning"
-- name: "Image Processing"
-  filter: "image-processing"
-- name: Security
-  filter: "security"
-
-# your publications
 publications:
-- title: An Example Paper on Machine Learning
+- title: "Does Watching Together Shape How We Remember? Semantic Structure in Shared Naturalistic Viewing Free Recall."
   publishedIn:
-    name: 2020 IEEE Region Symposium (TENSYMP)
-    date: 7 June 2020
-    url: https://example.com
+    name: In preparation
+    date: 2026
   authors:
-  - name: Dr. Madman
-    url: https://example.com
-  - name: Dr. Lessmad
-    url: https://example.com
-  - name: Dr. Moremad
-    url: https://example.com
-  - name: Dr. Goodman
-    url: https://example.com
+  - name: "Lo, C.-Y. Y."
+  - name: "Chou, F.-C. B."
+  - name: "Chen, P.-H. A."
   paper:
-    summary: Voluptate in id id voluptate laboris. Minim mollit aliquip sit aliqua ut exercitation voluptate eiusmod consequat pariatur sunt enim veniam. Velit esse tempor laboris anim tempor officia. Magna non labore duis do esse sit do ipsum culpa. Officia consequat id non duis culpa dolor. Excepteur magna non nostrud cupidatat aute aliqua aliquip.
-    url: https://example.com
-  categories: ["machinelearning","image-processing"]
-  tags: ["Machine Learning", "Autonomous Driving", "Computer Vision"]
-
-- title: An Sample Paper on Image Processing
+    summary: "Examines how shared naturalistic viewing shapes the semantic structure of free recall."
+  categories: ["shared-experience", "language"]
+  tags: ["In preparation", "Shared experience", "NLP"]
+- title: "From watching together to thinking alike: Semantic convergence in shared experience."
   publishedIn:
-    name: 2020 IEEE Region Symposium (TENSYMP)
-    date: 7 June 2020
-    url: https://example.com
+    name: Taiwanese Psychological Association 2025 Annual Conference (Oral Presentation)
+    date: 2025
+    url: https://www.tpa-tw.org
   authors:
-  - name: Dr. Madman
-    url: https://example.com
-  - name: Dr. Lessmad
-    url: https://example.com
-  - name: Dr. Moremad
-    url: https://example.com
-  - name: Dr. Goodman
-    url: https://example.com
+  - name: "Lo, C.-Y. Y."
+  - name: "Chou, F.-C. B."
+  - name: "Chang, C.-Y. E."
+  - name: "Wu, P.-Y. S."
+  - name: "Wang, T.-R. H."
+  - name: "Chen, P.-H. A."
   paper:
-    summary: Ullamco magna minim cupidatat Lorem ea ex aliqua fugiat et. Dolor quis cillum ea duis irure et commodo aliquip consectetur ullamco labore ut anim nisi. Commodo reprehenderit est consectetur tempor adipisicing occaecat exercitation amet do aliquip dolor do irure. Labore officia ut magna pariatur reprehenderit et ex sit sunt. Magna proident ullamco adipisicing sit.
-    url: https://example.com
-  categories: ["image-processing"]
-  tags: ["Image Processing", "Computer Vision"]
-
-- title: An Example Paper on Security
+    summary: "Examines semantic convergence in interpersonal conversation after a shared experience."
+  categories: ["shared-experience", "language"]
+  tags: ["Oral presentation", "Shared experience", "NLP"]
+- title: "Incentives Shape How the Powerful and the Powerless Behave as Power Becomes Equal."
   publishedIn:
-    name: 2020 IEEE Region Symposium (TENSYMP)
-    date: 7 June 2020
-    url: https://example.com
+    name: Taiwanese Psychological Association 2026 Annual Conference
+    date: 2026
+    url: https://www.tpa-tw.org
   authors:
-  - name: Dr. Madman
-    url: https://example.com
-  - name: Dr. Lessmad
-    url: https://example.com
-  - name: Dr. Moremad
-    url: https://example.com
-  - name: Dr. Goodman
-    url: https://example.com
+  - name: "Lo, C.-Y. Y."
+  - name: "Chou, F.-C. B."
+  - name: "Chang, C.-Y. E."
+  - name: "Wu, P.-Y. S."
+  - name: "Wang, T.-R. H."
+  - name: "Chen, P.-H. A."
   paper:
-    summary: Dolor ad cupidatat pariatur nulla ipsum ex ullamco nisi anim ullamco. Dolore elit esse in exercitation minim aliqua. Amet velit incididunt magna laboris. Proident reprehenderit deserunt ad officia duis dolor. Tempor nostrud ullamco ullamco sint deserunt cupidatat irure minim consectetur nulla adipisicing sunt.
-    url: https://example.com
-  categories: ["security"]
-  tags: ["Machine Learning", "Autonomous Driving", "Machine Vision"]
+    summary: "Investigates how powerful and powerless people adjust allocation and interaction strategies as power becomes more equal."
+  categories: ["decision", "computational-modeling"]
+  tags: ["Conference presentation", "Decision making", "Computational modeling"]
+- title: "The impact of group composition on discussion trajectories."
+  publishedIn:
+    name: Taiwanese Psychological Association 2025 Annual Conference
+    date: 2025
+    url: https://www.tpa-tw.org
+  authors:
+  - name: "Wu, P.-Y. S."
+  - name: "Chou, F.-C. B."
+  - name: "Li, C.-C. J."
+  - name: "Lo, C.-Y. Y."
+  - name: "Chang, C.-Y. E."
+  - name: "Wang, T.-R. H."
+  - name: "Chen, P.-H. A."
+  paper:
+    summary: "Examines how group composition shapes the dynamics of discussion trajectories."
+  categories: ["interaction", "time-series"]
+  tags: ["Conference presentation", "Group interaction", "Time series"]

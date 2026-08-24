@@ -1,104 +1,54 @@
-# section information
 section:
   name: Education
   id: education
-  template: sections/education.html # Use "sections/education-alt.html for alternate template.
+  template: sections/education.html
   enable: true
-  weight: 4
+  weight: 2
   showOnNavbar: true
-  # Can optionally hide the title in sections
-  # hideTitle: true
 
 degrees:
-- name: Ph.D in Quantum Cryptography
-  icon: fa-microscope
-  timeframe: 2016-2020
-  institution:
-    name: ABC University of Technology
-    url: "#"
-    logo: /images/sections/education/tech_college.png
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/education/tech_college.png
-  grade: #(optional)
-    scale: CGPA
-    achieved: 3.6
-    outOf: 4
-  publications: #(optional)
-  - title: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    url: "#"
-  - title: Fusce eu augue ut odio porttitor pulvinar.
-    url: "#"
-  - title: Nullam vitae orci tincidunt purus viverra pulvinar.
-    url: "#"
-- name: B.Sc. in Computer Science & Engineering
+- name: B.S. in Psychology
   icon: fa-graduation-cap
-  timeframe: 2012-2016
+  timeframe: 2023 - Present (Expected 2027)
   institution:
-    name: University of XYZ
-    url: "#"
-    logo: /images/sections/education/university.jpg
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/education/university.jpg
-  grade: #(optional)
-    scale: CGPA
-    achieved: 3.5
-    outOf: 4
-  takenCourses: #(optional)
-    # if true, the courses will be rendered as a table otherwise it will render as a list and the grades will be hidden.
-    showGrades: true
-    collapseAfter: 3
+    name: National Taiwan University
+    url: "https://www.ntu.edu.tw"
+    logo: /images/sections/education/ntulogo.png
+  grade:
+    scale: GPA
+    achieved: 4.19
+    outOf: 4.30
+  takenCourses:
+    showGrades: false
+    collapseAfter: 4
     courses:
-    - name: Data Structures and Algorithm
-      achieved: 3.75
-      outOf: 4
-    - name: Network Security
-      achieved: 3.80
-      outOf: 4
-    - name: Operating System
-      achieved: 3.5
-      outOf: 4
-    - name: Artificial Intelligent
-      achieved: 3.75
-      outOf: 4
-  publications: #(optional)
-  - title: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    url: "#"
-  - title: Fusce eu augue ut odio porttitor pulvinar.
-    url: "#"
-  extracurricularActivities: #(optional)
-  - In vitae facilisis est, eget porta sem.
-  - Vestibulum consectetur lorem justo, at laoreet lorem feugiat et.
-  - Duis sed massa feugiat, ornare justo et, aliquam est.
-  - Pellentesque ut fringilla magna.
-  customSections: #(optional)
-    - name: Thesis
-      content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    - name: Supervisor
-      content: Fusce eu augue ut odio porttitor pulvinar.
-- name: Higher Secondary School Certificate
-  icon: fa-university
-  timeframe: 2010-2012
+    - name: Psychological Statistics
+    - name: Mathematical Methods in Psychology
+    - name: Experimental Methods
+    - name: Psychometrics
+    - name: Cognitive Psychology
+    - name: Physiological Psychology
+    - name: Social Robotics
+    - name: Computational Interactive Mind Science
+  customSections:
+  - name: Honors & Research Funding
+    content: |
+      * National Science and Technology Council Undergraduate Research Project (2026 - Present)
+      * Book Award / Dean's List (2024)
+  - name: Academic & Community Leadership
+    content: |
+      * Director of Academic Affairs, NTU Psychology Student Association (2023 - 2025)
+      * Education Talent Development Team Member, EdYouth (2023 - 2024)
+- name: International Exchange Program
+  icon: fa-graduation-cap
+  timeframe: 2026
   institution:
-    name: MST College of Science
-    url: "#"
-    logo: /images/sections/education/science_college.png
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/education/science_college.png
-  grade: #(optional)
-    scale: GPA
-    achieved: 5
-    outOf: 5
-  extracurricularActivities: #(optional)
-  - In vitae facilisis est, eget porta sem.
-  - Vestibulum consectetur lorem justo, at laoreet lorem feugiat et.
-  - Duis sed massa feugiat, ornare justo et, aliquam est.
-  - Pellentesque ut fringilla magna.
-- name: Secondary School Certificate
-  icon: fa-school
-  timeframe: 2005-2010
-  institution:
-    name: JK School of Science
-  grade: #(optional)
-    scale: GPA
-    achieved: 4.5
-    outOf: 5
+    name: Monash University
+    url: "https://www.monash.edu/"
+    logo: /images/sections/education/monashlogo.png
+  customSections:
+  - name: Academic Performance
+    content: |
+      * Culture, Power and Difference: High Distinction
+      * True Happiness: High Distinction
+      * The Ethics of Artificial Intelligence: High Distinction

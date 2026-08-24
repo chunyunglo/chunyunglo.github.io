@@ -1,20 +1,15 @@
-# some information about you
-name: "Chun-Yung Lo"
-nickname: "Yong"
-# greeting message before your name. it will default to "Hi! I am" if not provided
+name: "Chun-Yung Yong Lo"
+nickname: "Chun-Yung"
 greeting: "Hi, I am"
+subtitle: "Behavioral Data Science & Computational Research"
 image: "images/author/chunyung.png"
-# give your some contact information. they will be used in the footer
 contactInfo:
-  email: "chunyunglo2005@gmail.com"
-  phone: "+886901039269"
-  github: Chun-Yung Yong Lo
-  linkedin: Chun-Yung Lo 
-
-# some summary about what you do
+  email: "b12207016@ntu.edu.tw"
+  phone: "+886901038269"
+  github: "chunyunglo"
+  linkedin: "chun-yung-yong-lo"
 summary:
-  - Psychology student at National Taiwan University (NTU).
-  - Specializing in behavioral data and multimodal analysis.
-  - Researching dynamic patterns in human behavior and interactions.
-  - Fluent in English and with strong cross-cultural communication skills.
-  - Passionate about challenging, interdisciplinary projects.
+  - Psychology undergraduate and computational research assistant
+  - Analyzing language, behavioral, time-series, and multimodal human data
+  - Combining behavioral theory, statistical inference, and computational modeling
+  - Building interpretable, carefully validated analyses

@@ -1,73 +1,35 @@
-# section information
 section:
-  name: 經歷
+  name: 研究經歷
   id: experiences
   enable: true
   weight: 3
   showOnNavbar: true
-  # Can optionally hide the title in sections
-  # hideTitle: true 
 
-# Your experiences
 experiences:
 - company:
-    name: Computational Human-sociocultural Experimental Neuroscience (CHEN) Lab
+    name: 計算互動心智科學實驗室（CHEN Lab）
     url: "https://www.chenlaboratory.com"
-    location: 台北，台灣
+    location: 台北，臺灣
     logo: /images/sections/experiences/company1.jpg
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/experiences/company1.jpg
-    # company overview
-    overview: Example Co. is a widely recognized company for cloud-native development. It builds tools for Kubernetes.
+    overview: 國立臺灣大學心理學系之計算互動心智科學實驗室。
   positions:
-  - designation: Senior Software Engineer
-    start: Nov 2019
-    # don't provide end date if you are currently working there. It will be replaced by "Present"
-    # end: Dec 2020
-    # give some points about what was your responsibilities at the company.
+  - designation: 兼任學生研究助理
+    start: 2025
     responsibilities:
-    - Design and develop XYZ tool for ABC task
-    - Design, develop and manage disaster recovery tool [Xtool](https://www.example.com) that backup Kubernetes volumes, databases, and cluster's resource definition.
-    - Lead backend team.
-
-  - designation: Junior Software Engineer
-    start: Nov 2017
-    end: Oct 2019
-    responsibilities:
-    - Implement and test xyz feature for abc tool.
-    - Support client for abc tool.
-    - Learn k,d,w technology for xyz.
-
+    - 建立自然語言、序列行為、時間序列與多模態人類資料的 Python 分析流程。
+    - 從語音與互動觀測資料建構語意、語法、時間及行為特徵，並協助資料對齊與視覺化。
+    - 應用主題建模、分群、事件分割、強化學習及階層貝氏模型，分析共享經驗與決策行為。
+    - 執行雙人互動與虛擬實境實驗；使用 BIOPAC 與頭戴式攝影機蒐集生理及行為資料。
+    - 以明確基準、held-out 比較、置換與敏感度程序、不確定性估計及模型診斷評估結果。
 - company:
-    name: PreExample Co.
-    url: "https://www.example.com"
-    location: Nowhere
+    name: Complex Human Data Hub
+    location: 墨爾本，澳洲
     logo: /images/sections/experiences/company2.jpg
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/experiences/company2.jpg
-    overview: PreExample Co. is a gateway company to enter into Example co. So, nothing special here.
+    overview: 跨領域人類資料研究中心。
   positions:
-  - designation: Software Engineer
-    start: March 2016
-    end: May 2017
+  - designation: 研究實習生
+    start: 2026
+    end: 2026
     responsibilities:
-    - Write lots of example codes.
-    - Read lots of examples.
-    - See lots of example videos.
-
-- company:
-    name: Intern Counting Company (ICC).
-    url: "https://www.example.com"
-    location: Intern Land
-    logo: /images/sections/experiences/company3.jpg
-    # Can optionally show a different logo for dark theme
-    # darkLogo: /images/sections/experiences/company3.jpg
-    overview: Intern counting Company (ICC) is responsible for counting worldwide intern Engineers.
-  positions:
-  - designation: Intern
-    start: Jun 2015
-    end: Jan 2016
-    responsibilities:
-    - Count lost of interns.
-    - Count more interns.
-    - Count me as an intern.
+    - 以中英文詞語聯想資料庫建構語意向量空間。
+    - 應用分佈語義學方法，評估翻譯詞對的跨語言語意對齊。
