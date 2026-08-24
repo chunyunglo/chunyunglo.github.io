@@ -4,7 +4,7 @@ canonifyURLs: false
 
 # Language Code
 languageCode: zh-tw
-title: "Chun Yung's Hub"
+title: "Chun-Yung Yong Lo | Behavioral Data Science"
 
 # Use Hugo modules to add theme
 module:
@@ -43,7 +43,7 @@ languages:
   en:
     languageCode: en
     languageName: English
-    title: "Chun Yung's Hub"
+    title: "Chun-Yung Yong Lo | Behavioral Data Science"
     weight: 2
 # default language for the content
 defaultContentLanguage: zh-tw
@@ -119,7 +119,7 @@ params:
 
     # Enable and configure blog posts
     blog:
-      enable: true
+      enable: false
       showAuthor: true # shows the author of post (defaults true)
       # Share post on different social media
       shareButtons:
@@ -325,4 +325,4 @@ params:
 
     # Show/hide disclaimer notice in the footer. Default is "false".
     disclaimer:
-      enable: true
+      enable: false

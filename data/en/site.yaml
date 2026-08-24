@@ -1,19 +1,8 @@
-# Copyright Notice
-copyright: © 2026 Copyright.
-
-# A disclaimer notice for the footer. Make sure you have set "params.footer.disclaimer.enable: true" in your `config.yaml` file.
-disclaimer: "This theme is under MIT license. So, you can use it for non-commercial, commercial, or private uses.
-You can modify or distribute the theme without requiring any permission from the theme author.
-However, the theme author does not provide any warranty or takes any liability for any issue with the theme."
-
-# Meta description for your site.  This will help the search engines to find your site.
-description: Portfolio and personal blog of Chun-Yung Lo.
-
-# Specify OpenGraph Headers
+copyright: "© 2026 Chun-Yung Yong Lo"
+description: "Portfolio of Chun-Yung Yong Lo, a behavioral data science and computational research student."
 openGraph:
-  title: Chun-Yung's Hub
+  title: "Chun-Yung Yong Lo | Behavioral Data Science"
   type: website
-  description: Portfolio and personal blog of Chun-Yung Lo
+  description: "Portfolio for research on natural language, behavior, time series, and multimodal human data."
   image: images/author/chunyung.png
   url: https://chunyunglo.github.io/
-

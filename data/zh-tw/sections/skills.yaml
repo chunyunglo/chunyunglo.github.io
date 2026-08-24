@@ -1,69 +1,40 @@
-# section information
 section:
-  name: 技能與認證
+  name: 技術與方法
   id: skills
   enable: true
   weight: 5
   showOnNavbar: true
   filter: true
-  # Can optionally hide the title in sections
-  # hideTitle: true
 
-# filter buttons
 buttons:
 - name: 全部
   filter: "all"
-- name: 語言能力
-  filter: "language"
-- name: 程式與資料處理
+- name: 程式與資料
   filter: "programming"
-- name: 研究與分析
+- name: 語言與表徵
+  filter: "language"
+- name: 研究與建模
   filter: "research"
 
-
-# Your Skills.
-# Give a summary of you each skill in the summary section.
 skills:
-- name: 英文
-  # logo: /images/sections/skills/english.png
-  summary: >
-    TOEIC 935、IELTS 7.5。可進行全英文學術閱讀、研究討論與跨國合作溝通，熟悉研究論文、技術文件與資料科學相關文獻之閱讀與整理。
-  categories: ["language"]
-
-- name: 中文
-  # logo: /images/sections/skills/chinese.png
-  summary: >
-    母語程度。可進行高密度概念表達、研究寫作與跨領域知識轉譯，擅長將技術與研究內容轉換為可溝通的敘事。
-  categories: ["language"]
-
-- name: Python
-  # logo: /images/sections/skills/python.png
-  summary: >
-    熟悉 pandas、numpy、scipy 進行資料清理與數值運算，使用 scikit-learn 進行監督與非監督式模型建構，以 seaborn 進行探索式資料視覺化。
+- name: Python 與資料分析
+  summary: "以 NumPy、Pandas、SciPy、scikit-learn、PyTorch、PyMC 與 statsmodels 建立可重現的資料整理、分析與建模流程。"
   categories: ["programming"]
-- name: 機器學習實務
-  # logo: /images/sections/skills/kaggle.png
-  summary: >
-    完成 Kaggle 認證課程：Intro to Machine Learning、Intermediate Machine Learning、Intro to Deep Learning。理解特徵工程、模型選擇、cross-validation、overfitting 與模型效能評估，具備以模型回應研究問題的實務經驗。
-  categories: ["programming"]
-- name: 資料處理
-  # logo: /images/sections/skills/data.png
-  summary: >
-    實際處理過問卷資料、行為資料、語義資料與時間序列資料。熟悉不同資料型態對分析方法、模型假設與解釋框架的影響。
-  categories: ["programming"]
-- name: 統計與行為資料分析
-  # logo: /images/sections/skills/statistics.png
-  summary: >
-    熟悉多種統計與行為資料分析方法，能根據研究問題選擇合適模型，並關注模型假設、可解釋性與研究限制。
+- name: 自然語言處理
+  summary: "建立詞彙、TF-IDF、情境式 embedding、主題、語法與序列表徵；分析語意相似度、語意軌跡與對話對齊。"
+  categories: ["language", "research"]
+- name: 時間與序列分析
+  summary: "分析對話輪次、決策回合與時間窗中的動態變化，使用自相關、FFT、MFDFA、遞迴分析及事件／狀態分割。"
   categories: ["research"]
-- name: 時間序列分析
-  # logo: /images/sections/skills/timeseries.png
-  summary: >
-    使用去趨勢波動分析 (DFA) 與傅立葉分析探索行為與互動資料中的長期相關性與頻率結構。
+- name: 統計與計算建模
+  summary: "使用迴歸、無母數檢定、置換程序、分群、降維、強化學習與階層貝氏模型，處理重複測量、雙人與群體資料。"
   categories: ["research"]
-
-
-
-
-
-
+- name: 模型驗證與視覺化
+  summary: "以 held-out、null、shuffled 與 pseudo-pair 基準，搭配敏感度分析、不確定性估計與診斷；使用 Matplotlib、Seaborn、Plotly 溝通結果。"
+  categories: ["programming", "research"]
+- name: 研究系統與資料蒐集
+  summary: "具 PsychoPy、HTML 實驗、BIOPAC，以及多模態與雙人互動資料流程經驗。"
+  categories: ["programming", "research"]
+- name: 語言能力
+  summary: "中文母語；英文 IELTS 7.5、TOEIC 935，可進行英文研究閱讀、技術溝通與跨國合作。"
+  categories: ["language"]
