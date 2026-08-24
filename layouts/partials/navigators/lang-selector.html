@@ -5,9 +5,9 @@
     </a>
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageSelector">
         {{ range .AllTranslations }}
-        <a class="dropdown-item nav-link languages-item {{ if eq $.Language.Lang .Language.Lang }}active{{ end }}"
+        <a class="dropdown-item nav-link languages-item {{ if eq $.Language.Name .Language.Name }}active{{ end }}"
             href="{{ .RelPermalink | relURL }}">
-            {{ .Language.LanguageName }}
+            {{ .Language.Params.displayLabel | default .Language.Name }}
         </a>
         {{ end }}
     </div>

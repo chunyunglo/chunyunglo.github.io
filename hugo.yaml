@@ -2,8 +2,8 @@ baseURL: https://chunyunglo.github.io/
 relativeURLs: true
 canonifyURLs: false
 
-# Language Code
-languageCode: zh-tw
+# Default locale
+locale: zh-TW
 title: "Chun-Yung Yong Lo | Behavioral Data Science"
 
 # Use Hugo modules to add theme
@@ -36,13 +36,17 @@ module:
 # For any more details, you can check the official documentation: https://gohugo.io/content-management/multilingual/
 languages:
   zh-tw:
-    languageCode: zh-tw
-    languageName: 繁體中文
+    locale: zh-TW
+    label: 繁體中文
+    params:
+      displayLabel: 繁體中文
     title: "羅俊詠"
     weight: 1
   en:
-    languageCode: en
-    languageName: English
+    locale: en
+    label: English
+    params:
+      displayLabel: English
     title: "Chun-Yung Yong Lo | Behavioral Data Science"
     weight: 2
 # default language for the content
