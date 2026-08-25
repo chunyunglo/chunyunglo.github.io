@@ -1,5 +1,5 @@
 section:
-  name: Research Experience
+  name: Experience
   id: experiences
   enable: true
   weight: 3
@@ -10,7 +10,7 @@ experiences:
     name: Computational Human-sociocultural Experimental Neuroscience Lab (CHEN Lab)
     url: "https://www.chenlaboratory.com"
     location: Taipei, Taiwan
-    logo: /images/sections/experiences/company1.jpg
+    logo: /images/sections/experiences/chen-lab.png
     overview: Computational interactive-mind research lab in the Department of Psychology at National Taiwan University.
   positions:
   - designation: Undergraduate Research Assistant
@@ -24,7 +24,7 @@ experiences:
 - company:
     name: Complex Human Data Hub
     location: Melbourne, Australia
-    logo: /images/sections/experiences/company2.jpg
+    logo: /images/sections/experiences/complex-human-data-hub.png
     overview: An interdisciplinary research hub for complex human data.
   positions:
   - designation: Research Intern
@@ -33,3 +33,30 @@ experiences:
     responsibilities:
     - Constructed Chinese and English semantic vector spaces from word-association databases.
     - Applied distributional-semantic methods to evaluate cross-lingual alignment between translation pairs.
+- company:
+    name: NTU Psychology Student Association
+    location: Taipei, Taiwan
+    logo: /images/sections/education/ntulogo.png
+    overview: Student organization coordinating academic activities and departmental exchange.
+  positions:
+  - designation: Director of Academic Affairs
+    start: 2023
+    end: 2025
+    responsibilities:
+    - Planned and led academic activities connecting students with scholars and practitioners.
+    - Served as a core organizer for the “Walking with Cancer” and “An Evening with Director Yi-Han Deng” events.
+    - Contributed to the 2023 Azalea Festival video team and led the team in 2024.
+- company:
+    name: EdYouth Taiwan Education Association
+    url: "https://www.edyouth.org/"
+    location: Taipei, Taiwan
+    logo: /images/sections/experiences/edyouth.png
+    overview: A student-led nonprofit advancing education advocacy and talent development.
+  positions:
+  - designation: Education Talent Development Team Member
+    start: 2023
+    end: 2024
+    responsibilities:
+    - Delivered workshops on learning portfolios, stress management, and growth mindsets.
+    - Helped organize a summer lecture series on learning and higher-education pathways.
+    - Participated in education-advocacy work that communicated students’ needs and perspectives.

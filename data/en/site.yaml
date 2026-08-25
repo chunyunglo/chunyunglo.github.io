@@ -1,7 +1,7 @@
 copyright: "© 2026 Chun-Yung Yong Lo"
-description: "Portfolio of Chun-Yung Yong Lo, a behavioral data science and computational research student."
+description: "Portfolio of Chun-Yung Yong Lo, a psychology student and computational research assistant."
 openGraph:
-  title: "Chun-Yung Yong Lo | Behavioral Data Science"
+  title: "Chun-Yung Yong Lo | Portfolio"
   type: website
   description: "Portfolio for research on natural language, behavior, time series, and multimodal human data."
   image: images/author/chunyung.png

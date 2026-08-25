@@ -1,7 +1,7 @@
 copyright: "© 2026 羅俊詠"
-description: "羅俊詠的行為資料科學與計算研究個人網站。"
+description: "羅俊詠的個人作品集與研究網站。"
 openGraph:
-  title: "羅俊詠｜行為資料科學與計算研究"
+  title: "羅俊詠｜個人網站"
   type: website
   description: "自然語言、行為、時間序列與多模態人類資料的研究作品集。"
   image: images/author/chunyung.png
