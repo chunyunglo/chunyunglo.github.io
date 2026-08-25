@@ -1,5 +1,5 @@
 section:
-  name: 研究經歷
+  name: 經歷
   id: experiences
   enable: true
   weight: 3
@@ -10,7 +10,7 @@ experiences:
     name: 計算互動心智科學實驗室（CHEN Lab）
     url: "https://www.chenlaboratory.com"
     location: 台北，臺灣
-    logo: /images/sections/experiences/company1.jpg
+    logo: /images/sections/experiences/chen-lab.png
     overview: 國立臺灣大學心理學系之計算互動心智科學實驗室。
   positions:
   - designation: 兼任學生研究助理
@@ -24,7 +24,7 @@ experiences:
 - company:
     name: Complex Human Data Hub
     location: 墨爾本，澳洲
-    logo: /images/sections/experiences/company2.jpg
+    logo: /images/sections/experiences/complex-human-data-hub.png
     overview: 跨領域人類資料研究中心。
   positions:
   - designation: 研究實習生
@@ -33,3 +33,30 @@ experiences:
     responsibilities:
     - 以中英文詞語聯想資料庫建構語意向量空間。
     - 應用分佈語義學方法，評估翻譯詞對的跨語言語意對齊。
+- company:
+    name: 國立臺灣大學心理學系系學會
+    location: 台北，臺灣
+    logo: /images/sections/education/ntulogo.png
+    overview: 學生自治組織，規劃學術活動與系務交流。
+  positions:
+  - designation: 學術部部長
+    start: 2023
+    end: 2025
+    responsibilities:
+    - 規劃並帶領系上學術活動，促進學生與學者、實務工作者的交流。
+    - 擔任「與癌同行」及「與鄧依涵導演有約」活動的核心籌辦人員。
+    - 參與 2023 年杜鵑花節影片團隊，並於 2024 年擔任團隊帶領者。
+- company:
+    name: EdYouth 臺灣一滴優教育協會
+    url: "https://www.edyouth.org/"
+    location: 台北，臺灣
+    logo: /images/sections/experiences/edyouth.png
+    overview: 由學生推動教育倡議與培力行動的非營利組織。
+  positions:
+  - designation: 教育培力組組員
+    start: 2023
+    end: 2024
+    responsibilities:
+    - 規劃並執行學習歷程檔案、壓力調適與成長心態相關工作坊。
+    - 協助籌辦暑期系列講座，提供學生學習與升學資訊。
+    - 參與教育倡議行動，從學生視角整理並傳達教育現場需求。

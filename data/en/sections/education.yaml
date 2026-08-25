@@ -45,7 +45,7 @@ degrees:
   institution:
     name: Monash University
     url: "https://www.monash.edu/"
-    logo: /images/sections/education/monashlogo.png
+    logo: /images/sections/education/monashlogo.svg
   customSections:
   - name: Academic Performance
     content: |

@@ -4,7 +4,7 @@ canonifyURLs: false
 
 # Default locale
 locale: zh-TW
-title: "Chun-Yung Yong Lo | Behavioral Data Science"
+title: "Chun-Yung Yong Lo | Portfolio"
 
 # Use Hugo modules to add theme
 module:
@@ -47,7 +47,7 @@ languages:
     label: English
     params:
       displayLabel: English
-    title: "Chun-Yung Yong Lo | Behavioral Data Science"
+    title: "Chun-Yung Yong Lo | Portfolio"
     weight: 2
 # default language for the content
 defaultContentLanguage: zh-tw
