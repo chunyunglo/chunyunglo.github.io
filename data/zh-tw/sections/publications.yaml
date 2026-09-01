@@ -36,23 +36,51 @@ publications:
   tags: ["Oral presentation", "Shared experience", "NLP"]
 - title: "Incentives Shape How the Powerful and the Powerless Behave as Power Becomes Equal."
   publishedIn:
-    name: 臺灣心理學會 2026 年會發表
+    name: 臺灣心理學會 2026 年會，台中，臺灣
     date: 2026
     url: https://www.tpa-tw.org
   authors:
   - name: "Lo, C.-Y. Y."
   - name: "Chou, F.-C. B."
-  - name: "Chang, C.-Y. E."
-  - name: "Wu, P.-Y. S."
-  - name: "Wang, T.-R. H."
   - name: "Chen, P.-H. A."
   paper:
     summary: "探討權力逐步平等時，有權與無權者如何調整資源分配與互動策略。"
   categories: ["decision", "computational-modeling"]
   tags: ["Conference presentation", "Decision making", "Computational modeling"]
+- title: "When feeling and showing diverge: dissociable neural predictors of emotional valence."
+  publishedIn:
+    name: 臺灣心理學會 2026 年會，台中，臺灣
+    date: 2026
+    url: https://www.tpa-tw.org
+  authors:
+  - name: "Wang, T.-R. H."
+  - name: "Chou, F.-C. B."
+  - name: "Lo, C.-Y. Y."
+  - name: "Lin, C.-C. E."
+  - name: "Chen, P.-H. A."
+  paper:
+    summary: "探討情緒感受與表現分歧時，可區辨預測情緒效價的神經指標。"
+  categories: ["affective-neuroscience", "neuroimaging"]
+  tags: ["Conference presentation", "Affective neuroscience", "Neuroimaging"]
+- title: "Using multivariate brain models to examine depression-related neural similarity during naturalistic viewing."
+  publishedIn:
+    name: 臺灣心理學會 2026 年會，台中，臺灣
+    date: 2026
+    url: https://www.tpa-tw.org
+  authors:
+  - name: "Chang, Y.-C. M."
+  - name: "Chou, F.-C. B."
+  - name: "Wang, T.-R. H."
+  - name: "Lo, C.-Y. Y."
+  - name: "Lin, C.-C. E."
+  - name: "Chen, P.-H. A."
+  paper:
+    summary: "以多變量腦模型檢視自然情境觀看中與憂鬱相關的神經相似性。"
+  categories: ["depression", "neuroimaging"]
+  tags: ["Conference presentation", "Depression", "Neuroimaging"]
 - title: "The impact of group composition on discussion trajectories."
   publishedIn:
-    name: 臺灣心理學會 2025 年會發表
+    name: 臺灣心理學會 2025 年會，台南，臺灣
     date: 2025
     url: https://www.tpa-tw.org
   authors:

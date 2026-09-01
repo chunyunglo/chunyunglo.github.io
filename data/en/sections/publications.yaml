@@ -36,23 +36,51 @@ publications:
   tags: ["Oral presentation", "Shared experience", "NLP"]
 - title: "Incentives Shape How the Powerful and the Powerless Behave as Power Becomes Equal."
   publishedIn:
-    name: Taiwanese Psychological Association 2026 Annual Conference
+    name: Taiwanese Psychological Association 2026 Annual Conference, Taichung, Taiwan
     date: 2026
     url: https://www.tpa-tw.org
   authors:
   - name: "Lo, C.-Y. Y."
   - name: "Chou, F.-C. B."
-  - name: "Chang, C.-Y. E."
-  - name: "Wu, P.-Y. S."
-  - name: "Wang, T.-R. H."
   - name: "Chen, P.-H. A."
   paper:
     summary: "Investigates how powerful and powerless people adjust allocation and interaction strategies as power becomes more equal."
   categories: ["decision", "computational-modeling"]
   tags: ["Conference presentation", "Decision making", "Computational modeling"]
+- title: "When feeling and showing diverge: dissociable neural predictors of emotional valence."
+  publishedIn:
+    name: Taiwanese Psychological Association 2026 Annual Conference, Taichung, Taiwan
+    date: 2026
+    url: https://www.tpa-tw.org
+  authors:
+  - name: "Wang, T.-R. H."
+  - name: "Chou, F.-C. B."
+  - name: "Lo, C.-Y. Y."
+  - name: "Lin, C.-C. E."
+  - name: "Chen, P.-H. A."
+  paper:
+    summary: "Examines dissociable neural predictors of emotional valence when feeling and expression diverge."
+  categories: ["affective-neuroscience", "neuroimaging"]
+  tags: ["Conference presentation", "Affective neuroscience", "Neuroimaging"]
+- title: "Using multivariate brain models to examine depression-related neural similarity during naturalistic viewing."
+  publishedIn:
+    name: Taiwanese Psychological Association 2026 Annual Conference, Taichung, Taiwan
+    date: 2026
+    url: https://www.tpa-tw.org
+  authors:
+  - name: "Chang, Y.-C. M."
+  - name: "Chou, F.-C. B."
+  - name: "Wang, T.-R. H."
+  - name: "Lo, C.-Y. Y."
+  - name: "Lin, C.-C. E."
+  - name: "Chen, P.-H. A."
+  paper:
+    summary: "Uses multivariate brain models to examine depression-related neural similarity during naturalistic viewing."
+  categories: ["depression", "neuroimaging"]
+  tags: ["Conference presentation", "Depression", "Neuroimaging"]
 - title: "The impact of group composition on discussion trajectories."
   publishedIn:
-    name: Taiwanese Psychological Association 2025 Annual Conference
+    name: Taiwanese Psychological Association 2025 Annual Conference, Tainan, Taiwan
     date: 2025
     url: https://www.tpa-tw.org
   authors:
