@@ -14,9 +14,6 @@ company:
 summary: 'I am a psychology undergraduate and computational research assistant at National Taiwan University. I analyze natural-language, sequential-behavior, time-series, and multimodal human data, combining behavioral theory, statistical inference, and computational modeling to develop interpretable, carefully validated workflows. My interests include social interaction, shared experience, decision-making, and the dynamic structure of human data.'
 
 socialLinks:
-- name: Email
-  icon: "fas fa-envelope"
-  url: "mailto:"
 - name: GitHub
   icon: "fab fa-github"
   url: "https://github.com/chunyunglo"

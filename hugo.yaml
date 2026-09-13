@@ -226,9 +226,9 @@ params:
       #   - languageCode: en
       #     countryCode: us
 
-    # Enable this to use `embed-pdf` shortcode.
+    # PDF embeds are disabled because downloadable CVs are not published here.
     embedpdf:
-      enable: true
+      enable: false
 
     # Enable this to create flowcharts using shortcodes.
     flowchart:
@@ -315,7 +315,7 @@ params:
       customMenus: true
     # Show/hide "Contact Me" section in the footer. Default is "true".
     contactMe:
-      enable: true
+      enable: false
     # Show/hide credentials section in the footer. Default is "true".
     credentials:
       enable: true
