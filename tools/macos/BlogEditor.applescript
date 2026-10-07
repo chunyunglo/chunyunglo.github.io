@@ -13,9 +13,20 @@ on run
 		quit
 		return
 	end try
+	-- Bring the local copy up to date (skipped quietly if there are unsaved changes).
+	try
+		do shell script shellEnv & "git pull --ff-only --quiet >/dev/null 2>&1 || true"
+	end try
+	try
+		do shell script shellEnv & "test -f tools/write.mjs"
+	on error
+		display dialog "這份網站資料夾還沒有編輯器程式。" & return & return & "請先在 GitHub 上 merge 含有編輯器的 PR，再用 GitHub Desktop 把 " & repoPath & " pull 到最新。" buttons {"好"} default button 1 with icon caution with title "文章編輯器"
+		quit
+		return
+	end try
 	if not (isListening()) then
 		try
-			do shell script shellEnv & "[ -d node_modules ] || npm install --no-audit --no-fund >" & logFile & " 2>&1"
+			do shell script shellEnv & "[ -d node_modules/decap-server ] || npm install --no-audit --no-fund >" & logFile & " 2>&1"
 			do shell script shellEnv & "BLOG_EDITOR_NO_OPEN=1 nohup node tools/write.mjs >>" & logFile & " 2>&1 & echo $! > " & pidFile
 		on error errMsg
 			display dialog "無法啟動編輯器：" & errMsg buttons {"好"} default button 1 with icon stop with title "文章編輯器"
@@ -27,7 +38,7 @@ on run
 			delay 0.5
 		end repeat
 		if not (isListening()) then
-			display dialog "編輯器沒有成功啟動，詳細訊息在 " & logFile buttons {"好"} default button 1 with icon stop with title "文章編輯器"
+			display dialog "編輯器沒有成功啟動。" & return & return & (do shell script "tail -n 3 " & logFile & " 2>/dev/null || true") & return & return & "完整訊息在 " & logFile buttons {"好"} default button 1 with icon stop with title "文章編輯器"
 			quit
 			return
 		end if
