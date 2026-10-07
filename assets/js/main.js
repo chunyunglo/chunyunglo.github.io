@@ -25,7 +25,9 @@ if (header && toggle && nav) {
     header.classList.remove('compact')
     const list = nav.querySelector('ul')
     const links = [...list.querySelectorAll('a')]
-    const oneLine = links.every((a) => a.offsetTop === links[0].offsetTop && a.getClientRects().length === 1)
+    const brand = header.querySelector('.brand')
+    const oneLine = links.every((a) => a.offsetTop === links[0].offsetTop && a.getClientRects().length === 1) &&
+      (!brand || brand.getClientRects().length === 1)
     const inner = header.querySelector('.header-inner')
     const overflow = inner.scrollWidth > inner.clientWidth + 1
     if (!oneLine || overflow) header.classList.add('compact')
@@ -35,7 +37,15 @@ if (header && toggle && nav) {
   document.fonts?.ready.then(fit)
   toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'))
   nav.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false) })
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false) })
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return
+    const inNav = nav.contains(document.activeElement)
+    setOpen(false)
+    if (inNav) toggle.focus()
+  })
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('open') && !header.contains(e.target)) setOpen(false)
+  })
 
   // Transparent header only while the home page is scrolled to the very top.
   if (document.body.classList.contains('is-home') && document.querySelector('.hero')) {
@@ -54,12 +64,14 @@ if (typed && !reduceMotion) {
     let i = 0
     let n = strings[0].length
     let deleting = true
+    let cycles = 0
     const tick = () => {
       const s = strings[i]
+      if (cycles >= 2 && i === 0 && !deleting && n === s.length) { typed.textContent = s; return }
       typed.textContent = s.slice(0, n)
       let delay = deleting ? 25 : 55
       if (!deleting && n === s.length) { deleting = true; delay = 2200 }
-      else if (deleting && n === 0) { deleting = false; i = (i + 1) % strings.length; delay = 350 }
+      else if (deleting && n === 0) { deleting = false; i = (i + 1) % strings.length; if (i === 0) cycles++; delay = 350 }
       else n += deleting ? -1 : 1
       setTimeout(tick, delay)
     }

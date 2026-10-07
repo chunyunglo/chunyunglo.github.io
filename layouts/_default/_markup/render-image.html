@@ -5,7 +5,9 @@
 {{- $a := $img.Resize (printf "%dx webp" $w) -}}
 {{- $srcset := printf "%s %dw" $a.RelPermalink $a.Width -}}
 {{- if gt $img.Width 1200 }}{{ $b := $img.Resize "1600x webp" }}{{ $srcset = printf "%s, %s %dw" $srcset $b.RelPermalink $b.Width }}{{ end -}}
-{{- $tag := printf `<img src="%s" srcset="%s" sizes="(max-width: 960px) 100vw, 720px" width="%d" height="%d" alt="%s" loading="lazy" decoding="async">` $a.RelPermalink $srcset $a.Width $a.Height .Text -}}
+{{- $sizes := "(max-width: 960px) 100vw, 720px" -}}
+{{- if not .IsBlock }}{{ $t := $img.Resize "480x webp" }}{{ $srcset = printf "%s %dw, %s" $t.RelPermalink $t.Width $srcset }}{{ $sizes = "(max-width: 600px) 50vw, 240px" }}{{ end -}}
+{{- $tag := printf `<img src="%s" srcset="%s" sizes="%s" width="%d" height="%d" alt="%s" loading="lazy" decoding="async">` $a.RelPermalink $srcset $sizes $a.Width $a.Height .Text -}}
 {{- if .IsBlock -}}
 <figure>{{ $tag | safeHTML }}{{ with .Title }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
 {{- else -}}

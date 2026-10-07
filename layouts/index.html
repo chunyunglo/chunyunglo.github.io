@@ -8,7 +8,7 @@
 <section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
   {{- with resources.Get "images/site/hero.jpg" }}
   {{- $s1 := .Resize "1280x webp q72" }}{{ $s2 := .Resize "1920x webp q72" }}{{ $s3 := .Resize "2560x webp q70" }}
-  <img class="hero-bg" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+  <img class="hero-bg" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high">
   {{- end }}
   <div class="wrap hero-grid">
     <div class="panel intro">
@@ -23,7 +23,7 @@
         </div>
       </div>
       {{- with $author.summary }}
-      <p class="typing" aria-hidden="true"><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret"></span></p>
+      <p class="typing" aria-hidden="true">{{ range . }}<span class="ghost">{{ . }}</span>{{ end }}<span><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret"></span></span></p>
       <ul class="sr-only">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
       {{- end }}
       <p class="lede">{{ $about.summary }}</p>
@@ -33,7 +33,7 @@
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
     </div>
-    <div class="panel writing" aria-labelledby="h-writing">
+    <section class="panel writing" aria-labelledby="h-writing">
       <div class="section-head">
         <h2 id="h-writing">{{ i18n "recentPosts" }}</h2>
         {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
@@ -55,7 +55,7 @@
       {{- else }}
       <p>{{ i18n "noPosts" }}</p>
       {{- end }}
-    </div>
+    </section>
   </div>
   <a class="scroll-cue" href="#{{ $s.experiences.section.id }}" aria-label="{{ i18n "explore" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </section>

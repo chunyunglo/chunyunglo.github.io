@@ -66,7 +66,7 @@ lang: zh
 如果你也正準備踏上這段旅程，我想說的是，不必害怕這一切的手足無措。儘管交換生活的一切我們都未曾經歷，我們固然會在初次體驗時顯得有些笨拙，但正是因為這些笨拙的日子，才顯得每個習以為常都格外真實。
 
 {{< gallery >}}
-![從 St Kilda 望向市區](stkilda.jpg "St Kilda 望向市區")
-![Frankston 海灘](frankston.jpg "Frankston beach")
-![Williamstown 港口](williamstown.jpg "Williamstown")
+![從 St Kilda 望向市區](stkilda.jpg)
+![Frankston 海灘](frankston.jpg)
+![Williamstown 港口](williamstown.jpg)
 {{< /gallery >}}
