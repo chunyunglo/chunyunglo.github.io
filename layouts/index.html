@@ -138,7 +138,7 @@
         <h3>{{ .name }}</h3>
         <p class="org">{{ .role }}</p>
         <p>{{ .summary }}</p>
-        {{- with .repo }}<p><a href="{{ . }}">{{ partial "icon.html" "github" }} Code</a></p>{{ end }}
+        {{- with .repo }}<p><a href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a></p>{{ end }}
         <ul class="chips small">{{ range .tags }}{{ if not (in (slice "language" "decision" "methods") .) }}<li>{{ . }}</li>{{ end }}{{ end }}</ul>
       </article>
       {{- end }}
@@ -169,7 +169,7 @@
       {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
     </div>
     <div class="cards three">
-      {{- range first 3 . }}{{ partial "post-card.html" . }}{{ end }}
+      {{- range first 3 . }}{{ partial "post-card.html" (dict "page" . "h" "h3") }}{{ end }}
     </div>
   </div>
 </section>

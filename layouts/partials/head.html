@@ -3,13 +3,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{- $title := site.Title -}}
-{{- if not .IsHome }}{{ $title = printf "%s｜%s" .Title site.Title }}{{ end }}
+{{- if eq .Kind "404" }}{{ $title = printf "%s｜%s" (i18n "notFound") site.Title }}{{ else if not .IsHome }}{{ $title = printf "%s｜%s" .Title site.Title }}{{ end }}
 <title>{{ $title }}</title>
 {{- $desc := "" -}}
 {{- if .IsHome }}{{ $desc = $data.site.description }}{{ else }}{{ $desc = .Description | default (.Summary | plainify | htmlUnescape | truncate 150) | default $data.site.description }}{{ end }}
 <meta name="description" content="{{ $desc }}">
 <meta name="author" content="{{ site.Params.author }}">
+{{- if eq .Kind "404" }}
+<meta name="robots" content="noindex">
+{{- else }}
 <link rel="canonical" href="{{ .Permalink }}">
+{{- end }}
 {{- range .AllTranslations }}
 <link rel="alternate" hreflang="{{ (partial "lang.html" .Language.Lang).code }}" href="{{ .Permalink }}">
 {{- end }}
@@ -61,5 +65,5 @@
 
 {{- if and hugo.IsProduction site.Params.googleAnalytics }}
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.Params.googleAnalytics }}"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","{{ site.Params.googleAnalytics }}",{anonymize_ip:true});</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","{{ site.Params.googleAnalytics }}");</script>
 {{- end }}

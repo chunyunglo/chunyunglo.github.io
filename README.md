@@ -28,7 +28,7 @@ hugo new content blog/my-post/index.md
 ```
 
 - 中文寫在 `index.md`，英文版另存 `index.en.md`；沒有英文版的文章也會出現在英文文章列表並標示語言。
-- 封面圖片命名為 `cover.jpg` 放在同一資料夾；內文用 `![說明](photo.jpg)` 引用，建置時會自動轉成 WebP 並去除 EXIF（含 GPS）。
+- 封面圖片命名為 `cover.jpg` 放在同一資料夾；內文用 `![說明](photo.jpg)` 引用。建置時會轉成 WebP（不含 EXIF/GPS），原始檔不會發布；但原始檔仍在 git 裡，commit 前最好先去除定位資訊。
 - `draft: true` 的文章不會發布。
 
 ## 隱私

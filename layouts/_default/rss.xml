@@ -1,0 +1,26 @@
+{{- $pages := cond (eq .Kind "term") .RegularPages (partial "blog-pages.html" .) -}}
+{{- $limit := site.Config.Services.RSS.Limit -}}
+{{- if ge $limit 1 }}{{ $pages = first $limit $pages }}{{ end -}}
+{{- $title := cond .IsHome site.Title (printf "%s｜%s" .Title site.Title) -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ $title }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ (partial "data.html" .).site.description }}</description>
+    <language>{{ (partial "lang.html" site.Language.Lang).code }}</language>
+    {{- with $pages }}<lastBuildDate>{{ (index . 0).Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
+    {{- with .OutputFormats.Get "RSS" }}
+    {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
+    {{- end }}
+    {{- range $pages }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      <guid>{{ .Permalink }}</guid>
+      <description>{{ .Description | default (.Summary | plainify) | transform.XMLEscape | safeHTML }}</description>
+    </item>
+    {{- end }}
+  </channel>
+</rss>

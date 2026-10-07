@@ -10,8 +10,8 @@
       {{- range .Translations }} · <a href="{{ .RelPermalink }}" hreflang="{{ (partial "lang.html" .Language.Lang).code }}">{{ (partial "lang.html" .Language.Lang).label }}</a>{{ end }}
     </p>
     {{- end }}
-    {{- with .Params.tags }}
-    <ul class="chips small">{{ range . }}<li><a href="{{ (site.GetPage (printf "/tags/%s" (urlize .))).RelPermalink }}">{{ . }}</a></li>{{ end }}</ul>
+    {{- with .GetTerms "tags" }}
+    <ul class="chips small">{{ range . }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}</ul>
     {{- end }}
   </header>
   {{- with .Resources.GetMatch "{cover,hero,featured}*" }}
@@ -24,8 +24,8 @@
   <details class="toc" open><summary>{{ i18n "toc" }}</summary>{{ .TableOfContents }}</details>
   {{- end }}
   <div class="prose">{{ .Content }}</div>
-  {{- if eq .Section "blog" }}
-  <nav class="post-nav" aria-label="{{ i18n "allPosts" }}">
+  {{- if and (eq .Section "blog") (or .PrevInSection .NextInSection) }}
+  <nav class="post-nav" aria-label="{{ i18n "postNav" }}">
     {{- with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}"><span>{{ i18n "prev" }}</span>{{ .Title }}</a>{{ end }}
     {{- with .NextInSection }}<a class="next" href="{{ .RelPermalink }}"><span>{{ i18n "next" }}</span>{{ .Title }}</a>{{ end }}
   </nav>

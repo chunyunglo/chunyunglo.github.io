@@ -7,7 +7,7 @@ description: "在 Monash University 交換、於 Complex Human Data Hub 實習�
 ---
 
 <!--
-草稿：尚未發布（draft: true）。以下兩段取自你碩甄進修計畫中關於交換的文字，作為起點。
+草稿：尚未發布（draft: true）。
 要加照片：把圖片放進這個資料夾（例如 cover.jpg 會自動成為封面），內文用 ![說明](檔名.jpg)。
 完成後把 draft 改成 false 即可上線。
 -->

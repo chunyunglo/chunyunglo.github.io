@@ -5,9 +5,10 @@
   <div class="wrap header-inner">
     <a class="brand" href="{{ $home }}">{{ $data.author.name }}</a>
     <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{{ i18n "menu" }}">{{ partial "icon.html" "menu" }}</button>
-    <nav id="site-nav" class="site-nav" aria-label="Primary">
+    <nav id="site-nav" class="site-nav" aria-label="{{ i18n "primaryNav" }}">
       <ul>
-        {{- range sort (where (slice $data.sections.about $data.sections.experiences $data.sections.publications $data.sections.projects) "section.showOnNavbar" true) "section.weight" }}
+        {{- $s := $data.sections }}
+        {{- range where (slice $s.about $s.experiences $s.education $s.publications $s.projects $s.skills) "section.showOnNavbar" true }}
         <li><a href="{{ $anchor }}#{{ .section.id }}">{{ .section.name }}</a></li>
         {{- end }}
         {{- with site.GetPage "/blog" }}
@@ -19,6 +20,7 @@
           {{- if ne .Language.Lang site.Language.Lang -}}
             {{- $other := .Language -}}
             {{- $t := .Home.RelPermalink -}}
+            {{- if or (eq $.Section "blog") (eq $.Type "tags") }}{{ with .GetPage "/blog" }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
             {{- range $.Translations }}{{ if eq .Language.Lang $other.Lang }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
             <a class="lang-link" href="{{ $t }}" hreflang="{{ (partial "lang.html" $other.Lang).code }}" lang="{{ (partial "lang.html" $other.Lang).code }}">{{ (partial "lang.html" $other.Lang).label }}</a>
           {{- end -}}
