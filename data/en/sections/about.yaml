@@ -13,6 +13,9 @@ company:
 
 summary: 'I am a psychology undergraduate and computational research assistant at National Taiwan University. I analyze natural-language, sequential-behavior, time-series, and multimodal human data, combining behavioral theory, statistical inference, and computational modeling to develop interpretable, carefully validated workflows. My interests include social interaction, shared experience, decision-making, and the dynamic structure of human data.'
 
+# Short line shown on the home page (the full summary is used for search results).
+interests: 'My research focuses on social interaction, shared experience, decision-making, and the dynamic structure of human data.'
+
 socialLinks:
 - name: GitHub
   icon: "fab fa-github"

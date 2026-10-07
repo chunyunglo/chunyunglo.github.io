@@ -13,6 +13,9 @@ company:
 
 summary: '我是國立臺灣大學心理學系學生與計算研究助理，分析自然語言、序列行為、時間序列及多模態人類資料。我將行為理論、統計推論與計算建模結合，建立具可解釋性並經審慎驗證的分析流程；研究興趣聚焦於人際互動、共享經驗、決策行為與人類資料中的動態結構。'
 
+# Short line shown on the home page (the full summary is used for search results).
+interests: '研究興趣聚焦於人際互動、共享經驗、決策行為，以及人類資料中的動態結構。'
+
 socialLinks:
 - name: GitHub
   icon: "fab fa-github"

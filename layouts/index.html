@@ -23,10 +23,9 @@
         </div>
       </div>
       {{- with $author.summary }}
-      <p class="typing" aria-hidden="true">{{ range . }}<span class="ghost">{{ . }}</span>{{ end }}<span><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret"></span></span></p>
-      <ul class="sr-only">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+      <p class="typing">{{ range . }}<span class="ghost" aria-hidden="true">{{ . }}</span>{{ end }}<span><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret" aria-hidden="true"></span></span></p>
       {{- end }}
-      <p class="lede">{{ $about.summary }}</p>
+      <p class="lede">{{ $about.interests | default $about.summary }}</p>
       <ul class="hero-links">
         <li><a class="btn btn-primary" href="#{{ $s.experiences.section.id }}">{{ i18n "explore" }} {{ partial "icon.html" "arrow" }}</a></li>
         <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }}<span class="btn-label"> GitHub</span></a></li>
