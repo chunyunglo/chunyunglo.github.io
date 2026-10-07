@@ -4,39 +4,65 @@
 {{- $s := $data.sections -}}
 {{- $about := $s.about -}}
 
+{{- $posts := partial "blog-pages.html" . -}}
 <section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
-  <div class="wrap hero-inner">
-    <div class="hero-text">
-      <p class="eyebrow">{{ $about.designation }}</p>
-      <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }} <span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
+  {{- with resources.Get "images/site/hero.jpg" }}
+  {{- $s1 := .Resize "1280x webp q72" }}{{ $s2 := .Resize "1920x webp q72" }}{{ $s3 := .Resize "2560x webp q70" }}
+  <img class="hero-bg" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+  {{- end }}
+  <div class="wrap hero-grid">
+    <div class="panel intro">
+      <div class="intro-head">
+        {{- with resources.Get $author.image }}
+        {{- $sz := int (math.Min 480 (math.Min .Width .Height)) }}{{ $img := .Fill (printf "%dx%d webp Center" $sz $sz) }}
+        <img class="avatar" src="{{ $img.RelPermalink }}" width="120" height="120" alt="{{ $author.name }}" decoding="async">
+        {{- end }}
+        <div>
+          <p class="eyebrow">{{ $author.greeting }}</p>
+          <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }}<span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
+        </div>
+      </div>
+      {{- with $author.summary }}
+      <p class="typing" aria-hidden="true"><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret"></span></p>
+      <ul class="sr-only">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+      {{- end }}
       <p class="lede">{{ $about.summary }}</p>
       <ul class="hero-links">
-        {{- with site.GetPage "/blog" }}
-        <li><a class="btn btn-primary" href="{{ .RelPermalink }}">{{ i18n "blog" }} {{ partial "icon.html" "arrow" }}</a></li>
-        {{- end }}
-        <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }} GitHub</a></li>
-        <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }} LinkedIn</a></li>
+        <li><a class="btn btn-primary" href="#{{ $s.experiences.section.id }}">{{ i18n "explore" }} {{ partial "icon.html" "arrow" }}</a></li>
+        <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }}<span class="btn-label"> GitHub</span></a></li>
+        <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
     </div>
-    {{- with resources.Get $author.image }}
-    {{- $sz := cond (lt .Width 640) (math.Min .Width .Height) 640 }}{{ $b := .Fill (printf "%dx%d webp Center" (int $sz) (int $sz)) }}{{ $a := $b }}{{ if gt $sz 320 }}{{ $a = .Fill "320x320 webp Center" }}{{ end }}
-    <figure class="portrait">
-      <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 1x, {{ $b.RelPermalink }} 2x" width="320" height="320" alt="{{ $author.name }}" fetchpriority="high" decoding="async">
-    </figure>
-    {{- end }}
+    <div class="panel writing" aria-labelledby="h-writing">
+      <div class="section-head">
+        <h2 id="h-writing">{{ i18n "recentPosts" }}</h2>
+        {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
+      </div>
+      {{- with $posts }}
+      <ol class="post-list">
+        {{- range first 4 . }}
+        <li>
+          <a href="{{ .RelPermalink }}">
+            {{- with .Resources.GetMatch "{cover,hero,featured}*" }}{{ $t := .Fill "160x160 webp Center" }}<img src="{{ $t.RelPermalink }}" width="80" height="80" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr .Title 0 1 }}</span>{{ end }}
+            <span class="pl-text">
+              <span class="pl-title">{{ .Title }}</span>
+              <span class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>{{ if ne .Language.Lang site.Language.Lang }} · {{ (partial "lang.html" .Language.Lang).label }}{{ end }}</span>
+            </span>
+          </a>
+        </li>
+        {{- end }}
+      </ol>
+      {{- else }}
+      <p>{{ i18n "noPosts" }}</p>
+      {{- end }}
+    </div>
   </div>
-  {{- with $author.summary }}
-  <div class="wrap">
-    <ul class="focus-list">
-      {{- range . }}{{ if ne . $about.designation }}<li>{{ . }}</li>{{ end }}{{ end }}
-    </ul>
-  </div>
-  {{- end }}
+  <a class="scroll-cue" href="#{{ $s.experiences.section.id }}" aria-label="{{ i18n "explore" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </section>
 
 {{- with $s.experiences }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <ol class="timeline">
       {{- range .experiences }}
@@ -64,7 +90,7 @@
 
 {{- with $s.education }}{{ if .section.enable }}
 <section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <div class="cards two">
       {{- range .degrees }}
@@ -97,7 +123,7 @@
 
 {{- with $s.publications }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <ol class="pubs">
       {{- range sort .publications "publishedIn.date" "desc" }}
@@ -124,7 +150,7 @@
 
 {{- with $s.projects }}{{ if .section.enable }}
 <section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     {{- with .buttons }}
     <div class="filters" role="group" aria-label="{{ i18n "tags" }}" data-filter-group="#{{ $s.projects.section.id }} .project">
@@ -149,7 +175,7 @@
 
 {{- with $s.skills }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <dl class="skills">
       {{- range .skills }}
@@ -160,18 +186,4 @@
 </section>
 {{- end }}{{ end }}
 
-{{- $posts := partial "blog-pages.html" . -}}
-{{- with $posts }}
-<section class="section alt" id="writing" aria-labelledby="h-writing">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 class="section-title" id="h-writing">{{ i18n "recentPosts" }}</h2>
-      {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
-    </div>
-    <div class="cards three">
-      {{- range first 3 . }}{{ partial "post-card.html" (dict "page" . "h" "h3") }}{{ end }}
-    </div>
-  </div>
-</section>
-{{- end }}
 {{ end }}
