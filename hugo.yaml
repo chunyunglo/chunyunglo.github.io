@@ -40,7 +40,6 @@ pagination:
   pagerSize: 12
 
 imaging:
-  quality: 82
   resampleFilter: Lanczos
   exif:
     disableLatLong: true
