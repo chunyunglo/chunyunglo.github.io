@@ -17,6 +17,7 @@ languages:
 
 enableRobotsTXT: true
 enableEmoji: true
+hasCJKLanguage: true
 summaryLength: 60
 
 taxonomies:
@@ -24,6 +25,8 @@ taxonomies:
 
 markup:
   goldmark:
+    parser:
+      wrapStandAloneImageWithinParagraph: false
     renderer:
       unsafe: true
   tableOfContents:

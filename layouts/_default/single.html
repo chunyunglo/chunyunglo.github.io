@@ -24,6 +24,7 @@
   <details class="toc" open><summary>{{ i18n "toc" }}</summary>{{ .TableOfContents }}</details>
   {{- end }}
   <div class="prose">{{ .Content }}</div>
+  {{- partial "series.html" . }}
   {{- if and (eq .Section "blog") (or .PrevInSection .NextInSection) }}
   <nav class="post-nav" aria-label="{{ i18n "postNav" }}">
     {{- with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}"><span>{{ i18n "prev" }}</span>{{ .Title }}</a>{{ end }}

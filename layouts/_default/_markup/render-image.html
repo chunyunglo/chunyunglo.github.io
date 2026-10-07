@@ -1,13 +1,16 @@
-{{- /* Page-bundle images become responsive WebP with lazy loading; others pass through. */ -}}
+{{- /* Page-bundle images become responsive WebP (no EXIF) with lazy loading; others pass through. */ -}}
 {{- $img := .Page.Resources.Get .Destination -}}
 {{- if and $img (in (slice "jpeg" "png" "webp") $img.MediaType.SubType) -}}
 {{- $w := cond (gt $img.Width 960) 960 $img.Width -}}
 {{- $a := $img.Resize (printf "%dx webp" $w) -}}
-{{- $b := $a -}}{{- if gt $img.Width 1920 }}{{ $b = $img.Resize "1920x webp" }}{{ end -}}
-<figure>
-  <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} {{ $a.Width }}w, {{ $b.RelPermalink }} {{ $b.Width }}w" sizes="(max-width: 960px) 100vw, 720px" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ .Text }}" loading="lazy" decoding="async">
-  {{- with .Title }}<figcaption>{{ . }}</figcaption>{{ end }}
-</figure>
+{{- $srcset := printf "%s %dw" $a.RelPermalink $a.Width -}}
+{{- if gt $img.Width 1200 }}{{ $b := $img.Resize "1600x webp" }}{{ $srcset = printf "%s, %s %dw" $srcset $b.RelPermalink $b.Width }}{{ end -}}
+{{- $tag := printf `<img src="%s" srcset="%s" sizes="(max-width: 960px) 100vw, 720px" width="%d" height="%d" alt="%s" loading="lazy" decoding="async">` $a.RelPermalink $srcset $a.Width $a.Height .Text -}}
+{{- if .IsBlock -}}
+<figure>{{ $tag | safeHTML }}{{ with .Title }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
+{{- else -}}
+{{ $tag | safeHTML }}
+{{- end -}}
 {{- else -}}
 <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
 {{- end -}}

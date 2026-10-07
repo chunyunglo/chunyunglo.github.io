@@ -256,3 +256,12 @@ main:focus { outline: none; }
   body { background: #fff; color: #000; }
   .section.alt { background: none; }
 }
+
+/* Gallery and series */
+.prose .gallery { margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: .75rem; }
+.prose .gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; }
+.series { margin-top: 3rem; padding: 1.25rem 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.series-title { font-weight: 700; margin-bottom: .5rem; }
+.series ol { margin: 0; padding-left: 1.25rem; }
+.series li + li { margin-top: .25rem; }
+.series [aria-current] { font-weight: 600; }
