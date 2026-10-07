@@ -15,6 +15,7 @@
   --shadow: 0 1px 2px rgba(29, 38, 44, .05), 0 8px 24px -12px rgba(29, 38, 44, .12);
   --wrap: 72rem;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --logo-bg: transparent;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   color-scheme: light;
 }
@@ -23,6 +24,7 @@
     --bg: #14191c; --surface: #1b2226; --surface-2: #20292e; --ink: #e8edef; --ink-2: #c1cbd0;
     --muted: #93a2aa; --line: #2e393f; --accent: #8fbccf; --accent-ink: #0f1518; --accent-soft: #23343c;
     --focus: #9fd3e6; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .5);
+    --logo-bg: #eef1f2;
     color-scheme: dark;
   }
 }
@@ -30,6 +32,7 @@
   --bg: #14191c; --surface: #1b2226; --surface-2: #20292e; --ink: #e8edef; --ink-2: #c1cbd0;
   --muted: #93a2aa; --line: #2e393f; --accent: #8fbccf; --accent-ink: #0f1518; --accent-soft: #23343c;
   --focus: #9fd3e6; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px -12px rgba(0, 0, 0, .5);
+  --logo-bg: #eef1f2;
   color-scheme: dark;
 }
 
@@ -192,7 +195,10 @@ main:focus { outline: none; }
 .grade { font-weight: 600; font-size: .9rem; margin: .35rem 0 0; }
 .courses { margin-top: 1rem; }
 .courses summary { cursor: pointer; font-weight: 600; font-size: .95rem; color: var(--ink-2); }
-.logo { width: auto; height: 2.75rem; max-width: 5.5rem; object-fit: contain; flex: none; }
+/* Logos are drawn for light backgrounds, so dark mode puts them on a light tile. */
+.logo { width: auto; height: 2.75rem; max-width: 5.5rem; object-fit: contain; flex: none; background: var(--logo-bg); border-radius: 8px; }
+:root[data-theme="dark"] .logo { padding: 4px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo { padding: 4px; } }
 
 /* Timeline */
 .timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.25rem; }

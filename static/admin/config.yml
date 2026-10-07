@@ -35,6 +35,7 @@ collections:
       - { name: draft, label: 草稿（勾選時不會發布）, widget: boolean, default: true }
       - { name: description, label: 摘要（顯示在文章列表與搜尋結果）, widget: text, required: false }
       - { name: tags, label: 標籤, widget: list, required: false }
+      - { name: series, label: 系列代稱（同一系列的文章填一樣的，例如 monash-2026；沒有就留空）, widget: string, required: false }
       - { name: cover, label: 封面圖片, widget: image, required: false, choose_url: false }
       - { name: coverAlt, label: 封面圖片說明, widget: string, required: false }
       - { name: body, label: 內文, widget: markdown }
@@ -60,6 +61,7 @@ collections:
       - { name: draft, label: Draft, widget: boolean, default: true }
       - { name: description, label: Summary, widget: text, required: false }
       - { name: tags, label: Tags, widget: list, required: false }
+      - { name: series, label: "Series (same value for every post in a series; leave empty if none)", widget: string, required: false }
       - { name: cover, label: Cover image, widget: image, required: false, choose_url: false }
       - { name: coverAlt, label: Cover alt text, widget: string, required: false }
       - { name: body, label: Body, widget: markdown }
