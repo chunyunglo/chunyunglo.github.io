@@ -43,7 +43,7 @@
         {{- range first 4 . }}
         <li>
           <a href="{{ .RelPermalink }}">
-            {{- with .Resources.GetMatch "{cover,hero,featured}*" }}{{ $t := .Fill "160x160 webp Center" }}<img src="{{ $t.RelPermalink }}" width="80" height="80" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr .Title 0 1 }}</span>{{ end }}
+            {{- with partial "cover.html" . }}{{ $t := .Fill "160x160 webp Center" }}<img src="{{ $t.RelPermalink }}" width="80" height="80" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr .Title 0 1 }}</span>{{ end }}
             <span class="pl-text">
               <span class="pl-title">{{ .Title }}</span>
               <span class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>{{ if ne .Language.Lang site.Language.Lang }} · {{ (partial "lang.html" .Language.Lang).label }}{{ end }}</span>

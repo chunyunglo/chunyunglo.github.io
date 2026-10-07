@@ -1,0 +1,65 @@
+# Local editor for blog posts. Start it with `npm run write` (see README).
+backend:
+  name: github
+  repo: chunyunglo/chunyunglo.github.io
+  branch: main
+local_backend: true
+locale: zh_Hant
+site_url: http://localhost:1313
+display_url: https://chunyunglo.github.io
+
+media_folder: static/uploads
+public_folder: /uploads
+
+collections:
+  - name: blog
+    label: 文章（中文）
+    label_singular: 文章
+    folder: content/blog
+    create: true
+    path: "{{fields.slug}}/index"
+    slug: "{{fields.slug}}"
+    filter: { field: lang, value: zh }
+    media_folder: ""
+    public_folder: ""
+    preview_path: "blog/{{fields.slug}}/"
+    summary: "{{title}}（{{year}}-{{month}}-{{day}}）{{draft}}"
+    sortable_fields: [date, title]
+    view_filters:
+      - { label: 草稿, field: draft, pattern: true }
+    fields:
+      - { name: title, label: 標題, widget: string }
+      - { name: slug, label: 網址代稱（英文小寫與連字號，例如 my-first-post）, widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', '只能用英文小寫、數字與連字號'] }
+      - { name: lang, label: 語言, widget: hidden, default: zh }
+      - { name: date, label: 日期, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ" }
+      - { name: draft, label: 草稿（勾選時不會發布）, widget: boolean, default: true }
+      - { name: description, label: 摘要（顯示在文章列表與搜尋結果）, widget: text, required: false }
+      - { name: tags, label: 標籤, widget: list, required: false }
+      - { name: cover, label: 封面圖片, widget: image, required: false, choose_url: false }
+      - { name: coverAlt, label: 封面圖片說明, widget: string, required: false }
+      - { name: body, label: 內文, widget: markdown }
+
+  - name: blog_en
+    label: Posts (English)
+    label_singular: Post
+    folder: content/blog
+    create: true
+    extension: en.md
+    format: frontmatter
+    path: "{{fields.slug}}/index"
+    slug: "{{fields.slug}}"
+    filter: { field: lang, value: en }
+    media_folder: ""
+    public_folder: ""
+    summary: "{{title}} ({{year}}-{{month}}-{{day}})"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: slug, label: "Folder name (use the same as the Chinese post to link them)", widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'lowercase letters, digits and hyphens only'] }
+      - { name: lang, label: Language, widget: hidden, default: en }
+      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ" }
+      - { name: draft, label: Draft, widget: boolean, default: true }
+      - { name: description, label: Summary, widget: text, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: cover, label: Cover image, widget: image, required: false, choose_url: false }
+      - { name: coverAlt, label: Cover alt text, widget: string, required: false }
+      - { name: body, label: Body, widget: markdown }

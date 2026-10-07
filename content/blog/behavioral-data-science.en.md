@@ -4,6 +4,8 @@ date: 2024-02-15T14:30:00+08:00
 draft: false
 tags: ["Data Science", "Psychology", "Career"]
 description: "Reflecting on how psychology and data science intersect in my research."
+slug: behavioral-data-science
+lang: en
 ---
 
 ## The Intersection

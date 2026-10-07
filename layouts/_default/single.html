@@ -14,7 +14,7 @@
     <ul class="chips small">{{ range . }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}</ul>
     {{- end }}
   </header>
-  {{- with .Resources.GetMatch "{cover,hero,featured}*" }}
+  {{- with partial "cover.html" . }}
   {{- $a := .Resize "960x webp" }}{{ $b := .Resize "1920x webp" }}
   <figure class="post-cover-lg">
     <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 960w, {{ $b.RelPermalink }} 1920w" sizes="(max-width: 960px) 100vw, 960px" width="{{ $a.Width }}" height="{{ $a.Height }}" alt="{{ $.Params.coverAlt }}" fetchpriority="high">

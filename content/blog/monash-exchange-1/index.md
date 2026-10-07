@@ -5,6 +5,8 @@ tags: ["交換學生", "Monash", "墨爾本"]
 series: monash-2026
 description: "Monash University 的校區與交通、提名選課、簽證、住宿、銀行電信與行李準備。"
 coverAlt: "從高樓窗外看出去的墨爾本市景"
+slug: monash-exchange-1
+lang: zh
 ---
 
 114-2 學期，我到澳洲墨爾本的 Monash University 交換一學期。這系列整理了交換前後的準備、課業與實習，以及在墨爾本生活的心得。

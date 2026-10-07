@@ -5,6 +5,8 @@ tags: ["交換學生", "Monash", "墨爾本", "研究"]
 series: monash-2026
 description: "在 Monash 修的三門課，以及在墨爾本大學 Complex Human Data Hub 的研究實習。"
 coverAlt: "Monash Learning & Teaching Building 的教室"
+slug: monash-exchange-2
+lang: zh
 ---
 
 ## 上課方式與評分

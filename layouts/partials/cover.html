@@ -1,0 +1,5 @@
+{{- /* Cover image of a page bundle: the `cover` front matter field, else a file named cover/hero/featured. */ -}}
+{{- $r := "" -}}
+{{- with .Params.cover }}{{ $r = $.Resources.Get (path.Base .) }}{{ end -}}
+{{- if not $r }}{{ $r = .Resources.GetMatch "{cover,hero,featured}*" }}{{ end -}}
+{{- return $r -}}
