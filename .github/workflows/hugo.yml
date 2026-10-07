@@ -3,21 +3,16 @@ name: Deploy Hugo site to Pages
 on:
   push:
     branches: ["main"]
+  pull_request:
   workflow_dispatch:
 
 permissions:
-  actions: read
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-defaults:
-  run:
-    shell: bash
+  group: pages-${{ github.ref }}
+  # Cancel superseded PR builds, but never interrupt a running deploy.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -25,62 +20,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: '1.22'
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: 'latest'
+          hugo-version: '0.167.0'
           extended: true
-
-      - name: Setup Dart Sass
-        run: |
-          curl -L https://github.com/sass/dart-sass/releases/download/1.77.8/dart-sass-1.77.8-linux-x64.tar.gz -o dart-sass.tar.gz
-          tar -xzf dart-sass.tar.gz
-          sudo cp dart-sass/sass /usr/local/bin/sass
-          rm -rf dart-sass dart-sass.tar.gz
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v6
-
-      - name: Install dependencies
-        run: |
-          npm install
 
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
-          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
-        run: |
-          hugo \
-            --gc \
-            --minify \
-            --baseURL "https://chunyunglo.github.io/"
+        run: hugo --gc --minify --panicOnWarning
 
       - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
   deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

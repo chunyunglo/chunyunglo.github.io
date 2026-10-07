@@ -1,0 +1,4 @@
+{{- /* Returns the data tree for the current language, falling back to zh-tw. */ -}}
+{{- $d := index hugo.Data site.Language.Lang -}}
+{{- if not $d }}{{ $d = index hugo.Data "zh-tw" }}{{ end -}}
+{{- return $d -}}

@@ -1,17 +1,17 @@
 # chunyunglo.github.io
 
-Personal portfolio website built with Hugo and the Toha theme, featuring a cold Morandi color scheme.
+Personal portfolio website and blog built with Hugo and a lightweight custom layout, featuring a cold Morandi color scheme.
 
 ## Overview
 
-This repository contains the source code for a professional portfolio website deployed on GitHub Pages. The site showcases personal information, skills, experiences, and projects with a minimalist design aesthetic.
+This repository contains the source code for a professional portfolio website deployed on GitHub Pages. The site showcases personal information, research, experiences, projects, and skills, plus a blog for notes, project write-ups, and exchange reflections, with a minimalist design aesthetic.
 
 ## Technology Stack
 
-- **Static Site Generator**: Hugo (Extended v0.154+)
-- **Theme**: [Toha v4](https://github.com/hugo-toha/toha)
+- **Static Site Generator**: Hugo (Extended v0.156+, CI pinned to v0.167.0)
+- **Theme**: Custom layouts in `layouts/` (no external theme, Node.js, or Go modules)
 - **Deployment**: GitHub Actions → GitHub Pages
-- **Styling**: Custom CSS with cold Morandi color palette
+- **Styling**: Single CSS file with cold Morandi color palette and dark mode
 - **Languages**: Traditional Chinese (zh-tw) and English
 
 ## Project Structure
@@ -19,21 +19,20 @@ This repository contains the source code for a professional portfolio website de
 ```
 .
 ├── .github/workflows/    # GitHub Actions deployment configuration
-├── content/             # Markdown content files
-├── data/                # YAML data files for sections
-├── layouts/             # Custom layout overrides
-├── static/              # Static assets (CSS, JS, images)
-├── hugo.yaml            # Hugo configuration
-└── go.mod              # Go module dependencies
+├── archetypes/           # Template for new blog posts
+├── assets/               # CSS, JS, and images (processed by Hugo)
+├── content/blog/         # Blog posts (Markdown)
+├── data/                 # YAML data files for homepage sections
+├── i18n/                 # Interface strings (zh-tw / en)
+├── layouts/              # Page templates
+└── hugo.yaml             # Hugo configuration
 ```
 
 ## Local Development
 
 ### Prerequisites
 
-- Hugo Extended (v0.154 or later)
-- Go (v1.22 or later)
-- Node.js (v20 or later)
+- Hugo Extended (v0.156 or later)
 
 ### Setup
 
@@ -43,22 +42,16 @@ git clone https://github.com/chunyunglo/chunyunglo.github.io.git
 cd chunyunglo.github.io
 ```
 
-2. Install dependencies:
+2. Run the development server (`-D` also shows drafts):
 ```bash
-npm install
-hugo mod tidy
+hugo server -p 1313 --bind 0.0.0.0 --noHTTPCache --disableFastRender -D
 ```
 
-3. Run the development server:
-```bash
-hugo server -p 1313 --bind 0.0.0.0 --noHTTPCache --disableFastRender
-```
-
-4. Visit `http://localhost:1313` in your browser.
+3. Visit `http://localhost:1313` in your browser.
 
 ## Deployment
 
-The site automatically deploys to GitHub Pages when changes are pushed to the `main` branch. The deployment workflow:
+The site automatically deploys to GitHub Pages when changes are pushed to the `main` branch. Pull requests are built but not deployed. The deployment workflow:
 
 1. Builds the site using Hugo
 2. Generates static files in the `public/` directory
@@ -70,12 +63,12 @@ View the live site at: [https://chunyunglo.github.io](https://chunyunglo.github.
 
 ### Color Scheme
 
-The site uses a custom cold Morandi color palette defined in `static/css/custom.css`:
+The site uses a custom cold Morandi color palette defined in `assets/css/main.css`:
 
-- Primary: #889CA9 (Morandi grey-blue)
-- Secondary: #DDE4E8 (Light grey-blue)
-- Accent: #5F7380 (Deep rock grey)
-- Background: #F4F6F7 (Cold cloud white)
+- Accent: #3F6577 (Deep Morandi blue)
+- Text: #1D262C (Deep charcoal)
+- Muted: #56646D (Rock grey)
+- Background: #F5F6F4 (Cold cloud white)
 
 ### Content Management
 
@@ -83,27 +76,33 @@ The site uses a custom cold Morandi color palette defined in `static/css/custom.
 - **Sections**: Modify files in `data/zh-tw/sections/` and `data/en/sections/`
 - **Site Config**: Update `hugo.yaml` for global settings
 
-### Custom Layouts
+### Writing Blog Posts
 
-Custom layout overrides are located in the `layouts/` directory:
-- `layouts/partials/navigators/lang-selector.html` - Language selector without flags
-- `layouts/partials/navigators/navbar.html` - Custom navigation bar
+1. Create a new post:
+```bash
+hugo new content blog/my-post/index.md
+```
+
+2. Write the Chinese version in `index.md`; add `index.en.md` for an English version. Posts without a translation also appear in the other language's list.
+3. Put the cover image in the same folder as `cover.jpg`, and reference other images with `![caption](photo.jpg)`.
+4. Set `draft: false` to publish.
+
+Images are converted to WebP without EXIF data, and the original files are not published. They still live in git, so remove location data from photos before committing.
 
 ## Key Features
 
 - Bilingual support (Traditional Chinese / English)
+- Blog with tags and RSS
 - Responsive design optimized for all devices
-- Custom navigation bar with transparent-to-solid transition
-- Minimalist card-based layout
-- No shadows or heavy visual effects
-- Extended homepage banner (150vh height)
+- Light and dark mode
+- Accessible markup (skip link, keyboard focus, ARIA labels)
+- Small footprint: about 12 KB CSS and 1 KB JavaScript
 
-## License
+## Privacy
 
-This project is based on the Toha theme. Please refer to the original theme's license for usage terms.
+Do not commit CVs, transcripts, ID documents, or files containing phone numbers or addresses. `static/files/*.pdf` is ignored by git.
 
 ## References
 
 - [Hugo Documentation](https://gohugo.io/documentation/)
-- [Toha Theme Guide](https://toha-guides.netlify.app/)
 - [GitHub Pages Documentation](https://docs.github.com/en/pages)

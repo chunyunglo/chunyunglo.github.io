@@ -44,3 +44,7 @@ yarn.lock
 # Temporary files
 .tmp/
 .sass-cache/
+
+# Private documents (CV, transcripts, IDs) must never be committed.
+*.docx
+*.pages

@@ -1,0 +1,10 @@
+{{- /* Posts in the current language, plus untranslated posts from other languages. */ -}}
+{{- $pages := where site.RegularPages "Section" "blog" -}}
+{{- range hugo.Sites -}}
+  {{- if ne .Language.Lang site.Language.Lang -}}
+    {{- range where .RegularPages "Section" "blog" -}}
+      {{- if not (.Translations) }}{{ $pages = $pages | append . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return sort $pages "Date" "desc" -}}

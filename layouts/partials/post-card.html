@@ -1,0 +1,16 @@
+{{- $h := .h | default "h3" -}}
+{{- with .page -}}
+<article class="post-card">
+  <a class="post-card-link" href="{{ .RelPermalink }}">
+    {{- with .Resources.GetMatch "{cover,hero,featured}*" }}
+    {{- $img := .Fill "720x405 webp Center" }}
+    <img class="post-cover" src="{{ $img.RelPermalink }}" alt="" width="{{ $img.Width }}" height="{{ $img.Height }}" loading="lazy" decoding="async">
+    {{- end }}
+    <div class="post-card-body">
+      <p class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>{{ if ne .Language.Lang site.Language.Lang }} · <span lang="{{ (partial "lang.html" .Language.Lang).code }}">{{ (partial "lang.html" .Language.Lang).label }}</span>{{ end }}</p>
+      {{ printf "<%s>" $h | safeHTML }}{{ .Title }}{{ printf "</%s>" $h | safeHTML }}
+      <p>{{ .Description | default (.Summary | plainify | htmlUnescape | truncate 110) }}</p>
+    </div>
+  </a>
+</article>
+{{- end -}}

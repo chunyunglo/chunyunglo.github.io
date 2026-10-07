@@ -1,0 +1,7 @@
+{{- /* Language metadata by key; avoids Language fields that differ between Hugo versions. */ -}}
+{{- $m := dict
+  "zh-tw" (dict "code" "zh-Hant-TW" "og" "zh_TW" "label" "中文")
+  "en" (dict "code" "en" "og" "en_US" "label" "EN")
+-}}
+{{- $r := index $m . | default (dict "code" . "og" . "label" .) -}}
+{{- return $r -}}

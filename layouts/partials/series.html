@@ -1,0 +1,14 @@
+{{- with .Params.series -}}
+{{- $s := . -}}
+{{- $parts := sort (where site.RegularPages "Params.series" $s) "Date" -}}
+{{- if gt (len $parts) 1 }}
+<nav class="series" aria-label="{{ i18n "series" }}">
+  <p class="series-title">{{ i18n "series" }}</p>
+  <ol>
+    {{- range $parts }}
+    <li>{{ if eq . $ }}<span aria-current="page">{{ .Title }}</span>{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
+    {{- end }}
+  </ol>
+</nav>
+{{- end }}
+{{- end -}}

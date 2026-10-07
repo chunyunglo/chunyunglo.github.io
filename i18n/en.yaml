@@ -1,0 +1,29 @@
+skip: Skip to content
+home: Home
+blog: Blog
+allPosts: All posts
+recentPosts: Recent writing
+readMore: Read more
+minRead: "{{ .Count }} min read"
+toc: Contents
+tags: Tags
+taggedWith: Tagged
+prev: Older
+next: Newer
+backToBlog: Back to blog
+toggleTheme: Toggle dark mode
+menu: Menu
+courses: Selected courses
+present: Present
+noPosts: No posts yet.
+langNote: "Some posts are written in Traditional Chinese."
+notFound: Page not found
+notFoundText: This page may have moved or never existed.
+backHome: Back home
+cv: CV
+contact: Contact
+filterAll: All
+primaryNav: Main navigation
+code: Code
+postNav: Post navigation
+series: In this series

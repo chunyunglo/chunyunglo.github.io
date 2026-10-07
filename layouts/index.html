@@ -1,0 +1,177 @@
+{{ define "main" }}
+{{- $data := partial "data.html" . -}}
+{{- $author := $data.author -}}
+{{- $s := $data.sections -}}
+{{- $about := $s.about -}}
+
+<section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">{{ $about.designation }}</p>
+      <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }} <span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
+      <p class="lede">{{ $about.summary }}</p>
+      <ul class="hero-links">
+        {{- with site.GetPage "/blog" }}
+        <li><a class="btn btn-primary" href="{{ .RelPermalink }}">{{ i18n "blog" }} {{ partial "icon.html" "arrow" }}</a></li>
+        {{- end }}
+        <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }} GitHub</a></li>
+        <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }} LinkedIn</a></li>
+      </ul>
+    </div>
+    {{- with resources.Get $author.image }}
+    {{- $sz := cond (lt .Width 640) (math.Min .Width .Height) 640 }}{{ $b := .Fill (printf "%dx%d webp Center" (int $sz) (int $sz)) }}{{ $a := $b }}{{ if gt $sz 320 }}{{ $a = .Fill "320x320 webp Center" }}{{ end }}
+    <figure class="portrait">
+      <img src="{{ $a.RelPermalink }}" srcset="{{ $a.RelPermalink }} 1x, {{ $b.RelPermalink }} 2x" width="320" height="320" alt="{{ $author.name }}" fetchpriority="high" decoding="async">
+    </figure>
+    {{- end }}
+  </div>
+  {{- with $author.summary }}
+  <div class="wrap">
+    <ul class="focus-list">
+      {{- range . }}{{ if ne . $about.designation }}<li>{{ . }}</li>{{ end }}{{ end }}
+    </ul>
+  </div>
+  {{- end }}
+</section>
+
+{{- with $s.experiences }}{{ if .section.enable }}
+<section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    <ol class="timeline">
+      {{- range .experiences }}
+      {{- $c := .company }}
+      {{- range .positions }}
+      <li class="timeline-item">
+        <div class="tl-head">
+          {{ partial "logo.html" (dict "src" $c.logo "alt" "") }}
+          <div>
+            <h3>{{ .designation }}</h3>
+            <p class="org">{{ with $c.url }}<a href="{{ . }}">{{ $c.name }}</a>{{ else }}{{ $c.name }}{{ end }}{{ with $c.location }} · {{ . }}{{ end }}</p>
+          </div>
+          <p class="when">{{ .start }}{{ if .end }}{{ if ne (string .end) (string .start) }} – {{ .end }}{{ end }}{{ else }} – {{ i18n "present" }}{{ end }}</p>
+        </div>
+        {{- with .responsibilities }}
+        <ul class="bullets">{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+        {{- end }}
+      </li>
+      {{- end }}
+      {{- end }}
+    </ol>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.education }}{{ if .section.enable }}
+<section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    <div class="cards two">
+      {{- range .degrees }}
+      <article class="card">
+        <div class="tl-head">
+          {{ partial "logo.html" (dict "src" .institution.logo "alt" "") }}
+          <div>
+            <h3>{{ .name }}</h3>
+            <p class="org">{{ with .institution.url }}<a href="{{ . }}">{{ end }}{{ .institution.name }}{{ with .institution.url }}</a>{{ end }}</p>
+          </div>
+        </div>
+        <p class="when">{{ .timeframe }}</p>
+        {{- with .grade }}<p class="grade">{{ .scale }} {{ .achieved }} / {{ .outOf }}</p>{{ end }}
+        {{- with .takenCourses }}
+        <details class="courses">
+          <summary>{{ i18n "courses" }}</summary>
+          <ul class="chips">{{ range .courses }}<li>{{ .name }}</li>{{ end }}</ul>
+        </details>
+        {{- end }}
+        {{- range .customSections }}
+        <h4>{{ .name }}</h4>
+        <div class="prose-sm">{{ .content | markdownify }}</div>
+        {{- end }}
+      </article>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.publications }}{{ if .section.enable }}
+<section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    <ol class="pubs">
+      {{- range sort .publications "publishedIn.date" "desc" }}
+      <li class="pub">
+        <p class="pub-year">{{ .publishedIn.date }}</p>
+        <div>
+          <h3>{{ .title }}</h3>
+          <p class="authors">
+            {{- $n := len .authors -}}
+            {{- range $i, $a := .authors -}}
+            {{- if eq $a.name site.Params.highlightAuthor }}<strong>{{ $a.name }}</strong>{{ else }}{{ $a.name }}{{ end }}{{ if lt (add $i 1) $n }}, {{ end }}
+            {{- end -}}
+          </p>
+          <p class="venue">{{ with .publishedIn.url }}<a href="{{ . }}">{{ end }}{{ .publishedIn.name }}{{ with .publishedIn.url }}</a>{{ end }}</p>
+          {{- with .paper.summary }}<p class="pub-summary">{{ . }}</p>{{ end }}
+          {{- with .tags }}<ul class="chips small">{{ range first 1 . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
+        </div>
+      </li>
+      {{- end }}
+    </ol>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.projects }}{{ if .section.enable }}
+<section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    {{- with .buttons }}
+    <div class="filters" role="group" aria-label="{{ i18n "tags" }}" data-filter-group="#{{ $s.projects.section.id }} .project">
+      {{- range $i, $b := . }}<button type="button" data-filter="{{ .filter }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}">{{ .name }}</button>{{ end }}
+    </div>
+    {{- end }}
+    <div class="cards three">
+      {{- range .projects }}
+      <article class="card project" data-tags="{{ delimit .tags " " }}">
+        <p class="when">{{ .timeline }}</p>
+        <h3>{{ .name }}</h3>
+        <p class="org">{{ .role }}</p>
+        <p>{{ .summary }}</p>
+        {{- with .repo }}<p><a href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a></p>{{ end }}
+        <ul class="chips small">{{ range .tags }}{{ if not (in (slice "language" "decision" "methods") .) }}<li>{{ . }}</li>{{ end }}{{ end }}</ul>
+      </article>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.skills }}{{ if .section.enable }}
+<section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    <dl class="skills">
+      {{- range .skills }}
+      <div><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
+      {{- end }}
+    </dl>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- $posts := partial "blog-pages.html" . -}}
+{{- with $posts }}
+<section class="section alt" id="writing" aria-labelledby="h-writing">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title" id="h-writing">{{ i18n "recentPosts" }}</h2>
+      {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
+    </div>
+    <div class="cards three">
+      {{- range first 3 . }}{{ partial "post-card.html" (dict "page" . "h" "h3") }}{{ end }}
+    </div>
+  </div>
+</section>
+{{- end }}
+{{ end }}
