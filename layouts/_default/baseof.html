@@ -4,6 +4,9 @@
 {{ partial "head.html" . }}
 </head>
 <body class="{{ if .IsHome }}is-home{{ else }}is-page{{ end }}">
+{{- with resources.Get "images/site/hero.jpg" }}{{ $bg := .Resize "960x webp q60" }}
+<div class="site-bg" aria-hidden="true" style="--bg-photo: url('{{ $bg.RelPermalink }}')"></div>
+{{- end }}
 <a class="skip-link" href="#main">{{ i18n "skip" }}</a>
 {{ partial "header.html" . }}
 <main id="main" tabindex="-1">

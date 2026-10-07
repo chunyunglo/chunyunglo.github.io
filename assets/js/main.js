@@ -138,3 +138,21 @@ if (glass.length) {
   window.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(fromScroll) }, { passive: true })
   fromScroll()
 }
+
+// The same pointer light on every glass card across the site (no tilt).
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('.card, .timeline-item, .post-card, .glass-panel').forEach((el) => {
+    let f = 0
+    el.addEventListener('pointermove', (e) => {
+      cancelAnimationFrame(f)
+      f = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect()
+        const x = (e.clientX - r.left) / r.width
+        const y = (e.clientY - r.top) / r.height
+        el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
+        el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
+        el.style.setProperty('--la', `${(Math.atan2(y - 0.5, x - 0.5) * 180 / Math.PI + 90).toFixed(1)}deg`)
+      })
+    })
+  })
+}
