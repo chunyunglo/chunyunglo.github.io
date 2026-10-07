@@ -28,7 +28,7 @@ setTimeout(() => {
   const url = 'http://localhost:1313/admin/'
   console.log(`\n✏️  編輯器：${url}\n👀 預覽網站：http://localhost:1313/\n按 Ctrl+C 結束。\n`)
   const opener = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open'
-  try { execSync(`${opener} ${url}`) } catch (e) {}
+  if (!process.env.BLOG_EDITOR_NO_OPEN) { try { execSync(`${opener} ${url}`) } catch (e) {} }
 }, 3000)
 
 const stop = () => { procs.forEach((p) => p.kill()); process.exit(0) }
