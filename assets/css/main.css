@@ -131,7 +131,7 @@ main:focus { outline: none; }
 /* ---------- Hero ---------- */
 .hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding: 6rem 0 5rem; overflow: hidden; isolation: isolate; }
 .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform: scale(1.06); animation: hero-zoom 18s ease-out forwards; }
-.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(12, 20, 26, .68), rgba(12, 20, 26, .25) 40%, rgba(12, 20, 26, .6)); }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 18, 24, .5), rgba(10, 18, 24, 0) 28%, rgba(10, 18, 24, 0) 70%, rgba(10, 18, 24, .45)); }
 @keyframes hero-zoom { to { transform: scale(1); } }
 .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2rem); align-items: stretch; }
 .panel {
@@ -311,3 +311,35 @@ main:focus { outline: none; }
   .hero-links .btn:not(.btn-primary) { padding: .6rem .75rem; }
   .lede { font-size: .97rem; }
 }
+
+/* Liquid-glass panels: the photo shows through, blurred and slightly dimmed for legible white text. */
+.hero .panel {
+  color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06) 55%, rgba(255, 255, 255, .12));
+  -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(.8); backdrop-filter: blur(22px) saturate(180%) brightness(.8);
+  border: 1px solid rgba(255, 255, 255, .38); border-radius: 28px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 -1px 0 rgba(255, 255, 255, .12), 0 24px 60px -24px rgba(0, 0, 0, .55);
+  position: relative; overflow: hidden;
+}
+.hero .panel::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: radial-gradient(120% 60% at 15% 0%, rgba(255, 255, 255, .28), transparent 60%);
+}
+.hero .panel > * { position: relative; }
+.hero .panel :is(h1, h2, .pl-title) { color: #fff; }
+.hero .panel :is(.lede, .meta, .alt-name) { color: rgba(255, 255, 255, .86); }
+.hero .panel :is(.eyebrow, .typing, .more) { color: #ffe1c2; }
+.hero .avatar { border-color: rgba(255, 255, 255, .7); }
+.hero .btn { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .45); color: #fff; text-shadow: none; }
+.hero .btn:hover { background: rgba(255, 255, 255, .26); border-color: #fff; }
+.hero .btn-primary { background: #fff; border-color: #fff; color: #1d2b33; }
+.hero .btn-primary:hover { background: #fff; }
+.hero .post-list a:hover { background: rgba(255, 255, 255, .14); }
+.hero .post-list img { box-shadow: 0 6px 16px -8px rgba(0, 0, 0, .5); }
+.hero .thumb-fallback { background: rgba(255, 255, 255, .2); color: #fff; }
+.hero .panel :focus-visible { outline-color: #fff; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .hero .panel { background: rgba(20, 32, 40, .62); }
+}
+.hero .typing { font-size: clamp(1.15rem, 1.8vw, 1.4rem); margin: .75rem 0 1rem; }
+.hero .lede { font-size: 1.05rem; }
