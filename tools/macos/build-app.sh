@@ -3,7 +3,7 @@
 # Usage: sh tools/macos/build-app.sh
 set -e
 cd "$(dirname "$0")/../.."
-REPO="$(pwd)"
+REPO="${REPO:-$(pwd)}"
 NAME="文章編輯器"
 DEST="${DEST:-$HOME/Applications/$NAME.app}"
 TMP="$(mktemp -d)"
