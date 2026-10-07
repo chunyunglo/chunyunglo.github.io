@@ -129,9 +129,10 @@ main:focus { outline: none; }
 .note { color: var(--muted); font-size: .9rem; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding: 6rem 0 5rem; overflow: hidden; isolation: isolate; }
-.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform: scale(1.06); animation: hero-zoom 18s ease-out forwards; }
-.hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 18, 24, .5), rgba(10, 18, 24, 0) 28%, rgba(10, 18, 24, 0) 70%, rgba(10, 18, 24, .45)); }
+.hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding: 6rem 0 5rem; isolation: isolate; clip-path: inset(0); }
+/* The photo is pinned to the viewport (clipped to the hero), so only the cards move over it. */
+.hero-bg { position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; }
+.hero::before { content: ""; position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 18, 24, .5), rgba(10, 18, 24, 0) 28%, rgba(10, 18, 24, 0) 70%, rgba(10, 18, 24, .45)); }
 @keyframes hero-zoom { to { transform: scale(1); } }
 .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2rem); align-items: stretch; }
 .panel {
@@ -303,7 +304,8 @@ main:focus { outline: none; }
 .series ol { margin: 0; padding-left: 1.25rem; }
 .series li + li { margin-top: .25rem; }
 .series [aria-current] { font-weight: 600; }
-.panel { animation: rise .7s ease both; }
+.panel { animation: rise .7s ease backwards; }
+.lg-defs { position: absolute; }
 .panel.writing { animation-delay: .12s; }
 @keyframes rise { from { transform: translateY(16px); } }
 @media (max-width: 30rem) {
@@ -343,3 +345,92 @@ main:focus { outline: none; }
 }
 .hero .typing { font-size: clamp(1.15rem, 1.8vw, 1.4rem); margin: .75rem 0 1rem; }
 .hero .lede { font-size: 1.05rem; }
+
+/* ---------- Liquid glass ---------- */
+.hero .panel[data-glass] {
+  --mx: 30%; --my: 0%; --la: 135deg; --rx: 0deg; --ry: 0deg;
+  overflow: visible; isolation: isolate;
+  transform: perspective(1200px) rotateX(var(--ry)) rotateY(var(--rx));
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1);
+  will-change: transform;
+}
+/* Specular highlight that follows the pointer (or scroll on touch screens). */
+.hero .panel[data-glass]::before {
+  background:
+    radial-gradient(55% 45% at var(--mx) var(--my), rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(120% 80% at calc(100% - var(--mx)) calc(100% - var(--my)), rgba(140, 190, 220, .14), transparent 60%);
+  z-index: 0;
+}
+/* Refracted rim: a thin edge whose bright arc rotates with the light. */
+.hero .panel[data-glass]::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1.5px; z-index: 0;
+  background: conic-gradient(from var(--la), rgba(255, 255, 255, .95), rgba(255, 255, 255, .15) 22%, rgba(255, 255, 255, .5) 48%, rgba(255, 255, 255, .12) 72%, rgba(255, 255, 255, .95));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.hero .panel[data-glass] > * { z-index: 1; }
+/* Chromium can bend the background through an SVG lens at the card edges. */
+.lens .hero .panel[data-glass] {
+  -webkit-backdrop-filter: blur(7px) url(#lg-lens) saturate(170%) brightness(.74);
+  backdrop-filter: blur(7px) url(#lg-lens) saturate(170%) brightness(.74);
+}
+@media (prefers-reduced-motion: reduce) { .hero .panel[data-glass] { transform: none; } }
+
+/* ---------- Site-wide liquid glass ---------- */
+:root { --glass: rgba(255, 255, 255, .5); --glass-edge: rgba(255, 255, 255, .7); --glass-shine: rgba(255, 255, 255, .55); --wash: rgba(245, 246, 244, .58); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --glass: rgba(30, 40, 46, .5); --glass-edge: rgba(255, 255, 255, .16); --glass-shine: rgba(255, 255, 255, .14); --wash: rgba(16, 22, 26, .72); } }
+:root[data-theme="dark"] { --glass: rgba(30, 40, 46, .5); --glass-edge: rgba(255, 255, 255, .16); --glass-shine: rgba(255, 255, 255, .14); --wash: rgba(16, 22, 26, .72); }
+
+/* One still, softly blurred photo behind every page; content floats over it in glass. */
+body { background: var(--bg); }
+.site-bg { position: fixed; inset: 0; z-index: -10; overflow: hidden; pointer-events: none; }
+.site-bg::before { content: ""; position: absolute; inset: -60px; background: var(--bg-photo) center / cover no-repeat; filter: blur(36px) saturate(1.3); }
+.site-bg::after { content: ""; position: absolute; inset: 0; background: var(--wash); }
+.section.alt { background: transparent; }
+
+.card, .timeline-item, .post-card, .toc, .series, .glass-panel,
+.site-header, .is-home .site-header:not(.over-hero), .site-header.compact .site-nav, .site-footer {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-shine), 0 18px 40px -24px rgba(20, 30, 36, .35);
+}
+.card, .timeline-item, .post-card, .toc, .series, .glass-panel { border-radius: 22px; position: relative; isolation: isolate; }
+.site-header { border-width: 0 0 1px; border-radius: 0; }
+.site-footer { border-width: 1px 0 0; border-radius: 0; }
+
+/* Light that follows the pointer across any glass card. */
+:is(.card, .timeline-item, .post-card, .glass-panel)::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: radial-gradient(50% 60% at var(--mx, 20%) var(--my, 0%), var(--glass-shine), transparent 70%);
+  opacity: .9; transition: opacity .3s ease;
+}
+:is(.card, .timeline-item, .post-card, .glass-panel)::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1px; z-index: -1;
+  background: conic-gradient(from var(--la, 135deg), var(--glass-edge), transparent 25%, var(--glass-shine) 50%, transparent 75%, var(--glass-edge));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.post-card .post-cover { position: relative; z-index: 0; }
+
+/* Lists that were plain rows become glass panels too. */
+.pubs, .skills { background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-edge); border-radius: 22px; box-shadow: inset 0 1px 0 var(--glass-shine), 0 18px 40px -24px rgba(20, 30, 36, .35); }
+.pubs { padding: .25rem 1.5rem; }
+.pub:first-child { border-top: 0; }
+.pub:last-child { border-bottom: 0; }
+.skills { padding: 1.75rem; }
+.page-head, .post-head { text-shadow: 0 1px 0 var(--glass-shine); }
+.post .prose { background: var(--glass); -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-edge); border-radius: 22px; padding: clamp(1.25rem, 4vw, 2.5rem); box-shadow: inset 0 1px 0 var(--glass-shine), 0 18px 40px -24px rgba(20, 30, 36, .35); }
+
+/* Glass controls. */
+.btn, .filters button, .chips li, .chips a, .icon-btn:hover {
+  -webkit-backdrop-filter: blur(12px) saturate(170%); backdrop-filter: blur(12px) saturate(170%);
+}
+.btn:not(.btn-primary), .filters button { background: var(--glass); border-color: var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-shine); }
+.chips li, .chips a { background: color-mix(in srgb, var(--accent-soft) 70%, transparent); }
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass: color-mix(in srgb, var(--surface) 94%, transparent); }
+}
