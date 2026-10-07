@@ -1,2 +1,2 @@
-{{ partial "helpers/script-bundle.html" }}
-<script src="{{ "js/custom.js" | relURL }}?v={{ now.Unix }}" defer></script>
+{{- $js := resources.Get "js/main.js" | js.Build (dict "minify" true "target" "es2018") | fingerprint -}}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

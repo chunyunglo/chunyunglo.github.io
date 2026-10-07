@@ -1,25 +1,34 @@
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
-{{ partial "helpers/style-bundle.html" . }}
-<link rel="stylesheet" href="{{ "css/custom.css" | relURL }}" />
-
-<!--================= fab-icon =========================-->
-{{/* add favicon only if the site author has provided the the favicon */}}
-{{ if site.Params.logo.favicon }}
-  {{ $favicon := site.Params.logo.favicon }}
-
-  {{/* resize the favicon. don't resize svg because it is not supported */}}
-  {{ $favicon = resources.Get $favicon }}
-  {{ if and $favicon (ne $favicon.MediaType.SubType "svg") }}
-    {{ $favicon = $favicon.Resize "42x" }}
-  {{ end }}
-  {{ $favicon = $favicon.RelPermalink}}
-
-  <link rel="icon" type="image/png" href="{{ $favicon }}" />
-{{end}}
-
-{{ with .OutputFormats.Get "rss" -}}
-  {{ printf `<link rel=%q type=%q href=%q title=%q>` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
-{{ end }}
+{{- $data := partial "data.html" . -}}
+{{- $home := site.Home.RelPermalink -}}
+{{- $anchor := cond .IsHome "" $home -}}
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ $home }}">{{ $data.author.name }}</a>
+    <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="{{ i18n "menu" }}">{{ partial "icon.html" "menu" }}</button>
+    <nav id="site-nav" class="site-nav" aria-label="Primary">
+      <ul>
+        {{- range sort (where (slice $data.sections.about $data.sections.experiences $data.sections.publications $data.sections.projects) "section.showOnNavbar" true) "section.weight" }}
+        <li><a href="{{ $anchor }}#{{ .section.id }}">{{ .section.name }}</a></li>
+        {{- end }}
+        {{- with site.GetPage "/blog" }}
+        <li><a href="{{ .RelPermalink }}"{{ if or (eq $.Section "blog") (eq $.Type "tags") }} aria-current="page"{{ end }}>{{ i18n "blog" }}</a></li>
+        {{- end }}
+      </ul>
+      <div class="nav-tools">
+        {{- $target := "" -}}
+        {{- range site.Languages -}}
+          {{- if ne .Lang site.Language.Lang -}}
+            {{- $other := . -}}
+            {{- $t := "" -}}
+            {{- range $.Translations }}{{ if eq .Language.Lang $other.Lang }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
+            {{- if not $t }}{{ range where site.Sites "Language.Lang" $other.Lang }}{{ $t = .Home.RelPermalink }}{{ end }}{{ end -}}
+            <a class="lang-link" href="{{ $t }}" hreflang="{{ (partial "lang.html" .Lang).code }}" lang="{{ (partial "lang.html" .Lang).code }}">{{ (partial "lang.html" .Lang).label }}</a>
+          {{- end -}}
+        {{- end }}
+        <button class="icon-btn theme-toggle" type="button" aria-label="{{ i18n "toggleTheme" }}">
+          <span class="i-sun">{{ partial "icon.html" "sun" }}</span><span class="i-moon">{{ partial "icon.html" "moon" }}</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>

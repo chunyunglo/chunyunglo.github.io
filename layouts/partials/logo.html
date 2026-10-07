@@ -1,0 +1,12 @@
+{{- /* Renders an institution logo from assets/, resized to WebP. Context: dict "src" "alt" */ -}}
+{{- with .src -}}
+{{- $r := resources.Get (strings.TrimPrefix "/" .) -}}
+{{- with $r -}}
+{{- if eq .MediaType.SubType "svg" -}}
+<img class="logo" src="{{ .RelPermalink }}" alt="{{ $.alt }}" width="48" height="48" loading="lazy" decoding="async">
+{{- else -}}
+{{- $s := .Fit "160x96 webp" -}}
+<img class="logo" src="{{ $s.RelPermalink }}" alt="{{ $.alt }}" width="{{ $s.Width }}" height="{{ $s.Height }}" loading="lazy" decoding="async">
+{{- end -}}
+{{- end -}}
+{{- end -}}

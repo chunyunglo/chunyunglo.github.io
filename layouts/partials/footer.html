@@ -1,0 +1,13 @@
+{{- $data := partial "data.html" . -}}
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>{{ $data.site.copyright }}</p>
+    <ul class="social">
+      <li><a href="https://github.com/{{ site.Params.github }}" aria-label="GitHub" rel="me">{{ partial "icon.html" "github" }}</a></li>
+      <li><a href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" aria-label="LinkedIn" rel="me">{{ partial "icon.html" "linkedin" }}</a></li>
+      {{- with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}
+      <li><a href="{{ .RelPermalink }}" aria-label="RSS">{{ partial "icon.html" "rss" }}</a></li>
+      {{- end }}{{ end }}
+    </ul>
+  </div>
+</footer>

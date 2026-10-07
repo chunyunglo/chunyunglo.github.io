@@ -1,0 +1,31 @@
+{{ define "main" }}
+{{- $pages := .RegularPages -}}
+{{- if eq .Section "blog" }}{{ $pages = partial "blog-pages.html" . }}{{ end -}}
+<div class="wrap page">
+  <header class="page-head">
+    <p class="eyebrow">{{ if eq .Kind "term" }}{{ i18n "taggedWith" }}{{ else }}{{ site.Title }}{{ end }}</p>
+    <h1>{{ if eq .Kind "term" }}#{{ end }}{{ .Title }}</h1>
+    {{- with .Content }}<div class="lede">{{ . }}</div>{{ end }}
+    {{- if and (eq .Section "blog") (i18n "langNote") }}<p class="note">{{ i18n "langNote" }}</p>{{ end }}
+  </header>
+  {{- if eq .Kind "taxonomy" }}
+  <ul class="chips">
+    {{- range .Data.Terms.ByCount }}<li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span>{{ .Count }}</span></a></li>{{ end }}
+  </ul>
+  {{- else }}
+  {{- with $pages }}
+  <div class="cards three">
+    {{- range . }}{{ partial "post-card.html" . }}{{ end }}
+  </div>
+  {{- else }}
+  <p>{{ i18n "noPosts" }}</p>
+  {{- end }}
+  {{- with site.Taxonomies.tags }}{{ if eq $.Section "blog" }}
+  <nav class="tag-cloud" aria-label="{{ i18n "tags" }}">
+    <h2>{{ i18n "tags" }}</h2>
+    <ul class="chips small">{{ range .ByCount }}<li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></li>{{ end }}</ul>
+  </nav>
+  {{- end }}{{ end }}
+  {{- end }}
+</div>
+{{ end }}
