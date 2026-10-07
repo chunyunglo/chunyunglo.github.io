@@ -10,7 +10,7 @@
 hugo server
 ```
 
-需要 Hugo extended 0.146 以上。
+需要 Hugo extended 0.156 以上（CI 固定使用 0.167.0；`brew upgrade hugo` 可更新）。
 
 ## 修改內容
 
