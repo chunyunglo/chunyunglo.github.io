@@ -101,3 +101,40 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     items.forEach((el) => { el.hidden = f !== 'all' && !el.dataset.tags.split(' ').includes(f) })
   })
 })
+
+// Liquid glass: light and a slight tilt follow the pointer; on touch screens the light follows scrolling.
+const glass = [...document.querySelectorAll('[data-glass]')]
+if (glass.length) {
+  if (navigator.userAgentData?.brands?.some((b) => /Chromium/.test(b.brand))) root.classList.add('lens')
+  const set = (el, x, y, tilt) => {
+    el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
+    el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
+    el.style.setProperty('--la', `${(Math.atan2(y - 0.5, x - 0.5) * 180 / Math.PI + 90).toFixed(1)}deg`)
+    el.style.setProperty('--rx', `${tilt ? ((x - 0.5) * 6).toFixed(2) : 0}deg`)
+    el.style.setProperty('--ry', `${tilt ? ((0.5 - y) * 6).toFixed(2) : 0}deg`)
+  }
+  const fromScroll = () => {
+    const vh = window.innerHeight
+    glass.forEach((el) => {
+      const r = el.getBoundingClientRect()
+      const t = Math.min(Math.max((r.top + r.height / 2) / vh, 0), 1)
+      set(el, 0.2 + 0.6 * t, 1 - t, false)
+    })
+  }
+  let raf = 0
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  if (finePointer) {
+    glass.forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(raf)
+        raf = requestAnimationFrame(() => {
+          const r = el.getBoundingClientRect()
+          set(el, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, !reduceMotion)
+        })
+      })
+      el.addEventListener('pointerleave', () => fromScroll())
+    })
+  }
+  window.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(fromScroll) }, { passive: true })
+  fromScroll()
+}
