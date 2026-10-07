@@ -5,6 +5,8 @@ tags: ["交換學生", "Monash", "墨爾本"]
 series: monash-2026
 description: "墨爾本的天氣、食物與咖啡，還有在一座陌生城市成為他者、慢慢長出自己生活的過程。"
 coverAlt: "從 St Kilda 望向墨爾本市區的夕陽"
+slug: monash-exchange-3
+lang: zh
 ---
 
 交換除了在學校上課以外，有更大部分的時間是與自己和這座城市相處，這是一個很有趣的過程。墨爾本是一座很值得探索的城市，某個街口巷尾總能發現一些意想不到的驚喜，可能是某種沒吃過的異國料理、某杯特調咖啡、某棵很美的樹。
@@ -64,7 +66,7 @@ coverAlt: "從 St Kilda 望向墨爾本市區的夕陽"
 如果你也正準備踏上這段旅程，我想說的是，不必害怕這一切的手足無措。儘管交換生活的一切我們都未曾經歷，我們固然會在初次體驗時顯得有些笨拙，但正是因為這些笨拙的日子，才顯得每個習以為常都格外真實。
 
 {{< gallery >}}
-![從 St Kilda 望向市區](stkilda.jpg "St Kilda 望向市區")
-![Frankston 海灘](frankston.jpg "Frankston beach")
-![Williamstown 港口](williamstown.jpg "Williamstown")
+![從 St Kilda 望向市區](stkilda.jpg)
+![Frankston 海灘](frankston.jpg)
+![Williamstown 港口](williamstown.jpg)
 {{< /gallery >}}

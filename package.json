@@ -1,0 +1,14 @@
+{
+  "name": "chunyunglo.github.io",
+  "private": true,
+  "scripts": {
+    "write": "node tools/write.mjs",
+    "preview": "hugo server -D",
+    "strip-exif": "node tools/strip-exif.mjs",
+    "app": "sh tools/macos/build-app.sh",
+    "postinstall": "git config core.hooksPath .githooks || true"
+  },
+  "devDependencies": {
+    "decap-server": "3.11.3"
+  }
+}

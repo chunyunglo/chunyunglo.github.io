@@ -1,0 +1,10 @@
+#!/bin/sh
+# Strip EXIF/GPS from staged images before every commit.
+files=$(git diff --cached --name-only --diff-filter=ACM | grep -iE '\.(jpe?g|png|heic|heif)$')
+[ -z "$files" ] && exit 0
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: 需要 Node.js 才能移除照片的定位資訊（https://nodejs.org）。" >&2
+  exit 1
+fi
+echo "$files" | tr '\n' '\0' | xargs -0 node tools/strip-exif.mjs || exit 1
+echo "$files" | tr '\n' '\0' | xargs -0 git add --
