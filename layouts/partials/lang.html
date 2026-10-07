@@ -3,4 +3,5 @@
   "zh-tw" (dict "code" "zh-Hant-TW" "og" "zh_TW" "label" "中文")
   "en" (dict "code" "en" "og" "en_US" "label" "EN")
 -}}
-{{- return index $m . | default (dict "code" . "og" . "label" .) -}}
+{{- $r := index $m . | default (dict "code" . "og" . "label" .) -}}
+{{- return $r -}}
