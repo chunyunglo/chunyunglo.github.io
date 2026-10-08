@@ -365,9 +365,6 @@ main:focus { outline: none; }
     inset 0 0 24px rgba(255, 255, 255, .12);
   position: relative; isolation: isolate; overflow: hidden;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 0 14px rgba(0, 0, 0, .3);
-  --mx: 25%; --my: 0%; --rx: 0deg; --ry: 0deg;
-  transform: perspective(1200px) rotateX(var(--ry)) rotateY(var(--rx));
-  transition: transform .5s cubic-bezier(.2, .8, .2, 1);
 }
 .lg-refract {
   position: absolute; inset: 0; z-index: -2; border-radius: inherit; pointer-events: none;
@@ -387,7 +384,6 @@ main:focus { outline: none; }
 .hero .panel > .lg-refract { position: absolute; inset: 0; z-index: -2; display: block; }
 .hero .panel :is(.lede, .meta, .alt-name) { color: rgba(255, 255, 255, .94); }
 .hero .lede, .hero .meta { font-weight: 500; }
-@media (prefers-reduced-motion: reduce) { .hero .panel { transform: none; } }
 
 /* The original bouncing arrow under the hero. */
 .scroll-cue { width: 3rem; height: 3rem; display: grid; place-items: center; animation: bounce 1.8s ease-in-out infinite; }

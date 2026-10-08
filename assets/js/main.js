@@ -173,20 +173,13 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     const build = ({ el, f }) => {
       const w = el.offsetWidth; const h = el.offsetHeight
       if (!w || !h) return
-      const bezel = Math.min(80, Math.min(w, h) * 0.18)
+      const bezel = Math.min(30, Math.min(w, h) * 0.07)
       const map = makeMap(w, h, 30, bezel)
       const s = bezel * 1.8 // max inward shift is scale / 2 (just under the bezel width)
-      // Three passes with slightly different strengths give the red/green/blue fringe.
+      // One displacement pass keeps scrolling smooth.
       f.innerHTML = `
         <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G" result="dr"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.04}" xChannelSelector="R" yChannelSelector="G" result="dg"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.08}" xChannelSelector="R" yChannelSelector="G" result="db"/>
-        <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-        <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-        <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
-        <feBlend in="r" in2="g" mode="screen" result="rg"/>
-        <feBlend in="rg" in2="b" mode="screen"/>`
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G"/>`
     }
 
     // Keep the photo inside each card lined up with the fixed background behind it.
@@ -204,26 +197,11 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     }
     const queue = () => { if (!queued) { queued = true; requestAnimationFrame(align) } }
     const rebuild = () => { setups.forEach(build); queue() }
-    window.addEventListener('scroll', queue, { passive: true })
+    let heroVisible = true
+    new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting }).observe(photo.closest('.hero'))
+    window.addEventListener('scroll', () => { if (heroVisible) queue() }, { passive: true })
     new ResizeObserver(rebuild).observe(panels[0].parentElement)
     rebuild()
 
-    // A slight tilt follows the pointer.
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      for (const { el } of setups) {
-        el.addEventListener('pointermove', (e) => {
-          const r = el.getBoundingClientRect()
-          const x = (e.clientX - r.left) / r.width; const y = (e.clientY - r.top) / r.height
-          if (!reduceMotion) {
-            el.style.setProperty('--rx', `${((x - 0.5) * 5).toFixed(2)}deg`)
-            el.style.setProperty('--ry', `${((0.5 - y) * 5).toFixed(2)}deg`)
-          }
-          queue()
-        })
-        el.addEventListener('pointerleave', () => {
-          el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); setTimeout(queue, 520)
-        })
-      }
-    }
   }
 }
