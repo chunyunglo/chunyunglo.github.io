@@ -402,3 +402,6 @@ main:focus { outline: none; }
 @media (hover: hover) {
   .lg-refract { background-attachment: scroll, fixed; background-size: 100% 100%, cover; background-position: 0 0, center; }
 }
+
+/* Reference lists at the end of essays: smaller type with a hanging indent. */
+.prose :is(h2#references, h2#reference) ~ p { font-size: .9rem; line-height: 1.6; padding-left: 1.75em; text-indent: -1.75em; margin-bottom: .6em; color: var(--ink-2); overflow-wrap: anywhere; }
