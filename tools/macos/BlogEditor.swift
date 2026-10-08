@@ -197,6 +197,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     view.addItem(withTitle: "預覽網站", action: #selector(openPreview), keyEquivalent: "p")
     viewItem.submenu = view
 
+    let siteItem = NSMenuItem(); main.addItem(siteItem)
+    let site = NSMenu(title: "網站")
+    site.addItem(withTitle: "上傳到網站…", action: #selector(uploadToSite), keyEquivalent: "u")
+    siteItem.submenu = site
+
     let winItem = NSMenuItem(); main.addItem(winItem)
     let win = NSMenu(title: "視窗")
     win.addItem(withTitle: "縮到最小", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
@@ -227,6 +232,73 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     if let request { v.load(request) }
     return v
   }
+
+  // MARK: upload
+
+  /// Runs a shell script in the site folder and returns (exit status, combined output).
+  func run(_ script: String) -> (Int32, String) {
+    let p = Process()
+    p.executableURL = URL(fileURLWithPath: "/bin/zsh")
+    p.arguments = ["-lc", "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; cd \"$REPO\" || exit 1; " + script]
+    var env = ProcessInfo.processInfo.environment
+    env["REPO"] = repoPath
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    p.environment = env
+    let out = Pipe(); p.standardOutput = out; p.standardError = out
+    do { try p.run() } catch { return (1, error.localizedDescription) }
+    let data = out.fileHandleForReading.readDataToEndOfFile()
+    p.waitUntilExit()
+    return (p.terminationStatus, String(data: data, encoding: .utf8) ?? "")
+  }
+
+  /// Commits everything the editor changed (posts, photos, data) and pushes it, which makes
+  /// GitHub rebuild and publish the site. The pre-commit hook strips photo location data first.
+  @objc func uploadToSite() {
+    let (_, changes) = run("git status --porcelain -- content data static assets")
+    let files = changes.split(separator: "\n").map { String($0.dropFirst(3)) }
+    if files.isEmpty {
+      let a = NSAlert(); a.messageText = "沒有需要上傳的變更"; a.informativeText = "編輯器裡按「發布」存好的文章才會出現在這裡。"
+      a.beginSheetModal(for: window); return
+    }
+    let posts = Set(files.compactMap { f -> String? in
+      let parts = f.split(separator: "/")
+      return parts.count >= 3 && parts[0] == "content" && parts[1] == "blog" ? String(parts[2]) : nil
+    }).sorted()
+    let confirm = NSAlert()
+    confirm.messageText = "上傳 \(files.count) 個變更到網站？"
+    confirm.informativeText = (posts.isEmpty ? "" : "文章：\(posts.joined(separator: "、"))\n\n") + "上傳後大約一分鐘會出現在 chunyunglo.github.io。照片的定位資訊會自動移除。"
+    confirm.addButton(withTitle: "上傳"); confirm.addButton(withTitle: "取消")
+    confirm.beginSheetModal(for: window) { r in
+      guard r == .alertFirstButtonReturn else { return }
+      self.status.stringValue = "正在上傳…"
+      DispatchQueue.global().async {
+        let message = posts.isEmpty ? "Update site content" : "Update posts: \(posts.joined(separator: ", "))"
+        let (code, out) = self.run("""
+          git config core.hooksPath .githooks
+          git add -A -- content data static assets &&
+          git commit -q -m \(self.shellQuote(message)) &&
+          git pull --rebase --autostash -q &&
+          git push -q
+          """)
+        AppDelegate.log("upload exit \(code): \(out)")
+        DispatchQueue.main.async {
+          let done = NSAlert()
+          if code == 0 {
+            done.messageText = "已上傳"
+            done.informativeText = "網站大約一分鐘後更新：https://chunyunglo.github.io"
+          } else {
+            done.alertStyle = .warning
+            done.messageText = "上傳沒有完成"
+            done.informativeText = String(out.split(separator: "\n").suffix(4).joined(separator: "\n"))
+              + "\n\n詳細紀錄：~/Library/Logs/文章編輯器.log"
+          }
+          done.beginSheetModal(for: self.window)
+        }
+      }
+    }
+  }
+
+  func shellQuote(_ s: String) -> String { "'" + s.replacingOccurrences(of: "'", with: "'\\''") + "'" }
 
   // MARK: web view behaviour
 
