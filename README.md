@@ -86,7 +86,7 @@ npm install
 ```
 This also turns on a git hook that removes location data (EXIF/GPS) from photos whenever you commit.
 
-**Mac app (optional):** run `npm run app` once to install **文章編輯器.app** into `~/Applications`. Open it from Launchpad or the Dock to start the editor; quit it (⌘Q) to stop the local servers.
+**Mac app (recommended):** run `npm run app` once (needs the Xcode command line tools) to install **文章編輯器.app** into `~/Applications`. It opens the editor in its own window, with no browser needed; **顯示方式 → 預覽網站** (⌘P) shows the site, and quitting (⌘Q) stops the local servers. Problems are logged to `~/Library/Logs/文章編輯器.log`.
 
 **Every time:**
 1. Start the editor (or open 文章編輯器.app):
