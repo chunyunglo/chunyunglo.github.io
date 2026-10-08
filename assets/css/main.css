@@ -482,3 +482,19 @@ body { background: var(--bg); }
 .hero .panel :is(.lede, .meta, .alt-name) { color: rgba(255, 255, 255, .94); }
 .hero .panel, .hero .panel[data-glass] { background: linear-gradient(160deg, rgba(255, 255, 255, .1), rgba(8, 18, 26, .14) 60%, rgba(8, 18, 26, .2)); }
 .hero .lede, .hero .meta { font-weight: 500; }
+
+/* ---------- Refraction instead of blur (round 3) ---------- */
+/* The background photo is sharp; glass bends it at the edges rather than blurring it. */
+.site-bg::before { filter: none; inset: 0; }
+:root { --wash: rgba(245, 246, 244, .18); --glass: rgba(255, 255, 255, .42); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --wash: rgba(12, 18, 22, .35); --glass: rgba(18, 26, 32, .46); } }
+:root[data-theme="dark"] { --wash: rgba(12, 18, 22, .35); --glass: rgba(18, 26, 32, .46); }
+.card, .timeline-item, .post-card, .toc, .series, .glass-panel, .pubs, .skills, .post .prose {
+  -webkit-backdrop-filter: blur(1.5px) saturate(160%); backdrop-filter: blur(1.5px) saturate(160%);
+}
+.btn:not(.btn-primary), .filters button { -webkit-backdrop-filter: saturate(160%); backdrop-filter: saturate(160%); }
+.lens :is(.card, .timeline-item, .post-card, .toc, .series, .glass-panel, .pubs, .skills, .post .prose) {
+  -webkit-backdrop-filter: url(#lg-lens) saturate(165%); backdrop-filter: url(#lg-lens) saturate(165%);
+}
+.hero .panel, .hero .panel[data-glass] { -webkit-backdrop-filter: saturate(160%) brightness(.76); backdrop-filter: saturate(160%) brightness(.76); }
+.lens .hero .panel[data-glass] { -webkit-backdrop-filter: url(#lg-lens) saturate(165%) brightness(.74); backdrop-filter: url(#lg-lens) saturate(165%) brightness(.74); }
