@@ -157,3 +157,47 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     })
   })
 }
+
+// Real refraction: give each glass card a magnified, edge-bent copy of the background photo.
+{
+  const bg = document.querySelector('.site-bg')
+  const cards = [...document.querySelectorAll('.hero .panel, .card, .timeline-item, .post-card, .toc, .series, .pubs, .skills, .post .prose')]
+  if (bg && cards.length) {
+    const iw = Number(bg.dataset.w) || 1920
+    const ih = Number(bg.dataset.h) || 1440
+    const photo = bg.style.getPropertyValue('--bg-photo')
+    const layers = cards.map((el) => {
+      const l = document.createElement('span')
+      l.className = 'lg-refract'
+      l.setAttribute('aria-hidden', 'true')
+      l.style.setProperty('--bg-photo', photo)
+      el.classList.add('has-refract')
+      el.prepend(l)
+      return [el, l, el.closest('.hero') ? 1.22 : 1.14]
+    })
+    let queued = false
+    const update = () => {
+      queued = false
+      const W = window.innerWidth
+      const H = window.innerHeight
+      const s = Math.max(W / iw, H / ih)
+      const bw = iw * s
+      const bh = ih * s
+      const ox = (W - bw) / 2
+      const oy = (H - bh) / 2
+      for (const [el, l, m] of layers) {
+        const r = el.getBoundingClientRect()
+        if (r.bottom < -50 || r.top > H + 50) continue
+        const cx = r.left + r.width / 2
+        const cy = r.top + r.height / 2
+        l.style.setProperty('--bgs', `${(bw * m).toFixed(1)}px ${(bh * m).toFixed(1)}px`)
+        l.style.setProperty('--bgp', `${(cx - r.left - m * (cx - ox)).toFixed(1)}px ${(cy - r.top - m * (cy - oy)).toFixed(1)}px`)
+      }
+    }
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update) } }
+    window.addEventListener('scroll', queue, { passive: true })
+    window.addEventListener('resize', queue)
+    new ResizeObserver(queue).observe(document.body)
+    update()
+  }
+}
