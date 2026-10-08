@@ -377,14 +377,14 @@ main:focus { outline: none; }
   background-repeat: no-repeat;
   filter: var(--lg-filter, none) saturate(1.2);
 }
-/* Specular sheen that follows the pointer. */
+/* Fixed specular sheen across the top of the glass. */
 .hero .panel::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
   background:
-    radial-gradient(40% 35% at var(--mx) var(--my), rgba(255, 255, 255, .32), transparent 70%),
     linear-gradient(160deg, rgba(255, 255, 255, .14), transparent 35%);
 }
 .hero .panel > * { position: relative; z-index: 1; }
+.hero .panel > .lg-refract { position: absolute; inset: 0; z-index: -2; display: block; }
 .hero .panel :is(.lede, .meta, .alt-name) { color: rgba(255, 255, 255, .94); }
 .hero .lede, .hero .meta { font-weight: 500; }
 @media (prefers-reduced-motion: reduce) { .hero .panel { transform: none; } }

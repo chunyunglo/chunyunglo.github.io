@@ -120,7 +120,7 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     // bezel each pixel samples further inward along the surface normal, following a convex
     // squircle profile, so the photo is compressed and bent at the edges like thick glass.
     const makeMap = (w, h, radius, bezel) => {
-      const k = 0.5 // render the map at half resolution; the filter stretches it
+      const k = 1 // full-resolution map keeps the bent edge smooth
       const W = Math.max(2, Math.round(w * k)); const H = Math.max(2, Math.round(h * k))
       const c = document.createElement('canvas'); c.width = W; c.height = H
       const ctx = c.getContext('2d'); const img = ctx.createImageData(W, H); const d = img.data
@@ -129,6 +129,11 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
         const qx = Math.abs(x - hx) - (hx - r); const qy = Math.abs(y - hy) - (hy - r)
         return Math.min(Math.max(qx, qy), 0) + Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) - r
       }
+      const rn = Math.min(Math.max(r, bezel * 1.6), hx, hy) // rounder shape for the normals avoids creases along the diagonals
+      const sdfN = (x, y) => {
+        const qx = Math.abs(x - hx) - (hx - rn); const qy = Math.abs(y - hy) - (hy - rn)
+        return Math.min(Math.max(qx, qy), 0) + Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) - rn
+      }
       for (let j = 0; j < H; j++) {
         for (let i = 0; i < W; i++) {
           const x = (i + 0.5) / k; const y = (j + 0.5) / k
@@ -136,10 +141,10 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
           let dx = 0; let dy = 0
           if (dist > 0 && dist < bezel) {
             const e = 0.75
-            let nx = sdf(x - e, y) - sdf(x + e, y); let ny = sdf(x, y - e) - sdf(x, y + e) // inward normal
+            let nx = sdfN(x - e, y) - sdfN(x + e, y); let ny = sdfN(x, y - e) - sdfN(x, y + e) // inward normal (smoothed)
             const n = Math.hypot(nx, ny) || 1; nx /= n; ny /= n
             const t = 1 - dist / bezel // 0 where the flat middle starts, 1 at the rim
-            const mag = Math.pow(t, 1.6) // convex bezel: bends hardest at the rim, none in the flat middle
+            const mag = t * t // convex bezel: bends hardest at the rim, none in the flat middle
             dx = nx * mag; dy = ny * mag
           }
           const o = (j * W + i) * 4
@@ -168,15 +173,15 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     const build = ({ el, f }) => {
       const w = el.offsetWidth; const h = el.offsetHeight
       if (!w || !h) return
-      const bezel = Math.min(46, Math.min(w, h) * 0.16)
+      const bezel = Math.min(80, Math.min(w, h) * 0.18)
       const map = makeMap(w, h, 30, bezel)
-      const s = bezel * 2.2 // max shift in px is scale / 2
+      const s = bezel * 1.8 // max inward shift is scale / 2 (just under the bezel width)
       // Three passes with slightly different strengths give the red/green/blue fringe.
       f.innerHTML = `
         <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
         <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G" result="dr"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.08}" xChannelSelector="R" yChannelSelector="G" result="dg"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.16}" xChannelSelector="R" yChannelSelector="G" result="db"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.04}" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.08}" xChannelSelector="R" yChannelSelector="G" result="db"/>
         <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
         <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
         <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
@@ -203,14 +208,12 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     new ResizeObserver(rebuild).observe(panels[0].parentElement)
     rebuild()
 
-    // Specular light (and a slight tilt) follow the pointer.
+    // A slight tilt follows the pointer.
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       for (const { el } of setups) {
         el.addEventListener('pointermove', (e) => {
           const r = el.getBoundingClientRect()
           const x = (e.clientX - r.left) / r.width; const y = (e.clientY - r.top) / r.height
-          el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
-          el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
           if (!reduceMotion) {
             el.style.setProperty('--rx', `${((x - 0.5) * 5).toFixed(2)}deg`)
             el.style.setProperty('--ry', `${((0.5 - y) * 5).toFixed(2)}deg`)
