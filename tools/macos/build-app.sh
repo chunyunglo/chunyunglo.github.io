@@ -1,5 +1,6 @@
 #!/bin/sh
-# Builds "文章編輯器.app" for this repository and installs it into ~/Applications.
+# Builds the native "文章編輯器.app" for this repository and installs it into ~/Applications.
+# Needs the Xcode command line tools (xcode-select --install).
 # Usage: sh tools/macos/build-app.sh
 set -e
 cd "$(dirname "$0")/../.."
@@ -7,21 +8,31 @@ REPO="${REPO:-$(pwd)}"
 NAME="文章編輯器"
 DEST="${DEST:-$HOME/Applications/$NAME.app}"
 TMP="$(mktemp -d)"
-
-sed "s|__REPO__|$REPO|" tools/macos/BlogEditor.applescript > "$TMP/app.applescript"
-osacompile -s -o "$TMP/$NAME.app" "$TMP/app.applescript"
-
 APP="$TMP/$NAME.app"
-cp tools/macos/AppIcon.icns "$APP/Contents/Resources/applet.icns"
-PL="$APP/Contents/Info.plist"
-# Use our .icns instead of the default script icon in the asset catalog.
-/usr/libexec/PlistBuddy -c "Delete :CFBundleIconName" "$PL" 2>/dev/null || true
-rm -f "$APP/Contents/Resources/Assets.car"
-/usr/libexec/PlistBuddy -c "Set :CFBundleName $NAME" "$PL" 2>/dev/null || /usr/libexec/PlistBuddy -c "Add :CFBundleName string $NAME" "$PL"
-/usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string $NAME" "$PL" 2>/dev/null || true
-/usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string io.github.chunyunglo.blog-editor" "$PL" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier io.github.chunyunglo.blog-editor" "$PL"
-/usr/libexec/PlistBuddy -c "Add :LSMinimumSystemVersion string 11.0" "$PL" 2>/dev/null || true
-/usr/libexec/PlistBuddy -c "Add :NSHumanReadableCopyright string 羅俊詠" "$PL" 2>/dev/null || true
+
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+swiftc -O -o "$APP/Contents/MacOS/BlogEditor" tools/macos/BlogEditor.swift -framework Cocoa -framework WebKit
+cp tools/macos/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+cat > "$APP/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key><string>$NAME</string>
+  <key>CFBundleDisplayName</key><string>$NAME</string>
+  <key>CFBundleIdentifier</key><string>io.github.chunyunglo.blog-editor</string>
+  <key>CFBundleExecutable</key><string>BlogEditor</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleShortVersionString</key><string>2.0</string>
+  <key>CFBundleVersion</key><string>2</string>
+  <key>LSMinimumSystemVersion</key><string>12.0</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>
+  <key>RepoPath</key><string>$REPO</string>
+</dict>
+</plist>
+PLIST
 codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
 mkdir -p "$(dirname "$DEST")"
