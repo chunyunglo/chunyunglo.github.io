@@ -103,9 +103,10 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
 })
 
 // Liquid glass: light and a slight tilt follow the pointer; on touch screens the light follows scrolling.
+// Chromium can refract the background through an SVG lens; other browsers keep plain glass.
+if (navigator.userAgentData?.brands?.some((b) => /Chromium/.test(b.brand))) root.classList.add('lens')
 const glass = [...document.querySelectorAll('[data-glass]')]
 if (glass.length) {
-  if (navigator.userAgentData?.brands?.some((b) => /Chromium/.test(b.brand))) root.classList.add('lens')
   const set = (el, x, y, tilt) => {
     el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
     el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
