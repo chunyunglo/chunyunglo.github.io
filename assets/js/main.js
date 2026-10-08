@@ -102,102 +102,125 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
   })
 })
 
-// Liquid glass: light and a slight tilt follow the pointer; on touch screens the light follows scrolling.
-// Chromium can refract the background through an SVG lens; other browsers keep plain glass.
-if (navigator.userAgentData?.brands?.some((b) => /Chromium/.test(b.brand))) root.classList.add('lens')
-const glass = [...document.querySelectorAll('[data-glass]')]
-if (glass.length) {
-  const set = (el, x, y, tilt) => {
-    el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
-    el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
-    el.style.setProperty('--la', `${(Math.atan2(y - 0.5, x - 0.5) * 180 / Math.PI + 90).toFixed(1)}deg`)
-    el.style.setProperty('--rx', `${tilt ? ((x - 0.5) * 6).toFixed(2) : 0}deg`)
-    el.style.setProperty('--ry', `${tilt ? ((0.5 - y) * 6).toFixed(2) : 0}deg`)
-  }
-  const fromScroll = () => {
-    const vh = window.innerHeight
-    glass.forEach((el) => {
-      const r = el.getBoundingClientRect()
-      const t = Math.min(Math.max((r.top + r.height / 2) / vh, 0), 1)
-      set(el, 0.2 + 0.6 * t, 1 - t, false)
-    })
-  }
-  let raf = 0
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-  if (finePointer) {
-    glass.forEach((el) => {
-      el.addEventListener('pointermove', (e) => {
-        cancelAnimationFrame(raf)
-        raf = requestAnimationFrame(() => {
-          const r = el.getBoundingClientRect()
-          set(el, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, !reduceMotion)
-        })
-      })
-      el.addEventListener('pointerleave', () => fromScroll())
-    })
-  }
-  window.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(fromScroll) }, { passive: true })
-  fromScroll()
-}
-
-// The same pointer light on every glass card across the site (no tilt).
-if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll('.card, .timeline-item, .post-card, .glass-panel').forEach((el) => {
-    let f = 0
-    el.addEventListener('pointermove', (e) => {
-      cancelAnimationFrame(f)
-      f = requestAnimationFrame(() => {
-        const r = el.getBoundingClientRect()
-        const x = (e.clientX - r.left) / r.width
-        const y = (e.clientY - r.top) / r.height
-        el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
-        el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
-        el.style.setProperty('--la', `${(Math.atan2(y - 0.5, x - 0.5) * 180 / Math.PI + 90).toFixed(1)}deg`)
-      })
-    })
-  })
-}
-
-// Real refraction: give each glass card a magnified, edge-bent copy of the background photo.
+// Liquid glass on the two home cards (see the CSS comment for the method).
 {
-  const bg = document.querySelector('.site-bg')
-  const cards = [...document.querySelectorAll('.hero .panel, .card, .timeline-item, .post-card, .toc, .series, .pubs, .skills, .post .prose')]
-  if (bg && cards.length) {
-    const iw = Number(bg.dataset.w) || 1920
-    const ih = Number(bg.dataset.h) || 1440
-    const photo = bg.style.getPropertyValue('--bg-photo')
-    const layers = cards.map((el) => {
-      const l = document.createElement('span')
-      l.className = 'lg-refract'
-      l.setAttribute('aria-hidden', 'true')
-      l.style.setProperty('--bg-photo', photo)
-      el.classList.add('has-refract')
-      el.prepend(l)
-      return [el, l, el.closest('.hero') ? 1.22 : 1.14]
+  const photo = document.querySelector('.hero-bg')
+  const panels = [...document.querySelectorAll('.hero .panel')]
+  if (photo && panels.length) {
+    const NS = 'http://www.w3.org/2000/svg'
+    const defs = document.createElementNS(NS, 'svg')
+    defs.setAttribute('width', '0'); defs.setAttribute('height', '0'); defs.setAttribute('aria-hidden', 'true')
+    defs.style.position = 'absolute'
+    document.body.append(defs)
+    const iw = Number(photo.dataset.w) || 1920
+    const ih = Number(photo.dataset.h) || 1440
+    const url = `url("${photo.currentSrc || photo.src}")`
+
+    // Displacement map for a rounded slab: neutral (no shift) in the flat middle; inside the
+    // bezel each pixel samples further inward along the surface normal, following a convex
+    // squircle profile, so the photo is compressed and bent at the edges like thick glass.
+    const makeMap = (w, h, radius, bezel) => {
+      const k = 0.5 // render the map at half resolution; the filter stretches it
+      const W = Math.max(2, Math.round(w * k)); const H = Math.max(2, Math.round(h * k))
+      const c = document.createElement('canvas'); c.width = W; c.height = H
+      const ctx = c.getContext('2d'); const img = ctx.createImageData(W, H); const d = img.data
+      const hx = w / 2; const hy = h / 2; const r = Math.min(radius, hx, hy)
+      const sdf = (x, y) => {
+        const qx = Math.abs(x - hx) - (hx - r); const qy = Math.abs(y - hy) - (hy - r)
+        return Math.min(Math.max(qx, qy), 0) + Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) - r
+      }
+      for (let j = 0; j < H; j++) {
+        for (let i = 0; i < W; i++) {
+          const x = (i + 0.5) / k; const y = (j + 0.5) / k
+          const dist = -sdf(x, y) // distance inside the edge
+          let dx = 0; let dy = 0
+          if (dist > 0 && dist < bezel) {
+            const e = 0.75
+            let nx = sdf(x - e, y) - sdf(x + e, y); let ny = sdf(x, y - e) - sdf(x, y + e) // inward normal
+            const n = Math.hypot(nx, ny) || 1; nx /= n; ny /= n
+            const t = 1 - dist / bezel // 0 where the flat middle starts, 1 at the rim
+            const mag = Math.pow(t, 1.6) // convex bezel: bends hardest at the rim, none in the flat middle
+            dx = nx * mag; dy = ny * mag
+          }
+          const o = (j * W + i) * 4
+          d[o] = 128 + dx * 127; d[o + 1] = 128 + dy * 127; d[o + 2] = 128; d[o + 3] = 255
+        }
+      }
+      ctx.putImageData(img, 0, 0)
+      return c.toDataURL()
+    }
+
+    const setups = panels.map((el, n) => {
+      const layer = document.createElement('span')
+      layer.className = 'lg-refract'; layer.setAttribute('aria-hidden', 'true')
+      layer.style.setProperty('--photo', url)
+      el.prepend(layer)
+      const id = `lg-glass-${n}`
+      const f = document.createElementNS(NS, 'filter')
+      f.setAttribute('id', id); f.setAttribute('x', '0'); f.setAttribute('y', '0')
+      f.setAttribute('width', '100%'); f.setAttribute('height', '100%')
+      f.setAttribute('color-interpolation-filters', 'sRGB')
+      defs.append(f)
+      layer.style.setProperty('--lg-filter', `url(#${id})`)
+      return { el, layer, f }
     })
+
+    const build = ({ el, f }) => {
+      const w = el.offsetWidth; const h = el.offsetHeight
+      if (!w || !h) return
+      const bezel = Math.min(46, Math.min(w, h) * 0.16)
+      const map = makeMap(w, h, 30, bezel)
+      const s = bezel * 2.2 // max shift in px is scale / 2
+      // Three passes with slightly different strengths give the red/green/blue fringe.
+      f.innerHTML = `
+        <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G" result="dr"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.08}" xChannelSelector="R" yChannelSelector="G" result="dg"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s * 1.16}" xChannelSelector="R" yChannelSelector="G" result="db"/>
+        <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+        <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+        <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+        <feBlend in="r" in2="g" mode="screen" result="rg"/>
+        <feBlend in="rg" in2="b" mode="screen"/>`
+    }
+
+    // Keep the photo inside each card lined up with the fixed background behind it.
     let queued = false
-    const update = () => {
+    const align = () => {
       queued = false
-      const W = window.innerWidth
-      const H = window.innerHeight
-      const s = Math.max(W / iw, H / ih)
-      const bw = iw * s
-      const bh = ih * s
-      const ox = (W - bw) / 2
-      const oy = (H - bh) / 2
-      for (const [el, l, m] of layers) {
+      const W = window.innerWidth; const H = window.innerHeight
+      const sc = Math.max(W / iw, H / ih); const bw = iw * sc; const bh = ih * sc
+      const ox = (W - bw) / 2; const oy = (H - bh) / 2
+      for (const { el, layer } of setups) {
         const r = el.getBoundingClientRect()
-        if (r.bottom < -50 || r.top > H + 50) continue
-        const cx = r.left + r.width / 2
-        const cy = r.top + r.height / 2
-        l.style.setProperty('--bgs', `${(bw * m).toFixed(1)}px ${(bh * m).toFixed(1)}px`)
-        l.style.setProperty('--bgp', `${(cx - r.left - m * (cx - ox)).toFixed(1)}px ${(cy - r.top - m * (cy - oy)).toFixed(1)}px`)
+        layer.style.setProperty('--bgs', `${bw.toFixed(1)}px ${bh.toFixed(1)}px`)
+        layer.style.setProperty('--bgp', `${(ox - r.left).toFixed(1)}px ${(oy - r.top).toFixed(1)}px`)
       }
     }
-    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update) } }
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(align) } }
+    const rebuild = () => { setups.forEach(build); queue() }
     window.addEventListener('scroll', queue, { passive: true })
-    window.addEventListener('resize', queue)
-    new ResizeObserver(queue).observe(document.body)
-    update()
+    new ResizeObserver(rebuild).observe(panels[0].parentElement)
+    rebuild()
+
+    // Specular light (and a slight tilt) follow the pointer.
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      for (const { el } of setups) {
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect()
+          const x = (e.clientX - r.left) / r.width; const y = (e.clientY - r.top) / r.height
+          el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
+          el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
+          if (!reduceMotion) {
+            el.style.setProperty('--rx', `${((x - 0.5) * 5).toFixed(2)}deg`)
+            el.style.setProperty('--ry', `${((0.5 - y) * 5).toFixed(2)}deg`)
+          }
+          queue()
+        })
+        el.addEventListener('pointerleave', () => {
+          el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); setTimeout(queue, 520)
+        })
+      }
+    }
   }
 }

@@ -8,7 +8,7 @@
 <section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
   {{- with resources.Get "images/site/hero.jpg" }}
   {{- $s1 := .Resize "1280x webp q72" }}{{ $s2 := .Resize "1920x webp q72" }}{{ $s3 := .Resize "2560x webp q70" }}
-  <img class="hero-bg" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high">
+  <img class="hero-bg" data-w="{{ $s2.Width }}" data-h="{{ $s2.Height }}" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high">
   {{- end }}
   <div class="wrap hero-grid">
     <div class="panel intro" data-glass>
