@@ -173,9 +173,9 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     const build = ({ el, f }) => {
       const w = el.offsetWidth; const h = el.offsetHeight
       if (!w || !h) return
-      const bezel = Math.min(30, Math.min(w, h) * 0.07)
+      const bezel = Math.min(40, Math.min(w, h) * 0.09)
       const map = makeMap(w, h, 30, bezel)
-      const s = bezel * 1.8 // max inward shift is scale / 2 (just under the bezel width)
+      const s = bezel * 0.98 // max inward shift is scale / 2; keeping it under half the bezel stops the image folding over itself
       // One displacement pass keeps scrolling smooth.
       f.innerHTML = `
         <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
