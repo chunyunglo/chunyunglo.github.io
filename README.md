@@ -95,7 +95,7 @@ npm run write
 ```
 2. The editor opens at `http://localhost:1313/admin/`. Click 登入, then **+ 文章** to start a post (or **Posts (English)** for an English version using the same folder name).
 3. Fill in the title, an English folder name (e.g. `my-first-post`), date, tags and summary. Upload a cover image and add photos with the image button in the editor.
-4. Untick 草稿 when the post is ready, then click 發布 → 立即發布. Preview it at `http://localhost:1313/blog/`.
+4. Press ⌘S (or the 儲存 button) to save; this writes the files on your Mac and nothing goes online yet. Untick 草稿 when the post should appear on the site. Preview it at `http://localhost:1313/blog/`.
 5. In the app choose **網站 → 上傳到網站…** (⌘U) to commit and push the changes, or commit and push with GitHub Desktop. The site updates about a minute after the push to `main`.
 
 Prefer plain files? `hugo new content blog/my-post/index.md` creates a post folder; put `cover.jpg` and other photos in the same folder.

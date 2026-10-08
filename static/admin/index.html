@@ -7,6 +7,39 @@
   <title>文章編輯器</title>
 </head>
 <body>
+  <script>window.CMS_MANUAL_INIT = true</script>
   <script src="https://unpkg.com/decap-cms@3.16.3/dist/decap-cms.js"></script>
+  <script type="module">
+    import zh from 'https://unpkg.com/decap-cms-locales@3.8.2/dist/esm/zh_Hant/index.js'
+
+    // In this local editor, Decap's "publish" only writes the files on this Mac; nothing goes
+    // online until 網站 → 上傳到網站 in the app. Call it what it is: save.
+    Object.assign(zh.editor.editorToolbar, {
+      publish: '儲存',
+      publishing: '儲存中…',
+      published: '已儲存',
+      publishNow: '儲存（⌘S）',
+      publishAndCreateNew: '儲存並新增一篇',
+      publishAndDuplicate: '儲存並複製一篇',
+      unpublish: '刪除'
+    })
+    Object.assign(zh.ui.toast, { entryPublished: '已儲存到電腦。要上線請用「網站 → 上傳到網站」。' })
+    CMS.registerLocale('zh_Hant', zh)
+    CMS.init()
+
+    // ⌘S / Ctrl+S saves the open entry (opens the save menu and picks "儲存").
+    const byText = (sel, text) => [...document.querySelectorAll(sel)].find((el) => el.textContent.trim().startsWith(text))
+    document.addEventListener('keydown', (e) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 's') return
+      e.preventDefault()
+      const menuButton = byText('button, [role="button"]', '儲存')
+      if (!menuButton) return
+      menuButton.click()
+      setTimeout(() => {
+        const item = byText('[role="menuitem"], li, button', '儲存（⌘S）')
+        if (item) item.click()
+      }, 60)
+    }, true)
+  </script>
 </body>
 </html>
