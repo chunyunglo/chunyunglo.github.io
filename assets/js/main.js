@@ -144,7 +144,8 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
             let nx = sdfN(x - e, y) - sdfN(x + e, y); let ny = sdfN(x, y - e) - sdfN(x, y + e) // inward normal (smoothed)
             const n = Math.hypot(nx, ny) || 1; nx /= n; ny /= n
             const t = 1 - dist / bezel // 0 where the flat middle starts, 1 at the rim
-            const mag = t * t // convex bezel: bends hardest at the rim, none in the flat middle
+            // Smootherstep profile: zero slope and curvature where the flat middle begins, so there is no visible seam.
+            const mag = t * t * t * (t * (t * 6 - 15) + 10)
             dx = nx * mag; dy = ny * mag
           }
           const o = (j * W + i) * 4
@@ -173,9 +174,9 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     const build = ({ el, f }) => {
       const w = el.offsetWidth; const h = el.offsetHeight
       if (!w || !h) return
-      const bezel = Math.min(40, Math.min(w, h) * 0.09)
+      const bezel = Math.min(46, Math.min(w, h) * 0.1)
       const map = makeMap(w, h, 30, bezel)
-      const s = bezel * 0.98 // max inward shift is scale / 2; keeping it under half the bezel stops the image folding over itself
+      const s = bezel * 1.0 // max inward shift is scale / 2; with this profile that never folds the image over itself
       // One displacement pass keeps scrolling smooth.
       f.innerHTML = `
         <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
