@@ -498,3 +498,26 @@ body { background: var(--bg); }
 }
 .hero .panel, .hero .panel[data-glass] { -webkit-backdrop-filter: saturate(160%) brightness(.76); backdrop-filter: saturate(160%) brightness(.76); }
 .lens .hero .panel[data-glass] { -webkit-backdrop-filter: url(#lg-lens) saturate(165%) brightness(.74); backdrop-filter: url(#lg-lens) saturate(165%) brightness(.74); }
+
+/* ---------- Real refraction (round 4) ----------
+   Each glass card holds its own copy of the page photo, aligned with the background and
+   magnified like a lens; an SVG displacement filter bends it further at the edges.
+   This uses an ordinary CSS filter, so it works in Safari and Firefox as well as Chromium. */
+.lg-refract {
+  position: absolute; inset: 0; z-index: -2; border-radius: inherit; pointer-events: none; overflow: hidden;
+  background-image: linear-gradient(var(--glass-tint), var(--glass-tint)), var(--bg-photo);
+  background-size: 100% 100%, var(--bgs, cover);
+  background-position: 0 0, var(--bgp, center);
+  background-repeat: no-repeat;
+  filter: url(#lg-lens) saturate(1.25);
+}
+:root { --glass-tint: rgba(255, 255, 255, .5); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --glass-tint: rgba(14, 22, 28, .58); } }
+:root[data-theme="dark"] { --glass-tint: rgba(14, 22, 28, .58); }
+.hero { --glass-tint: rgba(8, 18, 26, .26); }
+.has-refract:is(.card, .timeline-item, .post-card, .toc, .series, .pubs, .skills, .prose, .panel) {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  position: relative; isolation: isolate;
+}
+.post-card.has-refract { overflow: hidden; }
