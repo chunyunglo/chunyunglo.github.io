@@ -253,30 +253,67 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
 
   /// Commits everything the editor changed (posts, photos, data) and pushes it, which makes
   /// GitHub rebuild and publish the site. The pre-commit hook strips photo location data first.
+  /// Reads a post's title from its front matter (Chinese or English version).
+  func postTitle(_ slug: String) -> String {
+    for name in ["index.md", "index.en.md"] {
+      let url = URL(fileURLWithPath: repoPath).appendingPathComponent("content/blog/\(slug)/\(name)")
+      if let text = try? String(contentsOf: url, encoding: .utf8),
+         let line = text.split(separator: "\n").first(where: { $0.hasPrefix("title:") }) {
+        return line.dropFirst(6).trimmingCharacters(in: .whitespaces).trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+      }
+    }
+    return slug
+  }
+
+  /// Lets you pick which changed posts to upload, then commits only those and pushes, which
+  /// makes GitHub rebuild and publish the site. The pre-commit hook strips photo location data.
   @objc func uploadToSite() {
     let (_, changes) = run("git status --porcelain -- content data static assets")
-    let files = changes.split(separator: "\n").map { String($0.dropFirst(3)) }
+    let files = changes.split(separator: "\n").map { String($0.dropFirst(3)).trimmingCharacters(in: CharacterSet(charactersIn: "\"")) }
     if files.isEmpty {
-      let a = NSAlert(); a.messageText = "沒有需要上傳的變更"; a.informativeText = "編輯器裡按「發布」存好的文章才會出現在這裡。"
+      let a = NSAlert(); a.messageText = "沒有需要上傳的變更"; a.informativeText = "在編輯器按「儲存」（⌘S）存好的文章才會出現在這裡。"
       a.beginSheetModal(for: window); return
     }
-    let posts = Set(files.compactMap { f -> String? in
+    // Group changes by post; anything else (site settings, images) is one extra item.
+    var groups: [(label: String, slug: String?, paths: [String])] = []
+    var other: [String] = []
+    for f in files {
       let parts = f.split(separator: "/")
-      return parts.count >= 3 && parts[0] == "content" && parts[1] == "blog" ? String(parts[2]) : nil
-    }).sorted()
+      if parts.count >= 3, parts[0] == "content", parts[1] == "blog", !parts[2].hasPrefix("_index") {
+        let slug = String(parts[2])
+        let dir = "content/blog/\(slug)"
+        if let i = groups.firstIndex(where: { $0.slug == slug }) { groups[i].paths.append(f) }
+        else { groups.append((postTitle(slug), slug, [f.hasSuffix("/") ? dir : f])) }
+      } else { other.append(f) }
+    }
+    if !other.isEmpty { groups.append(("其他網站變更（\(other.count) 個檔案）", nil, other)) }
+
+    let stack = NSStackView(); stack.orientation = .vertical; stack.alignment = .leading; stack.spacing = 6
+    let boxes = groups.map { g -> NSButton in
+      let b = NSButton(checkboxWithTitle: g.label, target: nil, action: nil)
+      b.state = .on
+      stack.addArrangedSubview(b)
+      return b
+    }
+    stack.frame = NSRect(x: 0, y: 0, width: 420, height: CGFloat(groups.count) * 24)
+
     let confirm = NSAlert()
-    confirm.messageText = "上傳 \(files.count) 個變更到網站？"
-    confirm.informativeText = (posts.isEmpty ? "" : "文章：\(posts.joined(separator: "、"))\n\n") + "上傳後大約一分鐘會出現在 chunyunglo.github.io。照片的定位資訊會自動移除。"
+    confirm.messageText = "要上傳哪些到網站？"
+    confirm.informativeText = "只會上傳勾選的項目，其他的會留在電腦上。上傳後大約一分鐘會出現在 chunyunglo.github.io，照片的定位資訊會自動移除。"
+    confirm.accessoryView = stack
     confirm.addButton(withTitle: "上傳"); confirm.addButton(withTitle: "取消")
     confirm.beginSheetModal(for: window) { r in
       guard r == .alertFirstButtonReturn else { return }
-      self.status.stringValue = "正在上傳…"
+      let chosen = zip(groups, boxes).filter { $0.1.state == .on }.map { $0.0 }
+      if chosen.isEmpty { return }
+      let paths = chosen.flatMap { $0.paths }.map { self.shellQuote($0) }.joined(separator: " ")
+      let names = chosen.compactMap { $0.slug }
+      let message = names.isEmpty ? "Update site content" : "Update posts: \(names.joined(separator: ", "))"
       DispatchQueue.global().async {
-        let message = posts.isEmpty ? "Update site content" : "Update posts: \(posts.joined(separator: ", "))"
         let (code, out) = self.run("""
           git config core.hooksPath .githooks
-          git add -A -- content data static assets &&
-          git commit -q -m \(self.shellQuote(message)) &&
+          git add -A -- \(paths) &&
+          git commit -q -m \(self.shellQuote(message)) -- \(paths) &&
           git pull --rebase --autostash -q &&
           git push -q
           """)
