@@ -131,7 +131,7 @@ main:focus { outline: none; }
 /* ---------- Hero ---------- */
 .hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding: 6rem 0 5rem; isolation: isolate; clip-path: inset(0); }
 /* The photo is pinned to the viewport (clipped to the hero), so only the cards move over it. */
-.hero-bg { position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; }
+.hero-bg { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
 .hero::before { content: ""; position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 18, 24, .5), rgba(10, 18, 24, 0) 28%, rgba(10, 18, 24, 0) 70%, rgba(10, 18, 24, .45)); }
 @keyframes hero-zoom { to { transform: scale(1); } }
 .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2rem); align-items: stretch; }
@@ -382,6 +382,8 @@ main:focus { outline: none; }
 }
 .hero .panel > * { position: relative; z-index: 1; }
 .hero .panel > .lg-refract { position: absolute; inset: 0; z-index: -2; display: block; }
+.hero .panel > .lg-rim { inset: auto; border-radius: 0; }
+.lg-refract:not(.lg-rim) { filter: saturate(1.2); }
 .hero .panel :is(.lede, .meta, .alt-name) { color: rgba(255, 255, 255, .94); }
 .hero .lede, .hero .meta { font-weight: 500; }
 
@@ -394,3 +396,9 @@ main:focus { outline: none; }
 .site-header { background: color-mix(in srgb, var(--bg) 94%, transparent); border-bottom: 1px solid var(--line); }
 .site-header.compact .site-nav, .site-header.menu-open .site-nav { background: var(--bg); box-shadow: 0 16px 32px -16px rgba(15, 25, 30, .45); }
 .is-home .site-header.over-hero.menu-open { background: var(--bg); }
+
+/* Desktop: let the browser keep the photo inside the glass locked to the fixed background
+   (background-attachment: fixed), so it never trails a frame behind while scrolling. */
+@media (hover: hover) {
+  .lg-refract { background-attachment: scroll, fixed; background-size: 100% 100%, cover; background-position: 0 0, center; }
+}

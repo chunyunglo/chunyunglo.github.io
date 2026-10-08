@@ -153,34 +153,56 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
         }
       }
       ctx.putImageData(img, 0, 0)
-      return c.toDataURL()
+      return c
     }
 
-    const setups = panels.map((el, n) => {
-      const layer = document.createElement('span')
-      layer.className = 'lg-refract'; layer.setAttribute('aria-hidden', 'true')
-      layer.style.setProperty('--photo', url)
-      el.prepend(layer)
-      const id = `lg-glass-${n}`
-      const f = document.createElementNS(NS, 'filter')
-      f.setAttribute('id', id); f.setAttribute('x', '0'); f.setAttribute('y', '0')
-      f.setAttribute('width', '100%'); f.setAttribute('height', '100%')
-      f.setAttribute('color-interpolation-filters', 'sRGB')
-      defs.append(f)
-      layer.style.setProperty('--lg-filter', `url(#${id})`)
-      return { el, layer, f }
+    // Each card gets a plain photo layer for the clear middle, plus four thin strips along the
+    // rim that carry the refraction filter. Filtering only the rim keeps the per-frame work small
+    // (an SVG filter over the whole card was what made scrolling stutter on Retina screens).
+    const mkLayer = (cls) => {
+      const l = document.createElement('span')
+      l.className = cls; l.setAttribute('aria-hidden', 'true')
+      l.style.setProperty('--photo', url)
+      return l
+    }
+    let fid = 0
+    const setups = panels.map((el) => {
+      const base = mkLayer('lg-refract')
+      const strips = ['top', 'bottom', 'left', 'right'].map((side) => {
+        const l = mkLayer('lg-refract lg-rim')
+        const f = document.createElementNS(NS, 'filter')
+        const id = `lg-rim-${fid++}`
+        f.setAttribute('id', id); f.setAttribute('x', '0'); f.setAttribute('y', '0')
+        f.setAttribute('width', '100%'); f.setAttribute('height', '100%')
+        f.setAttribute('color-interpolation-filters', 'sRGB')
+        defs.append(f)
+        l.style.setProperty('--lg-filter', `url(#${id})`)
+        return { side, l, f, x: 0, y: 0 }
+      })
+      el.prepend(base, ...strips.map((s) => s.l))
+      return { el, base, strips }
     })
 
-    const build = ({ el, f }) => {
+    const build = ({ el, strips }) => {
       const w = el.offsetWidth; const h = el.offsetHeight
       if (!w || !h) return
-      const bezel = Math.min(46, Math.min(w, h) * 0.1)
-      const map = makeMap(w, h, 30, bezel)
-      const s = bezel * 1.0 // max inward shift is scale / 2; with this profile that never folds the image over itself
-      // One displacement pass keeps scrolling smooth.
-      f.innerHTML = `
-        <feImage href="${map}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="map"/>
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G"/>`
+      const bezel = Math.min(22, Math.min(w, h) * 0.06)
+      const s = bezel // max inward shift is scale / 2; with this profile the image never folds
+      const map = makeMap(w, h, 30, bezel) // full-card map, cut into the four strips below
+      const band = Math.ceil(bezel * 1.6) // a little extra so corner samples stay inside the strip
+      for (const st of strips) {
+        const r = st.side === 'top' ? [0, 0, w, band]
+          : st.side === 'bottom' ? [0, h - band, w, band]
+            : st.side === 'left' ? [0, band, band, h - 2 * band]
+              : [w - band, band, band, h - 2 * band]
+        ;[st.x, st.y] = r
+        Object.assign(st.l.style, { left: `${r[0]}px`, top: `${r[1]}px`, width: `${r[2]}px`, height: `${r[3]}px` })
+        const c = document.createElement('canvas'); c.width = r[2]; c.height = r[3]
+        c.getContext('2d').drawImage(map, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3])
+        st.f.innerHTML = `
+          <feImage href="${c.toDataURL()}" x="0" y="0" width="${r[2]}" height="${r[3]}" preserveAspectRatio="none" result="map"/>
+          <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G"/>`
+      }
     }
 
     // Keep the photo inside each card lined up with the fixed background behind it.
@@ -190,13 +212,20 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
       const W = window.innerWidth; const H = window.innerHeight
       const sc = Math.max(W / iw, H / ih); const bw = iw * sc; const bh = ih * sc
       const ox = (W - bw) / 2; const oy = (H - bh) / 2
-      for (const { el, layer } of setups) {
+      const size = `${bw.toFixed(1)}px ${bh.toFixed(1)}px`
+      for (const { el, base, strips } of setups) {
         const r = el.getBoundingClientRect()
-        layer.style.setProperty('--bgs', `${bw.toFixed(1)}px ${bh.toFixed(1)}px`)
-        layer.style.setProperty('--bgp', `${(ox - r.left).toFixed(1)}px ${(oy - r.top).toFixed(1)}px`)
+        base.style.setProperty('--bgs', size)
+        base.style.setProperty('--bgp', `${(ox - r.left).toFixed(1)}px ${(oy - r.top).toFixed(1)}px`)
+        for (const st of strips) {
+          st.l.style.setProperty('--bgs', size)
+          st.l.style.setProperty('--bgp', `${(ox - r.left - st.x).toFixed(1)}px ${(oy - r.top - st.y).toFixed(1)}px`)
+        }
       }
     }
-    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(align) } }
+    // Touch devices ignore background-attachment: fixed, so there the script keeps it aligned.
+    const needsAlign = !window.matchMedia('(hover: hover)').matches
+    const queue = () => { if (needsAlign && !queued) { queued = true; requestAnimationFrame(align) } }
     const rebuild = () => { setups.forEach(build); queue() }
     let heroVisible = true
     new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting }).observe(photo.closest('.hero'))
