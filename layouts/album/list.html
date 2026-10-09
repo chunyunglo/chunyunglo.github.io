@@ -1,30 +1,37 @@
 {{ define "main" }}
 {{- $albums := partial "album-pages.html" . -}}
-<div class="wrap page">
-  <header class="page-head">
-    <p class="eyebrow">{{ site.Title }}</p>
-    <h1>{{ .Title }}</h1>
-    {{- with .Content }}<div class="lede">{{ . }}</div>{{ end }}
+<div class="gallery-index">
+  <header class="g-intro wrap">
+    <p class="g-kicker">{{ i18n "album" }}</p>
+    <h1 class="g-display">{{ .Title }}</h1>
+    {{- with .Content }}<div class="g-statement">{{ . }}</div>{{ end }}
   </header>
   {{- with $albums }}
-  <div class="albums">
-    {{- range . }}
-    {{- $photos := partial "album-photos.html" . -}}
-    {{- $cover := partial "cover.html" . -}}
+  <ol class="g-catalogue">
+    {{- range $i, $a := . }}
+    {{- $photos := partial "album-photos.html" $a -}}
+    {{- $cover := partial "cover.html" $a -}}
     {{- if and (not $cover) $photos }}{{ $cover = (index $photos 0).img }}{{ end -}}
-    <a class="album-card" href="{{ .RelPermalink }}">
-      {{- with $cover }}{{ $t := .Fill "900x675 webp Center q78" }}
-      <img src="{{ $t.RelPermalink }}" width="{{ $t.Width }}" height="{{ $t.Height }}" alt="" loading="lazy" decoding="async">
-      {{- end }}
-      <span class="album-meta">
-        <span class="album-title">{{ .Title }}</span>
-        <span class="meta">{{ with .Params.location }}{{ . }} · {{ end }}{{ .Date.Format "2006.01" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</span>
-      </span>
-    </a>
+    <li class="g-entry reveal">
+      <a href="{{ $a.RelPermalink }}">
+        <figure class="g-entry-image">
+          {{- with $cover }}{{ $s := .Fill "1600x1000 webp Center q80" }}{{ $m := .Fill "900x560 webp Center q78" }}
+          <img src="{{ $s.RelPermalink }}" srcset="{{ $m.RelPermalink }} 900w, {{ $s.RelPermalink }} 1600w" sizes="(max-width: 900px) 100vw, 70vw" width="{{ $s.Width }}" height="{{ $s.Height }}" alt="" loading="lazy" decoding="async">
+          {{- end }}
+        </figure>
+        <div class="g-entry-text">
+          <span class="g-number">{{ printf "%02d" (add $i 1) }}</span>
+          <h2 class="g-title">{{ $a.Title }}</h2>
+          <p class="g-meta">{{ with $a.Params.location }}{{ . }}<br>{{ end }}{{ $a.Date.Format "2006" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</p>
+          {{- with $a.Description }}<p class="g-desc">{{ . }}</p>{{ end }}
+          <span class="g-enter">{{ i18n "viewAlbum" }} →</span>
+        </div>
+      </a>
+    </li>
     {{- end }}
-  </div>
+  </ol>
   {{- else }}
-  <p>{{ i18n "noAlbums" }}</p>
+  <p class="wrap">{{ i18n "noAlbums" }}</p>
   {{- end }}
 </div>
 {{ end }}
