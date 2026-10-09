@@ -36,4 +36,14 @@ photos:
     caption: 從 Sydney Tower 往下看
   - image: southern-highlands.jpg
     caption: 往南途中的草原
+  - image: chicken-don.jpg
+    caption: 雪梨吃到的炸雞丼
+  - image: old-parliament.jpg
+    caption: 舊國會大廈
+  - image: parliament-corridor.jpg
+    caption: 舊國會的走廊
+  - image: house-chamber.jpg
+    caption: 舊國會的眾議院議場
+  - image: town-hall.jpg
+    caption: 雪梨市政廳的鐘塔
 ---

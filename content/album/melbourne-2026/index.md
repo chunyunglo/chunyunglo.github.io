@@ -38,4 +38,14 @@ photos:
     caption: 要變天的 St Kilda 海邊
   - image: stkilda.jpg
     caption: 從 St Kilda 望向市區
+  - image: flinders-clock.jpg
+    caption: Flinders Street 的鐘塔
+  - image: chicken-bowl.jpg
+    caption: 午餐的雞肉碗
+  - image: st-patricks.jpg
+    caption: St Patrick's Cathedral
+  - image: geelong-station.jpg
+    caption: Geelong 車站
+  - image: clayton.jpg
+    caption: Monash Clayton 校區
 ---
