@@ -21,22 +21,21 @@
   </section>
   {{- end }}
 
-  <ol class="ex-works">
-    {{- range $i, $p := $photos }}
-    {{- $img := $p.img -}}
-    {{- $orient := cond (gt $img.Width $img.Height) "landscape" "portrait" -}}
-    {{- $s := $img.Resize "1000x webp q80" -}}{{- $l := $img.Resize (printf "%dx webp q82" (cond (gt $img.Width 1800) 1800 $img.Width)) -}}
-    {{- $full := $img.Resize (printf "%dx webp q85" (cond (gt $img.Width 2400) 2400 $img.Width)) -}}
-    <li class="ex-work {{ $orient }} pos-{{ mod $i 4 }} reveal">
-      <figure>
+  <section class="ex-reel" aria-label="{{ i18n "works" }}">
+    <ol class="ex-track">
+      {{- range $i, $p := $photos }}
+      {{- $img := $p.img -}}
+      {{- $s := $img.Resize "x700 webp q80" -}}{{- $l := $img.Resize (printf "x%d webp q82" (cond (gt $img.Height 1400) 1400 $img.Height)) -}}
+      {{- $full := cond (gt $img.Width $img.Height) ($img.Resize (printf "%dx webp q85" (cond (gt $img.Width 2400) 2400 $img.Width))) ($img.Resize (printf "x%d webp q85" (cond (gt $img.Height 2400) 2400 $img.Height))) -}}
+      <li class="ex-work">
         <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
-          <img src="{{ $l.RelPermalink }}" srcset="{{ $s.RelPermalink }} {{ $s.Width }}w, {{ $l.RelPermalink }} {{ $l.Width }}w" sizes="(max-width: 900px) 100vw, 70vw" width="{{ $l.Width }}" height="{{ $l.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="lazy" decoding="async">
+          <img src="{{ $s.RelPermalink }}" srcset="{{ $s.RelPermalink }} {{ $s.Width }}w, {{ $l.RelPermalink }} {{ $l.Width }}w" sizes="(max-width: 600px) 90vw, 60vw" width="{{ $s.Width }}" height="{{ $s.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="{{ if lt $i 4 }}eager{{ else }}lazy{{ end }}" decoding="async" draggable="false">
+          <span class="placard"><span class="placard-no">{{ printf "%02d" (add $i 1) }}</span>{{ with $p.caption }}<span class="placard-title">{{ . }}</span>{{ end }}</span>
         </a>
-        <figcaption class="placard"><span class="placard-no">{{ printf "%02d" (add $i 1) }}</span>{{ with $p.caption }}<span class="placard-title">{{ . }}</span>{{ end }}</figcaption>
-      </figure>
-    </li>
-    {{- end }}
-  </ol>
+      </li>
+      {{- end }}
+    </ol>
+  </section>
 
   <footer class="ex-end wrap">
     <p class="ex-fin">— {{ i18n "end" }} —</p>

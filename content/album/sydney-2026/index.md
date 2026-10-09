@@ -10,8 +10,6 @@ cover: sydney-from-above.jpg
 photos:
   - image: sydney-from-above.jpg
     caption: 從 Sydney Tower 往下看
-  - image: town-hall.jpg
-    caption: 雪梨市政廳的鐘塔
   - image: southern-highlands.jpg
     caption: 往南途中的草原
 ---

@@ -12,12 +12,4 @@ photos:
     caption: 清澄庭園
   - image: shinjuku-gyoen.jpg
     caption: 新宿御苑
-  - image: maeda-residence.jpg
-    caption: 舊前田家本邸
-  - image: coffered-ceiling.jpg
-    caption: 明治生命館的格狀天花板
-  - image: blue-bottle.jpg
-    caption: 青山的 Blue Bottle
-  - image: hibiya-hall.jpg
-    caption: 日比谷公會堂
 ---

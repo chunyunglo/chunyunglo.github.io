@@ -236,10 +236,56 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
   }
 }
 
+// Exhibition reel: the photos drift sideways on their own and loop; hovering, focusing or
+// touching pauses it, and it can still be scrolled or swiped by hand.
+{
+  const reel = document.querySelector('.ex-reel')
+  const track = reel && reel.querySelector('.ex-track')
+  if (track && track.children.length > 1) {
+    // A second copy of the photos makes the loop seamless.
+    const originals = [...track.children]
+    originals.forEach((li) => {
+      const c = li.cloneNode(true)
+      c.setAttribute('aria-hidden', 'true')
+      c.querySelector('.photo').setAttribute('data-clone', '')
+      c.querySelector('.photo').tabIndex = -1
+      track.append(c)
+    })
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let pos = 0; let last = 0; let hold = false; let resumeAt = 0; let visible = true
+    const loopWidth = () => originals[0].parentNode.children[originals.length].offsetLeft - originals[0].offsetLeft
+    const speed = 40 // px per second
+    const tick = (t) => {
+      const dt = last ? Math.min(t - last, 64) / 1000 : 0
+      last = t
+      if (!still && visible && !hold && t > resumeAt && !document.hidden) {
+        const w = loopWidth()
+        if (Math.abs(reel.scrollLeft - pos) > 2) pos = reel.scrollLeft // the visitor scrolled by hand
+        pos += speed * dt
+        if (pos >= w) pos -= w
+        reel.scrollLeft = pos
+      }
+      requestAnimationFrame(tick)
+    }
+    reel.addEventListener('scroll', () => {
+      const w = loopWidth()
+      if (reel.scrollLeft >= w) { reel.scrollLeft -= w; pos = reel.scrollLeft }
+    }, { passive: true })
+    reel.addEventListener('mouseenter', () => { hold = true })
+    reel.addEventListener('mouseleave', () => { hold = false })
+    reel.addEventListener('focusin', () => { hold = true })
+    reel.addEventListener('focusout', () => { hold = false })
+    reel.addEventListener('touchstart', () => { resumeAt = Infinity }, { passive: true })
+    reel.addEventListener('touchend', () => { resumeAt = performance.now() + 2500 }, { passive: true })
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting }).observe(reel)
+    requestAnimationFrame(tick)
+  }
+}
+
 // Album lightbox: click a photo to view it large; arrows, swipe and Escape work too.
 {
   const box = document.querySelector('.lightbox')
-  const links = [...document.querySelectorAll('.photo-grid .photo, .ex-works .photo')]
+  const links = [...document.querySelectorAll('.photo-grid .photo, .ex-track .photo:not([data-clone])')]
   if (box && links.length && typeof box.showModal === 'function') {
     const img = box.querySelector('img')
     const cap = box.querySelector('figcaption')
@@ -255,6 +301,10 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
       ;[at - 1, at + 1].forEach((j) => { const n = links[(j + links.length) % links.length]; if (n) new Image().src = n.dataset.full })
     }
     links.forEach((a, i) => a.addEventListener('click', (e) => { e.preventDefault(); show(i); box.showModal() }))
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('.photo[data-clone]')
+      if (a) { e.preventDefault(); show(Number(a.dataset.index)); box.showModal() }
+    })
     box.querySelector('.lb-close').addEventListener('click', () => box.close())
     box.querySelector('.lb-prev').addEventListener('click', () => show(at - 1))
     box.querySelector('.lb-next').addEventListener('click', () => show(at + 1))

@@ -16,10 +16,6 @@ photos:
     caption: 夜裡的 Parkville 與市區
   - image: port-melbourne-piers.jpg
     caption: Princes Pier 的舊碼頭木樁
-  - image: st-patricks.jpg
-    caption: St Patrick's Cathedral
-  - image: geelong-station.jpg
-    caption: Geelong 車站
   - image: williamstown.jpg
     caption: Williamstown 港口
   - image: crane-sunset.jpg
@@ -28,8 +24,6 @@ photos:
     caption: 四月的雲
   - image: golden-leaves.jpg
     caption: 轉黃的樹
-  - image: terrace-house.jpg
-    caption: Carlton 的維多利亞式排屋
   - image: autumn.jpg
     caption: 深秋的好天氣
   - image: yarra-river.jpg
@@ -44,6 +38,4 @@ photos:
     caption: 要變天的 St Kilda 海邊
   - image: stkilda.jpg
     caption: 從 St Kilda 望向市區
-  - image: clayton.jpg
-    caption: Monash Clayton 校區
 ---

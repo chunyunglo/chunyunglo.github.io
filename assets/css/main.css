@@ -490,25 +490,26 @@ main:focus { outline: none; }
 .ex-statement { width: min(100% - 2.5rem, 38rem); margin: clamp(4rem, 10vw, 8rem) auto; text-align: center; }
 .ex-lede { font-family: var(--g-serif); font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.6; color: var(--g-ink); margin: 0; }
 .ex-body { color: var(--g-muted); margin-top: 1.5rem; line-height: 1.9; }
-.ex-works { list-style: none; margin: 0 auto; padding: 0; width: min(100% - 2.5rem, var(--wrap)); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1rem, 3vw, 2.5rem); row-gap: clamp(5rem, 12vw, 10rem); }
-.ex-work figure { margin: 0; }
-.ex-work .photo { display: block; cursor: zoom-in; }
-.ex-work img { display: block; width: 100%; height: auto; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8); }
-/* Landscape works alternate between wide, offset and full-bleed hangs; portraits sit narrower. */
-.ex-work.landscape.pos-0 { grid-column: 1 / span 9; }
-.ex-work.landscape.pos-1 { grid-column: 4 / span 9; }
-.ex-work.landscape.pos-2 { grid-column: 2 / span 10; }
-.ex-work.landscape.pos-3 { grid-column: 1 / -1; }
-.ex-work.portrait.pos-0, .ex-work.portrait.pos-2 { grid-column: 2 / span 5; }
-.ex-work.portrait.pos-1, .ex-work.portrait.pos-3 { grid-column: 7 / span 5; }
-.placard { display: flex; gap: 1rem; align-items: baseline; margin-top: 1rem; font-size: .85rem; color: var(--g-muted); letter-spacing: .03em; }
-.placard-no { font-family: var(--g-serif); color: var(--g-ink); letter-spacing: .1em; }
+/* The works drift past in one long row (main.js scrolls the reel); hovering pauses it and
+   lifts the placard into view over the photo. */
+.ex-reel { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 1rem 0 2rem; }
+.ex-reel::-webkit-scrollbar { display: none; }
+.ex-track { list-style: none; margin: 0; padding: 0 0 0 6vw; display: flex; gap: clamp(1.25rem, 3vw, 2.75rem); width: max-content; }
+.ex-work { flex: none; height: clamp(16rem, 64vh, 42rem); }
+.ex-work .photo { position: relative; display: block; height: 100%; overflow: hidden; cursor: zoom-in; }
+.ex-work img { display: block; height: 100%; width: auto; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8); transition: transform 1.2s cubic-bezier(.2, .7, .2, 1), filter .6s ease; user-select: none; }
+.ex-reel:hover .ex-work img { filter: brightness(.55) saturate(.8); }
+.ex-reel .ex-work .photo:is(:hover, :focus-visible) img { filter: none; transform: scale(1.03); }
+.placard { position: absolute; inset: auto 0 0 0; display: flex; gap: 1rem; align-items: baseline; padding: 3.5rem 1.25rem 1.1rem; background: linear-gradient(transparent, rgba(0, 0, 0, .72)); color: var(--g-ink); font-size: .9rem; letter-spacing: .03em; opacity: 0; transform: translateY(1.25rem); transition: opacity .5s ease, transform .6s cubic-bezier(.2, .7, .2, 1); pointer-events: none; }
+.ex-work .photo:is(:hover, :focus-visible) .placard { opacity: 1; transform: none; }
+.placard-no { font-family: var(--g-serif); letter-spacing: .1em; color: rgba(236, 234, 228, .7); }
+.placard-title { font-family: var(--g-serif); font-size: 1.05rem; }
+@media (hover: none) {
+  .ex-work { height: clamp(14rem, 52vh, 30rem); }
+  .placard { opacity: 1; transform: none; padding-top: 2.5rem; font-size: .8rem; }
+}
 .ex-end { text-align: center; padding: clamp(6rem, 14vw, 11rem) 0 clamp(4rem, 8vw, 6rem); }
 .ex-fin { font-family: var(--g-serif); font-size: 1.1rem; letter-spacing: .4em; color: var(--g-muted); margin-bottom: 2.5rem; }
-@media (max-width: 52rem) {
-  .ex-work.landscape, .ex-work.portrait { grid-column: 1 / -1 !important; }
-  .ex-work.portrait { padding: 0 8%; }
-}
 .lb-count { position: absolute; top: 1.4rem; left: 1.5rem; margin: 0; font-family: var(--g-serif, Georgia, serif); color: rgba(255, 255, 255, .7); letter-spacing: .15em; font-size: .9rem; }
 .is-gallery .js .reveal, .js .is-gallery .reveal { transition-duration: 1.1s; }
 
