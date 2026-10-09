@@ -12,22 +12,38 @@ photos:
     caption: St Kilda 的夕陽與天際線
   - image: city-view.jpg
     caption: 從高處看墨爾本市區
-  - image: carlton.jpg
-    caption: Carlton 的街角
-  - image: autumn.jpg
-    caption: 深秋的好天氣
-  - image: flinders.jpg
-    caption: 陰雨天的 Flinders Street Station
+  - image: night-city.jpg
+    caption: 夜裡的 Parkville 與市區
+  - image: port-melbourne-piers.jpg
+    caption: Princes Pier 的舊碼頭木樁
+  - image: st-patricks.jpg
+    caption: St Patrick's Cathedral
+  - image: geelong-station.jpg
+    caption: Geelong 車站
   - image: williamstown.jpg
     caption: Williamstown 港口
+  - image: crane-sunset.jpg
+    caption: 工地吊車與落日
+  - image: autumn-sky.jpg
+    caption: 四月的雲
+  - image: golden-leaves.jpg
+    caption: 轉黃的樹
+  - image: terrace-house.jpg
+    caption: Carlton 的維多利亞式排屋
+  - image: autumn.jpg
+    caption: 深秋的好天氣
+  - image: yarra-river.jpg
+    caption: Yarra River
+  - image: flinders.jpg
+    caption: 陰雨天的 Flinders Street Station
+  - image: reflection.jpg
+    caption: 雨後的倒影
   - image: frankston.jpg
     caption: Frankston 海灘
+  - image: stormy-bay.jpg
+    caption: 要變天的 St Kilda 海邊
   - image: stkilda.jpg
     caption: 從 St Kilda 望向市區
-  - image: moomba.jpg
-    caption: Moomba Festival
-  - image: afl.jpg
-    caption: AFL 球賽
   - image: clayton.jpg
     caption: Monash Clayton 校區
 ---
