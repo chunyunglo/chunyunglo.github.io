@@ -1,32 +1,57 @@
 {{ define "main" }}
 {{- $photos := partial "album-photos.html" . -}}
-<div class="wrap page album-page">
-  <header class="page-head">
-    <p class="eyebrow"><a href="{{ (site.GetPage "/album").RelPermalink }}">{{ i18n "album" }}</a></p>
-    <h1>{{ .Title }}</h1>
-    <p class="meta">{{ with .Params.location }}{{ . }} · {{ end }}{{ .Date.Format "2006.01" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</p>
-    {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-    {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+{{- $cover := partial "cover.html" . -}}
+{{- if and (not $cover) $photos }}{{ $cover = (index $photos 0).img }}{{ end -}}
+<article class="exhibition">
+  <header class="ex-hero">
+    {{- with $cover }}{{ $l := .Resize "2400x webp q82" }}{{ $m := .Resize "1200x webp q80" }}
+    <img class="ex-hero-img" src="{{ $l.RelPermalink }}" srcset="{{ $m.RelPermalink }} 1200w, {{ $l.RelPermalink }} 2400w" sizes="100vw" alt="" fetchpriority="high">
+    {{- end }}
+    <div class="ex-hero-text wrap">
+      <p class="g-kicker"><a href="{{ (site.GetPage "/album").RelPermalink }}">{{ i18n "album" }}</a></p>
+      <h1 class="g-display">{{ .Title }}</h1>
+      <p class="g-meta">{{ with .Params.location }}{{ . }} · {{ end }}{{ .Date.Format "2006.01" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</p>
+    </div>
   </header>
-  <ul class="photo-grid">
+
+  {{- if or .Description .Content }}
+  <section class="ex-statement">
+    {{- with .Description }}<p class="ex-lede">{{ . }}</p>{{ end }}
+    {{- with .Content }}<div class="ex-body">{{ . }}</div>{{ end }}
+  </section>
+  {{- end }}
+
+  <ol class="ex-works">
     {{- range $i, $p := $photos }}
     {{- $img := $p.img -}}
-    {{- $t := $img.Resize "720x webp q78" -}}
-    {{- $full := $img -}}{{- if gt $img.Width 2400 }}{{ $full = $img.Resize "2400x webp q85" }}{{ else }}{{ $full = $img.Resize (printf "%dx webp q85" $img.Width) }}{{ end -}}
-    <li>
-      <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
-        <img src="{{ $t.RelPermalink }}" width="{{ $t.Width }}" height="{{ $t.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="lazy" decoding="async">
-      </a>
-      {{- with $p.caption }}<span class="photo-caption">{{ . }}</span>{{ end }}
+    {{- $orient := cond (gt $img.Width $img.Height) "landscape" "portrait" -}}
+    {{- $s := $img.Resize "1000x webp q80" -}}{{- $l := $img.Resize (printf "%dx webp q82" (cond (gt $img.Width 1800) 1800 $img.Width)) -}}
+    {{- $full := $img.Resize (printf "%dx webp q85" (cond (gt $img.Width 2400) 2400 $img.Width)) -}}
+    <li class="ex-work {{ $orient }} pos-{{ mod $i 4 }} reveal">
+      <figure>
+        <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
+          <img src="{{ $l.RelPermalink }}" srcset="{{ $s.RelPermalink }} {{ $s.Width }}w, {{ $l.RelPermalink }} {{ $l.Width }}w" sizes="(max-width: 900px) 100vw, 70vw" width="{{ $l.Width }}" height="{{ $l.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="lazy" decoding="async">
+        </a>
+        <figcaption class="placard"><span class="placard-no">{{ printf "%02d" (add $i 1) }}</span>{{ with $p.caption }}<span class="placard-title">{{ . }}</span>{{ end }}</figcaption>
+      </figure>
     </li>
     {{- end }}
-  </ul>
-</div>
+  </ol>
+
+  <footer class="ex-end wrap">
+    <p class="ex-fin">— {{ i18n "end" }} —</p>
+    {{- $all := partial "album-pages.html" . -}}
+    {{- $next := "" -}}{{- $found := false -}}
+    {{- range $all }}{{ if $found }}{{ if not $next }}{{ $next = . }}{{ end }}{{ end }}{{ if eq .RelPermalink $.RelPermalink }}{{ $found = true }}{{ end }}{{ end -}}
+    {{- with $next }}<a class="g-enter" href="{{ .RelPermalink }}">{{ i18n "nextAlbum" }}：{{ .Title }} →</a>{{ else }}<a class="g-enter" href="{{ (site.GetPage "/album").RelPermalink }}">← {{ i18n "album" }}</a>{{ end }}
+  </footer>
+</article>
 <dialog class="lightbox" aria-label="{{ .Title }}">
   <figure>
     <img alt="">
     <figcaption></figcaption>
   </figure>
+  <p class="lb-count" aria-live="polite"></p>
   <button class="lb-btn lb-close" type="button" aria-label="{{ i18n "close" }}">✕</button>
   <button class="lb-btn lb-prev" type="button" aria-label="{{ i18n "prevPhoto" }}">‹</button>
   <button class="lb-btn lb-next" type="button" aria-label="{{ i18n "nextPhoto" }}">›</button>

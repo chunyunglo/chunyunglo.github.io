@@ -205,32 +205,32 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
       }
     }
 
-    // Keep the photo inside each card lined up with the fixed background behind it.
-    let queued = false
+    // Keep the photo inside each card lined up with the background behind it.
+    // Desktop: the background is fixed and CSS (background-attachment: fixed) does the work.
+    // Touch screens ignore that, and realigning from script on every scroll frame re-ran the
+    // refraction filter each frame, which made phones stutter. There the background scrolls with
+    // the hero instead, so the alignment (and the filtered rim) is computed once per resize.
+    const hero = photo.closest('.hero')
     const align = () => {
-      queued = false
-      const W = window.innerWidth; const H = window.innerHeight
+      const box = hero.getBoundingClientRect()
+      const W = box.width; const H = box.height
       const sc = Math.max(W / iw, H / ih); const bw = iw * sc; const bh = ih * sc
       const ox = (W - bw) / 2; const oy = (H - bh) / 2
       const size = `${bw.toFixed(1)}px ${bh.toFixed(1)}px`
       for (const { el, base, strips } of setups) {
         const r = el.getBoundingClientRect()
+        const x = r.left - box.left; const y = r.top - box.top
         base.style.setProperty('--bgs', size)
-        base.style.setProperty('--bgp', `${(ox - r.left).toFixed(1)}px ${(oy - r.top).toFixed(1)}px`)
+        base.style.setProperty('--bgp', `${(ox - x).toFixed(1)}px ${(oy - y).toFixed(1)}px`)
         for (const st of strips) {
           st.l.style.setProperty('--bgs', size)
-          st.l.style.setProperty('--bgp', `${(ox - r.left - st.x).toFixed(1)}px ${(oy - r.top - st.y).toFixed(1)}px`)
+          st.l.style.setProperty('--bgp', `${(ox - x - st.x).toFixed(1)}px ${(oy - y - st.y).toFixed(1)}px`)
         }
       }
     }
-    // Touch devices ignore background-attachment: fixed, so there the script keeps it aligned.
     const needsAlign = !window.matchMedia('(hover: hover)').matches
-    const queue = () => { if (needsAlign && !queued) { queued = true; requestAnimationFrame(align) } }
-    const rebuild = () => { setups.forEach(build); queue() }
-    let heroVisible = true
-    new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting }).observe(photo.closest('.hero'))
-    window.addEventListener('scroll', () => { if (heroVisible) queue() }, { passive: true })
-    new ResizeObserver(rebuild).observe(panels[0].parentElement)
+    const rebuild = () => { setups.forEach(build); if (needsAlign) align() }
+    new ResizeObserver(rebuild).observe(hero)
     rebuild()
 
   }
@@ -239,7 +239,7 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
 // Album lightbox: click a photo to view it large; arrows, swipe and Escape work too.
 {
   const box = document.querySelector('.lightbox')
-  const links = [...document.querySelectorAll('.photo-grid .photo')]
+  const links = [...document.querySelectorAll('.photo-grid .photo, .ex-works .photo')]
   if (box && links.length && typeof box.showModal === 'function') {
     const img = box.querySelector('img')
     const cap = box.querySelector('figcaption')
@@ -250,6 +250,7 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
       img.src = a.dataset.full
       img.alt = a.querySelector('img').alt
       cap.textContent = a.dataset.caption || ''
+      const count = box.querySelector('.lb-count'); if (count) count.textContent = `${at + 1} / ${links.length}`
       // Warm up the neighbours so paging feels instant.
       ;[at - 1, at + 1].forEach((j) => { const n = links[(j + links.length) % links.length]; if (n) new Image().src = n.dataset.full })
     }
