@@ -1,0 +1,10 @@
+{{- /* Albums in the current language, plus albums that only exist in another language. */ -}}
+{{- $pages := where site.RegularPages "Section" "album" -}}
+{{- range hugo.Sites -}}
+  {{- if ne .Language.Lang site.Language.Lang -}}
+    {{- range where .RegularPages "Section" "album" -}}
+      {{- if not .Translations }}{{ $pages = $pages | append . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return sort $pages "Date" "desc" -}}

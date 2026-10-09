@@ -1,4 +1,4 @@
-{{- $pages := cond (eq .Kind "term") .RegularPages (partial "blog-pages.html" .) -}}
+{{- $pages := cond (eq .Kind "term") .RegularPages (cond (eq .Section "album") (partial "album-pages.html" .) (partial "blog-pages.html" .)) -}}
 {{- $limit := site.Config.Services.RSS.Limit -}}
 {{- if ge $limit 1 }}{{ $pages = first $limit $pages }}{{ end -}}
 {{- $title := cond .IsHome site.Title (printf "%s｜%s" .Title site.Title) -}}

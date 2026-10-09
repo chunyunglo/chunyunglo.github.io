@@ -1,4 +1,4 @@
-# Local editor for blog posts. Start it with `npm run write` (see README).
+# Local editor for the whole site (posts, albums, profile sections). Start it with `npm run write` (see README).
 backend:
   name: github
   repo: chunyunglo/chunyunglo.github.io
@@ -8,60 +8,1344 @@ locale: zh_Hant
 site_url: http://localhost:1313
 display_url: https://chunyunglo.github.io
 
-media_folder: static/uploads
-public_folder: /uploads
+# Images picked in the profile sections (logos, profile photo) go here; posts and albums keep theirs next to the text.
+media_folder: assets/images/uploads
+public_folder: /images/uploads
 
 collections:
-  - name: blog
-    label: 文章（中文）
-    label_singular: 文章
-    folder: content/blog
-    create: true
-    path: "{{fields.slug}}/index"
-    slug: "{{fields.slug}}"
-    filter: { field: lang, value: zh }
-    media_folder: ""
-    public_folder: ""
-    preview_path: "blog/{{fields.slug}}/"
-    summary: "{{title}}（{{year}}-{{month}}-{{day}}）{{draft}}"
-    sortable_fields: [date, title]
-    view_filters:
-      - { label: 草稿, field: draft, pattern: true }
+- name: blog
+  label: 文章（中文）
+  label_singular: 文章
+  folder: content/blog
+  create: true
+  path: '{{fields.slug}}/index'
+  slug: '{{fields.slug}}'
+  filter:
+    field: lang
+    value: zh
+  media_folder: ''
+  public_folder: ''
+  preview_path: blog/{{fields.slug}}/
+  summary: '{{title}}（{{year}}-{{month}}-{{day}}）{{draft}}'
+  sortable_fields:
+  - date
+  - title
+  view_filters:
+  - label: 草稿
+    field: draft
+    pattern: true
+  fields:
+  - name: title
+    label: 標題
+    widget: string
+  - name: slug
+    label: 網址代稱（英文小寫與連字號，例如 my-first-post）
+    widget: string
+    pattern:
+    - ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    - 只能用英文小寫、數字與連字號
+  - name: lang
+    label: 語言
+    widget: hidden
+    default: zh
+  - name: date
+    label: 日期
+    widget: datetime
+    format: YYYY-MM-DDTHH:mm:ssZ
+  - name: draft
+    label: 草稿（勾選時不會發布）
+    widget: boolean
+    default: true
+    required: false
+  - name: description
+    label: 摘要（顯示在文章列表與搜尋結果）
+    widget: text
+    required: false
+  - name: tags
+    label: 標籤
+    widget: list
+    required: false
+  - name: series
+    label: 系列代稱（同一系列的文章填一樣的，例如 monash-2026；沒有就留空）
+    widget: string
+    required: false
+  - name: cover
+    label: 封面圖片
+    widget: image
+    required: false
+    choose_url: false
+  - name: coverAlt
+    label: 封面圖片說明
+    widget: string
+    required: false
+  - name: body
+    label: 內文
+    widget: markdown
+- name: blog_en
+  label: Posts (English)
+  label_singular: Post
+  folder: content/blog
+  create: true
+  extension: en.md
+  format: frontmatter
+  path: '{{fields.slug}}/index'
+  slug: '{{fields.slug}}'
+  filter:
+    field: lang
+    value: en
+  media_folder: ''
+  public_folder: ''
+  summary: '{{title}} ({{year}}-{{month}}-{{day}})'
+  fields:
+  - name: title
+    label: Title
+    widget: string
+  - name: slug
+    label: Folder name (use the same as the Chinese post to link them)
+    widget: string
+    pattern:
+    - ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    - lowercase letters, digits and hyphens only
+  - name: lang
+    label: Language
+    widget: hidden
+    default: en
+  - name: date
+    label: Date
+    widget: datetime
+    format: YYYY-MM-DDTHH:mm:ssZ
+  - name: draft
+    label: Draft
+    widget: boolean
+    default: true
+    required: false
+  - name: description
+    label: Summary
+    widget: text
+    required: false
+  - name: tags
+    label: Tags
+    widget: list
+    required: false
+  - name: series
+    label: Series (same value for every post in a series; leave empty if none)
+    widget: string
+    required: false
+  - name: cover
+    label: Cover image
+    widget: image
+    required: false
+    choose_url: false
+  - name: coverAlt
+    label: Cover alt text
+    widget: string
+    required: false
+  - name: body
+    label: Body
+    widget: markdown
+- name: album
+  label: 相簿
+  label_singular: 相簿
+  folder: content/album
+  create: true
+  path: '{{fields.slug}}/index'
+  slug: '{{fields.slug}}'
+  filter:
+    field: lang
+    value: zh
+  media_folder: ''
+  public_folder: ''
+  preview_path: album/{{fields.slug}}/
+  summary: '{{title}}（{{year}}-{{month}}）'
+  sortable_fields:
+  - date
+  - title
+  fields:
+  - name: title
+    label: 相簿名稱
+    widget: string
+  - name: slug
+    label: 網址代稱（英文小寫與連字號，例如 tokyo-2027）
+    widget: string
+    pattern:
+    - ^[a-z0-9]+(?:-[a-z0-9]+)*$
+    - 只能用英文小寫、數字與連字號
+  - name: lang
+    label: 語言
+    widget: hidden
+    default: zh
+  - name: date
+    label: 日期（拍攝時間，用來排序）
+    widget: datetime
+    format: YYYY-MM-DDTHH:mm:ssZ
+  - name: draft
+    label: 草稿（勾選時不會出現在網站）
+    widget: boolean
+    default: false
+    required: false
+  - name: location
+    label: 地點（例如：東京，日本）
+    widget: string
+    required: false
+  - name: description
+    label: 一句話介紹
+    widget: text
+    required: false
+  - name: cover
+    label: 封面照片（沒選就用第一張）
+    widget: image
+    choose_url: false
+    required: false
+  - name: photos
+    label: 照片（可拖曳排序）
+    widget: list
     fields:
-      - { name: title, label: 標題, widget: string }
-      - { name: slug, label: 網址代稱（英文小寫與連字號，例如 my-first-post）, widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', '只能用英文小寫、數字與連字號'] }
-      - { name: lang, label: 語言, widget: hidden, default: zh }
-      - { name: date, label: 日期, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ" }
-      - { name: draft, label: 草稿（勾選時不會發布）, widget: boolean, default: true }
-      - { name: description, label: 摘要（顯示在文章列表與搜尋結果）, widget: text, required: false }
-      - { name: tags, label: 標籤, widget: list, required: false }
-      - { name: series, label: 系列代稱（同一系列的文章填一樣的，例如 monash-2026；沒有就留空）, widget: string, required: false }
-      - { name: cover, label: 封面圖片, widget: image, required: false, choose_url: false }
-      - { name: coverAlt, label: 封面圖片說明, widget: string, required: false }
-      - { name: body, label: 內文, widget: markdown }
-
-  - name: blog_en
-    label: Posts (English)
-    label_singular: Post
-    folder: content/blog
-    create: true
-    extension: en.md
-    format: frontmatter
-    path: "{{fields.slug}}/index"
-    slug: "{{fields.slug}}"
-    filter: { field: lang, value: en }
-    media_folder: ""
-    public_folder: ""
-    summary: "{{title}} ({{year}}-{{month}}-{{day}})"
+    - name: image
+      label: 照片
+      widget: image
+      choose_url: false
+    - name: caption
+      label: 說明
+      widget: string
+      required: false
+    summary: '{{fields.caption}}'
+  - name: body
+    label: 相簿文字（選填）
+    widget: markdown
+    required: false
+- name: site_zh
+  label: 網站內容（中文）
+  editor:
+    preview: false
+  files:
+  - name: author
+    label: 個人資料
+    file: data/zh-tw/author.yaml
     fields:
-      - { name: title, label: Title, widget: string }
-      - { name: slug, label: "Folder name (use the same as the Chinese post to link them)", widget: string, pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'lowercase letters, digits and hyphens only'] }
-      - { name: lang, label: Language, widget: hidden, default: en }
-      - { name: date, label: Date, widget: datetime, format: "YYYY-MM-DDTHH:mm:ssZ" }
-      - { name: draft, label: Draft, widget: boolean, default: true }
-      - { name: description, label: Summary, widget: text, required: false }
-      - { name: tags, label: Tags, widget: list, required: false }
-      - { name: series, label: "Series (same value for every post in a series; leave empty if none)", widget: string, required: false }
-      - { name: cover, label: Cover image, widget: image, required: false, choose_url: false }
-      - { name: coverAlt, label: Cover alt text, widget: string, required: false }
-      - { name: body, label: Body, widget: markdown }
+    - name: name
+      label: 姓名
+      widget: string
+    - name: nickname
+      label: 暱稱
+      widget: string
+    - name: greeting
+      label: 招呼語（例如：嗨，我是）
+      widget: string
+    - name: image
+      label: 大頭照
+      widget: image
+      choose_url: false
+    - name: contactInfo
+      label: 聯絡資訊
+      widget: object
+      fields:
+      - name: github
+        label: GitHub 帳號
+        widget: string
+        required: false
+      - name: linkedin
+        label: LinkedIn 帳號
+        widget: string
+        required: false
+      collapsed: true
+    - name: summary
+      label: 首頁打字動畫的句子
+      widget: list
+  - name: about
+    label: 關於我
+    file: data/zh-tw/sections/about.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: designation
+      label: 身分（例如：心理學系學生與計算研究助理）
+      widget: string
+    - name: company
+      label: 所屬單位
+      widget: object
+      fields:
+      - name: name
+        label: 名稱
+        widget: string
+      - name: url
+        label: 網址
+        widget: string
+        required: false
+    - name: summary
+      label: 完整簡介（用於搜尋結果）
+      widget: text
+    - name: interests
+      label: 首頁顯示的研究興趣一句話
+      widget: text
+      required: false
+    - name: socialLinks
+      label: 社群連結
+      widget: list
+      fields:
+      - name: name
+        label: 名稱
+        widget: string
+        required: false
+      - name: icon
+        label: icon
+        widget: string
+        required: false
+      - name: url
+        label: 網址
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+  - name: experiences
+    label: 經歷
+    file: data/zh-tw/sections/experiences.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: experiences
+      label: 經歷
+      widget: list
+      fields:
+      - name: company
+        label: 單位
+        widget: object
+        fields:
+        - name: name
+          label: 名稱
+          widget: string
+        - name: url
+          label: 網址
+          widget: string
+          required: false
+        - name: location
+          label: 地點
+          widget: string
+          required: false
+        - name: logo
+          label: Logo
+          widget: image
+          choose_url: false
+          required: false
+        - name: overview
+          label: 簡介
+          widget: text
+          required: false
+      - name: positions
+        label: 職位
+        widget: list
+        fields:
+        - name: designation
+          label: 職稱
+          widget: string
+        - name: start
+          label: 開始年份
+          widget: number
+          value_type: int
+        - name: end
+          label: 結束年份（現職留空）
+          widget: number
+          value_type: int
+          required: false
+        - name: responsibilities
+          label: 工作內容
+          widget: list
+          required: false
+      summary: '{{fields.company.name}}'
+  - name: education
+    label: 教育背景
+    file: data/zh-tw/sections/education.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: degrees
+      label: 學歷
+      widget: list
+      fields:
+      - name: name
+        label: 學位／名稱
+        widget: string
+      - name: icon
+        label: icon
+        widget: string
+        default: fa-graduation-cap
+        required: false
+      - name: timeframe
+        label: 期間
+        widget: string
+      - name: institution
+        label: 學校
+        widget: object
+        fields:
+        - name: name
+          label: 名稱
+          widget: string
+        - name: url
+          label: 網址
+          widget: string
+          required: false
+        - name: logo
+          label: Logo
+          widget: image
+          choose_url: false
+          required: false
+      - name: grade
+        label: 成績（不想公開可留空）
+        widget: object
+        fields:
+        - name: scale
+          label: GPA
+          widget: string
+          required: false
+        - name: achieved
+          label: 分數
+          widget: number
+          value_type: float
+          required: false
+        - name: outOf
+          label: 滿分
+          widget: number
+          value_type: float
+          required: false
+        required: false
+        collapsed: true
+      - name: takenCourses
+        label: 修習課程
+        widget: object
+        fields:
+        - name: showGrades
+          label: 顯示成績
+          widget: boolean
+          default: false
+          required: false
+        - name: collapseAfter
+          label: 顯示幾門後收合
+          widget: number
+          value_type: int
+          required: false
+        - name: courses
+          label: 課程
+          widget: list
+          fields:
+          - name: name
+            label: 課名
+            widget: string
+            required: false
+          required: false
+        required: false
+        collapsed: true
+      - name: customSections
+        label: 其他段落（榮譽、服務等）
+        widget: list
+        fields:
+        - name: name
+          label: 標題
+          widget: string
+          required: false
+        - name: content
+          label: 內容（Markdown）
+          widget: markdown
+          required: false
+        required: false
+      summary: '{{fields.institution.name}}'
+  - name: publications
+    label: 研究與發表
+    file: data/zh-tw/sections/publications.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: publications
+      label: 發表
+      widget: list
+      fields:
+      - name: title
+        label: 題目
+        widget: string
+      - name: publishedIn
+        label: 發表於
+        widget: object
+        fields:
+        - name: name
+          label: 會議／期刊
+          widget: string
+        - name: date
+          label: 年份
+          widget: number
+          value_type: int
+        - name: url
+          label: 網址
+          widget: string
+          required: false
+      - name: authors
+        label: 作者（依順序）
+        widget: list
+        fields:
+        - name: name
+          label: 姓名
+          widget: string
+      - name: paper
+        label: 摘要
+        widget: object
+        fields:
+        - name: summary
+          label: 一句話摘要
+          widget: text
+          required: false
+        required: false
+      - name: categories
+        label: 分類
+        widget: list
+        required: false
+      - name: tags
+        label: 標籤（第一個會顯示）
+        widget: list
+        required: false
+      summary: '{{fields.publishedIn.date}} {{fields.title}}'
+  - name: projects
+    label: 研究專案
+    file: data/zh-tw/sections/projects.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: buttons
+      label: 篩選按鈕
+      widget: list
+      fields:
+      - name: name
+        label: 按鈕文字
+        widget: string
+        required: false
+      - name: filter
+        label: 對應標籤
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+    - name: projects
+      label: 專案
+      widget: list
+      fields:
+      - name: name
+        label: 名稱
+        widget: string
+      - name: role
+        label: 角色
+        widget: string
+        required: false
+      - name: timeline
+        label: 期間
+        widget: string
+        required: false
+      - name: summary
+        label: 簡介
+        widget: text
+      - name: repo
+        label: 程式碼連結（GitHub）
+        widget: string
+        required: false
+      - name: tags
+        label: 標籤（要能被篩選按鈕對到）
+        widget: list
+        required: false
+      summary: '{{fields.name}}'
+  - name: skills
+    label: 技術與方法
+    file: data/zh-tw/sections/skills.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      - name: filter
+        label: filter
+        widget: boolean
+        required: false
+      collapsed: true
+    - name: buttons
+      label: 篩選按鈕
+      widget: list
+      fields:
+      - name: name
+        label: 按鈕文字
+        widget: string
+        required: false
+      - name: filter
+        label: 對應分類
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+    - name: skills
+      label: 技能
+      widget: list
+      fields:
+      - name: name
+        label: 名稱
+        widget: string
+      - name: summary
+        label: 說明
+        widget: text
+      - name: categories
+        label: 分類
+        widget: list
+        required: false
+      summary: '{{fields.name}}'
+  - name: site
+    label: 網站設定（版權、搜尋描述）
+    file: data/zh-tw/site.yaml
+    fields:
+    - name: copyright
+      label: 頁尾版權文字
+      widget: string
+    - name: description
+      label: 網站描述（搜尋結果）
+      widget: text
+    - name: openGraph
+      label: 分享預覽（社群貼連結時）
+      widget: object
+      fields:
+      - name: title
+        label: 標題
+        widget: string
+      - name: type
+        label: type
+        widget: string
+        default: website
+      - name: description
+        label: 描述
+        widget: text
+      - name: image
+        label: 預覽圖
+        widget: image
+        choose_url: false
+        required: false
+      - name: url
+        label: URL
+        widget: string
+      collapsed: true
+- name: site_en
+  label: Site content (English)
+  editor:
+    preview: false
+  files:
+  - name: author
+    label: Profile
+    file: data/en/author.yaml
+    fields:
+    - name: name
+      label: Name
+      widget: string
+    - name: nickname
+      label: Nickname
+      widget: string
+    - name: greeting
+      label: Greeting
+      widget: string
+    - name: image
+      label: Profile photo
+      widget: image
+      choose_url: false
+    - name: contactInfo
+      label: Contact
+      widget: object
+      fields:
+      - name: github
+        label: GitHub 帳號
+        widget: string
+        required: false
+      - name: linkedin
+        label: LinkedIn 帳號
+        widget: string
+        required: false
+      collapsed: true
+    - name: summary
+      label: Typing lines on the home page
+      widget: list
+  - name: about
+    label: About
+    file: data/en/sections/about.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: designation
+      label: Role
+      widget: string
+    - name: company
+      label: Affiliation
+      widget: object
+      fields:
+      - name: name
+        label: Name
+        widget: string
+      - name: url
+        label: URL
+        widget: string
+        required: false
+    - name: summary
+      label: Full summary (search results)
+      widget: text
+    - name: interests
+      label: Interests line on the home page
+      widget: text
+      required: false
+    - name: socialLinks
+      label: Social links
+      widget: list
+      fields:
+      - name: name
+        label: Name
+        widget: string
+        required: false
+      - name: icon
+        label: icon
+        widget: string
+        required: false
+      - name: url
+        label: URL
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+  - name: experiences
+    label: Experience
+    file: data/en/sections/experiences.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: experiences
+      label: Experience
+      widget: list
+      fields:
+      - name: company
+        label: Organisation
+        widget: object
+        fields:
+        - name: name
+          label: Name
+          widget: string
+        - name: url
+          label: URL
+          widget: string
+          required: false
+        - name: location
+          label: Location
+          widget: string
+          required: false
+        - name: logo
+          label: Logo
+          widget: image
+          choose_url: false
+          required: false
+        - name: overview
+          label: Overview
+          widget: text
+          required: false
+      - name: positions
+        label: Positions
+        widget: list
+        fields:
+        - name: designation
+          label: Title
+          widget: string
+        - name: start
+          label: Start year
+          widget: number
+          value_type: int
+        - name: end
+          label: End year (empty if current)
+          widget: number
+          value_type: int
+          required: false
+        - name: responsibilities
+          label: Responsibilities
+          widget: list
+          required: false
+      summary: '{{fields.company.name}}'
+  - name: education
+    label: Education
+    file: data/en/sections/education.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: degrees
+      label: Degrees
+      widget: list
+      fields:
+      - name: name
+        label: Degree
+        widget: string
+      - name: icon
+        label: icon
+        widget: string
+        default: fa-graduation-cap
+        required: false
+      - name: timeframe
+        label: Timeframe
+        widget: string
+      - name: institution
+        label: Institution
+        widget: object
+        fields:
+        - name: name
+          label: Name
+          widget: string
+        - name: url
+          label: URL
+          widget: string
+          required: false
+        - name: logo
+          label: Logo
+          widget: image
+          choose_url: false
+          required: false
+      - name: grade
+        label: Grade (leave empty to hide)
+        widget: object
+        fields:
+        - name: scale
+          label: GPA
+          widget: string
+          required: false
+        - name: achieved
+          label: Achieved
+          widget: number
+          value_type: float
+          required: false
+        - name: outOf
+          label: Out of
+          widget: number
+          value_type: float
+          required: false
+        required: false
+        collapsed: true
+      - name: takenCourses
+        label: Courses
+        widget: object
+        fields:
+        - name: showGrades
+          label: Show grades
+          widget: boolean
+          default: false
+          required: false
+        - name: collapseAfter
+          label: Collapse after
+          widget: number
+          value_type: int
+          required: false
+        - name: courses
+          label: Courses
+          widget: list
+          fields:
+          - name: name
+            label: Name
+            widget: string
+            required: false
+          required: false
+        required: false
+        collapsed: true
+      - name: customSections
+        label: Extra sections
+        widget: list
+        fields:
+        - name: name
+          label: Heading
+          widget: string
+          required: false
+        - name: content
+          label: Content (Markdown)
+          widget: markdown
+          required: false
+        required: false
+      summary: '{{fields.institution.name}}'
+  - name: publications
+    label: Publications
+    file: data/en/sections/publications.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: publications
+      label: Publications
+      widget: list
+      fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: publishedIn
+        label: Published in
+        widget: object
+        fields:
+        - name: name
+          label: Venue
+          widget: string
+        - name: date
+          label: Year
+          widget: number
+          value_type: int
+        - name: url
+          label: URL
+          widget: string
+          required: false
+      - name: authors
+        label: Authors (in order)
+        widget: list
+        fields:
+        - name: name
+          label: Name
+          widget: string
+      - name: paper
+        label: Summary
+        widget: object
+        fields:
+        - name: summary
+          label: One-line summary
+          widget: text
+          required: false
+        required: false
+      - name: categories
+        label: Categories
+        widget: list
+        required: false
+      - name: tags
+        label: Tags (the first is shown)
+        widget: list
+        required: false
+      summary: '{{fields.publishedIn.date}} {{fields.title}}'
+  - name: projects
+    label: Projects
+    file: data/en/sections/projects.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      collapsed: true
+    - name: buttons
+      label: Filter buttons
+      widget: list
+      fields:
+      - name: name
+        label: Label
+        widget: string
+        required: false
+      - name: filter
+        label: Tag
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+    - name: projects
+      label: Projects
+      widget: list
+      fields:
+      - name: name
+        label: Name
+        widget: string
+      - name: role
+        label: Role
+        widget: string
+        required: false
+      - name: timeline
+        label: Timeline
+        widget: string
+        required: false
+      - name: summary
+        label: Summary
+        widget: text
+      - name: repo
+        label: Code link
+        widget: string
+        required: false
+      - name: tags
+        label: Tags
+        widget: list
+        required: false
+      summary: '{{fields.name}}'
+  - name: skills
+    label: Skills
+    file: data/en/sections/skills.yaml
+    fields:
+    - name: section
+      label: 區塊設定（標題、是否顯示）
+      widget: object
+      fields:
+      - name: name
+        label: 區塊標題
+        widget: string
+      - name: id
+        label: 錨點代稱（勿改）
+        widget: string
+      - name: enable
+        label: 顯示這個區塊
+        widget: boolean
+        default: true
+        required: false
+      - name: weight
+        label: 排序（數字小的在前）
+        widget: number
+        value_type: int
+      - name: showOnNavbar
+        label: 放在導覽列
+        widget: boolean
+        default: true
+        required: false
+      - name: template
+        label: 版型（勿改）
+        widget: string
+        required: false
+      - name: filter
+        label: filter
+        widget: boolean
+        required: false
+      collapsed: true
+    - name: buttons
+      label: Filter buttons
+      widget: list
+      fields:
+      - name: name
+        label: Label
+        widget: string
+        required: false
+      - name: filter
+        label: Category
+        widget: string
+        required: false
+      collapsed: true
+      required: false
+    - name: skills
+      label: Skills
+      widget: list
+      fields:
+      - name: name
+        label: Name
+        widget: string
+      - name: summary
+        label: Summary
+        widget: text
+      - name: categories
+        label: Categories
+        widget: list
+        required: false
+      summary: '{{fields.name}}'
+  - name: site
+    label: Site settings
+    file: data/en/site.yaml
+    fields:
+    - name: copyright
+      label: Footer copyright
+      widget: string
+    - name: description
+      label: Site description
+      widget: text
+    - name: openGraph
+      label: Link previews
+      widget: object
+      fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: type
+        label: type
+        widget: string
+        default: website
+      - name: description
+        label: Description
+        widget: text
+      - name: image
+        label: Image
+        widget: image
+        choose_url: false
+        required: false
+      - name: url
+        label: URL
+        widget: string
+      collapsed: true

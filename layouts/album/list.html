@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- $albums := partial "album-pages.html" . -}}
+<div class="wrap page">
+  <header class="page-head">
+    <p class="eyebrow">{{ site.Title }}</p>
+    <h1>{{ .Title }}</h1>
+    {{- with .Content }}<div class="lede">{{ . }}</div>{{ end }}
+  </header>
+  {{- with $albums }}
+  <div class="albums">
+    {{- range . }}
+    {{- $photos := partial "album-photos.html" . -}}
+    {{- $cover := partial "cover.html" . -}}
+    {{- if and (not $cover) $photos }}{{ $cover = (index $photos 0).img }}{{ end -}}
+    <a class="album-card" href="{{ .RelPermalink }}">
+      {{- with $cover }}{{ $t := .Fill "900x675 webp Center q78" }}
+      <img src="{{ $t.RelPermalink }}" width="{{ $t.Width }}" height="{{ $t.Height }}" alt="" loading="lazy" decoding="async">
+      {{- end }}
+      <span class="album-meta">
+        <span class="album-title">{{ .Title }}</span>
+        <span class="meta">{{ with .Params.location }}{{ . }} · {{ end }}{{ .Date.Format "2006.01" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</span>
+      </span>
+    </a>
+    {{- end }}
+  </div>
+  {{- else }}
+  <p>{{ i18n "noAlbums" }}</p>
+  {{- end }}
+</div>
+{{ end }}

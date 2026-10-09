@@ -78,7 +78,7 @@ The site uses a custom cold Morandi color palette defined in `assets/css/main.cs
 
 ### Writing Blog Posts
 
-Posts are written in a local editor (Decap CMS) with a live preview of the site.
+Posts, albums and every profile section (about, experience, education, publications, projects, skills, site settings) are edited in a local editor (Decap CMS) with a live preview of the site.
 
 **First time only:** install [Hugo](https://gohugo.io/installation/) and [Node.js](https://nodejs.org), then run:
 ```bash
@@ -86,10 +86,10 @@ npm install
 ```
 This also turns on a git hook that removes location data (EXIF/GPS) from photos whenever you commit.
 
-**Mac app (recommended):** run `npm run app` once (needs the Xcode command line tools) to install **文章編輯器.app** into `~/Applications`. It opens the editor in its own window, with no browser needed; **顯示方式 → 預覽網站** (⌘P) shows the site, and quitting (⌘Q) stops the local servers. Problems are logged to `~/Library/Logs/文章編輯器.log`.
+**Mac app (recommended):** run `npm run app` once (needs the Xcode command line tools) to install **網站編輯器.app** into `~/Applications`. It opens the editor in its own window, with no browser needed; **顯示方式 → 預覽網站** (⌘P) shows the site, and quitting (⌘Q) stops the local servers. Problems are logged to `~/Library/Logs/網站編輯器.log`.
 
 **Every time:**
-1. Start the editor (or open 文章編輯器.app):
+1. Start the editor (or open 網站編輯器.app):
 ```bash
 npm run write
 ```
@@ -100,7 +100,7 @@ npm run write
 
 Prefer plain files? `hugo new content blog/my-post/index.md` creates a post folder; put `cover.jpg` and other photos in the same folder.
 
-Photos are converted to WebP when the site is built, and the original files are never published. iPhone HEIC photos must be exported as JPEG first. CI refuses to deploy if any committed image still contains location data.
+Photos larger than 2560px are shrunk on commit and converted to WebP when the site is built, and the original files are never published. iPhone HEIC photos must be exported as JPEG first. CI refuses to deploy if any committed image still contains location data.
 
 ## Key Features
 
