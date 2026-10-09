@@ -1,4 +1,4 @@
-// 文章編輯器: a small native macOS app that runs the local preview (Hugo) and the post
+// 網站編輯器: a small native macOS app that runs the local preview (Hugo) and the post
 // editor (Decap CMS) in the background and shows the editor in its own window.
 // Build with: sh tools/macos/build-app.sh
 import Cocoa
@@ -50,7 +50,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 820),
                       styleMask: [.titled, .closable, .miniaturizable, .resizable],
                       backing: .buffered, defer: false)
-    window.title = "文章編輯器"
+    window.title = "網站編輯器"
     window.contentView = content
     window.setFrameAutosaveName("EditorWindow")
     window.center()
@@ -147,7 +147,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
   }
 
   // A small log in ~/Library/Logs helps when something goes wrong.
-  static let logURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Logs/文章編輯器.log")
+  static let logURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Logs/網站編輯器.log")
   static func log(_ line: String) {
     let text = "\(Date()) \(line)\n"
     if let h = try? FileHandle(forWritingTo: logURL) { h.seekToEndOfFile(); h.write(text.data(using: .utf8)!); try? h.close() }
@@ -177,7 +177,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     let main = NSMenu()
     let appItem = NSMenuItem(); main.addItem(appItem)
     let app = NSMenu()
-    app.addItem(withTitle: "結束文章編輯器", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+    app.addItem(withTitle: "結束網站編輯器", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     appItem.submenu = app
 
     let editItem = NSMenuItem(); main.addItem(editItem)
@@ -254,15 +254,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
   /// Commits everything the editor changed (posts, photos, data) and pushes it, which makes
   /// GitHub rebuild and publish the site. The pre-commit hook strips photo location data first.
   /// Reads a post's title from its front matter (Chinese or English version).
-  func postTitle(_ slug: String) -> String {
+  func postTitle(_ dir: String) -> String {
     for name in ["index.md", "index.en.md"] {
-      let url = URL(fileURLWithPath: repoPath).appendingPathComponent("content/blog/\(slug)/\(name)")
+      let url = URL(fileURLWithPath: repoPath).appendingPathComponent("\(dir)/\(name)")
       if let text = try? String(contentsOf: url, encoding: .utf8),
          let line = text.split(separator: "\n").first(where: { $0.hasPrefix("title:") }) {
         return line.dropFirst(6).trimmingCharacters(in: .whitespaces).trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
       }
     }
-    return slug
+    return (dir as NSString).lastPathComponent
   }
 
   /// Lets you pick which changed posts to upload, then commits only those and pushes, which
@@ -279,11 +279,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     var other: [String] = []
     for f in files {
       let parts = f.split(separator: "/")
-      if parts.count >= 3, parts[0] == "content", parts[1] == "blog", !parts[2].hasPrefix("_index") {
+      if parts.count >= 3, parts[0] == "content", parts[1] == "blog" || parts[1] == "album", !parts[2].hasPrefix("_index") {
         let slug = String(parts[2])
-        let dir = "content/blog/\(slug)"
+        let dir = "content/\(parts[1])/\(slug)"
+        let label = (parts[1] == "album" ? "相簿：" : "") + postTitle(dir)
         if let i = groups.firstIndex(where: { $0.slug == slug }) { groups[i].paths.append(f) }
-        else { groups.append((postTitle(slug), slug, [f.hasSuffix("/") ? dir : f])) }
+        else { groups.append((label, slug, [f.hasSuffix("/") ? dir : f])) }
       } else { other.append(f) }
     }
     if !other.isEmpty { groups.append(("其他網站變更（\(other.count) 個檔案）", nil, other)) }
@@ -327,7 +328,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
             done.alertStyle = .warning
             done.messageText = "上傳沒有完成"
             done.informativeText = String(out.split(separator: "\n").suffix(4).joined(separator: "\n"))
-              + "\n\n詳細紀錄：~/Library/Logs/文章編輯器.log"
+              + "\n\n詳細紀錄：~/Library/Logs/網站編輯器.log"
           }
           done.beginSheetModal(for: self.window)
         }

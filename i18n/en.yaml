@@ -28,3 +28,10 @@ code: Code
 postNav: Post navigation
 series: In this series
 explore: Explore
+album: Album
+albumIntro: Photographs I have taken.
+photos: "{{ .Count }} photos"
+close: Close
+prevPhoto: Previous photo
+nextPhoto: Next photo
+noAlbums: No albums yet.

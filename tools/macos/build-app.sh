@@ -1,11 +1,11 @@
 #!/bin/sh
-# Builds the native "文章編輯器.app" for this repository and installs it into ~/Applications.
+# Builds the native "網站編輯器.app" for this repository and installs it into ~/Applications.
 # Needs the Xcode command line tools (xcode-select --install).
 # Usage: sh tools/macos/build-app.sh
 set -e
 cd "$(dirname "$0")/../.."
 REPO="${REPO:-$(pwd)}"
-NAME="文章編輯器"
+NAME="網站編輯器"
 DEST="${DEST:-$HOME/Applications/$NAME.app}"
 TMP="$(mktemp -d)"
 APP="$TMP/$NAME.app"
@@ -37,6 +37,8 @@ codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
 mkdir -p "$(dirname "$DEST")"
 rm -rf "$DEST"
+# The app used to be called 文章編輯器; remove the old copy.
+rm -rf "$(dirname "$DEST")/文章編輯器.app"
 mv "$APP" "$DEST"
 rm -rf "$TMP"
 touch "$DEST"

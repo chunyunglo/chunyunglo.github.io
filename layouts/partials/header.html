@@ -14,6 +14,9 @@
         {{- with site.GetPage "/blog" }}
         <li><a href="{{ .RelPermalink }}"{{ if or (eq $.Section "blog") (eq $.Type "tags") }} aria-current="page"{{ end }}>{{ i18n "blog" }}</a></li>
         {{- end }}
+        {{- with site.GetPage "/album" }}
+        <li><a href="{{ .RelPermalink }}"{{ if eq $.Section "album" }} aria-current="page"{{ end }}>{{ i18n "album" }}</a></li>
+        {{- end }}
       </ul>
       <div class="nav-tools">
         {{- range hugo.Sites -}}
@@ -21,6 +24,7 @@
             {{- $other := .Language -}}
             {{- $t := .Home.RelPermalink -}}
             {{- if or (eq $.Section "blog") (eq $.Type "tags") }}{{ with .GetPage "/blog" }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
+            {{- if eq $.Section "album" }}{{ with .GetPage "/album" }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
             {{- range $.Translations }}{{ if eq .Language.Lang $other.Lang }}{{ $t = .RelPermalink }}{{ end }}{{ end -}}
             <a class="lang-link" href="{{ $t }}" hreflang="{{ (partial "lang.html" $other.Lang).code }}" lang="{{ (partial "lang.html" $other.Lang).code }}">{{ (partial "lang.html" $other.Lang).label }}</a>
           {{- end -}}

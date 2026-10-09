@@ -1,0 +1,34 @@
+{{ define "main" }}
+{{- $photos := partial "album-photos.html" . -}}
+<div class="wrap page album-page">
+  <header class="page-head">
+    <p class="eyebrow"><a href="{{ (site.GetPage "/album").RelPermalink }}">{{ i18n "album" }}</a></p>
+    <h1>{{ .Title }}</h1>
+    <p class="meta">{{ with .Params.location }}{{ . }} · {{ end }}{{ .Date.Format "2006.01" }} · {{ i18n "photos" (dict "Count" (len $photos)) }}</p>
+    {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+    {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </header>
+  <ul class="photo-grid">
+    {{- range $i, $p := $photos }}
+    {{- $img := $p.img -}}
+    {{- $t := $img.Resize "720x webp q78" -}}
+    {{- $full := $img -}}{{- if gt $img.Width 2400 }}{{ $full = $img.Resize "2400x webp q85" }}{{ else }}{{ $full = $img.Resize (printf "%dx webp q85" $img.Width) }}{{ end -}}
+    <li>
+      <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
+        <img src="{{ $t.RelPermalink }}" width="{{ $t.Width }}" height="{{ $t.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="lazy" decoding="async">
+      </a>
+      {{- with $p.caption }}<span class="photo-caption">{{ . }}</span>{{ end }}
+    </li>
+    {{- end }}
+  </ul>
+</div>
+<dialog class="lightbox" aria-label="{{ .Title }}">
+  <figure>
+    <img alt="">
+    <figcaption></figcaption>
+  </figure>
+  <button class="lb-btn lb-close" type="button" aria-label="{{ i18n "close" }}">✕</button>
+  <button class="lb-btn lb-prev" type="button" aria-label="{{ i18n "prevPhoto" }}">‹</button>
+  <button class="lb-btn lb-next" type="button" aria-label="{{ i18n "nextPhoto" }}">›</button>
+</dialog>
+{{ end }}

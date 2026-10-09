@@ -28,3 +28,10 @@ code: 程式碼
 postNav: 文章導覽
 series: 系列文章
 explore: 認識我
+album: 相簿
+albumIntro: 我拍的照片。
+photos: "{{ .Count }} 張照片"
+close: 關閉
+prevPhoto: 上一張
+nextPhoto: 下一張
+noAlbums: 目前還沒有相簿。

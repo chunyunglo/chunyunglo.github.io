@@ -1,0 +1,13 @@
+{{- /* An album's photos: the `photos` list in front matter (image + caption), else every image in the bundle except the cover. */ -}}
+{{- $out := slice -}}
+{{- if .Params.photos -}}
+  {{- range .Params.photos -}}
+    {{- $caption := .caption | default "" -}}
+    {{- with $.Resources.Get (path.Base .image) }}{{ $out = $out | append (dict "img" . "caption" $caption) }}{{ end -}}
+  {{- end -}}
+{{- else -}}
+  {{- range .Resources.ByType "image" -}}
+    {{- if not (strings.HasPrefix .Name "cover") }}{{ $out = $out | append (dict "img" . "caption" "") }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

@@ -235,3 +235,41 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
 
   }
 }
+
+// Album lightbox: click a photo to view it large; arrows, swipe and Escape work too.
+{
+  const box = document.querySelector('.lightbox')
+  const links = [...document.querySelectorAll('.photo-grid .photo')]
+  if (box && links.length && typeof box.showModal === 'function') {
+    const img = box.querySelector('img')
+    const cap = box.querySelector('figcaption')
+    let at = 0
+    const show = (i) => {
+      at = (i + links.length) % links.length
+      const a = links[at]
+      img.src = a.dataset.full
+      img.alt = a.querySelector('img').alt
+      cap.textContent = a.dataset.caption || ''
+      // Warm up the neighbours so paging feels instant.
+      ;[at - 1, at + 1].forEach((j) => { const n = links[(j + links.length) % links.length]; if (n) new Image().src = n.dataset.full })
+    }
+    links.forEach((a, i) => a.addEventListener('click', (e) => { e.preventDefault(); show(i); box.showModal() }))
+    box.querySelector('.lb-close').addEventListener('click', () => box.close())
+    box.querySelector('.lb-prev').addEventListener('click', () => show(at - 1))
+    box.querySelector('.lb-next').addEventListener('click', () => show(at + 1))
+    box.addEventListener('click', (e) => { if (e.target === box || e.target.tagName === 'FIGURE') box.close() })
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(at - 1)
+      if (e.key === 'ArrowRight') show(at + 1)
+    })
+    let x0 = null
+    box.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX }, { passive: true })
+    box.addEventListener('touchend', (e) => {
+      if (x0 === null) return
+      const dx = e.changedTouches[0].clientX - x0
+      if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1))
+      x0 = null
+    })
+    box.addEventListener('close', () => links[at].focus())
+  }
+}

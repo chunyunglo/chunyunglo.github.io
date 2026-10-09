@@ -1,10 +1,20 @@
 #!/bin/sh
-# Strip EXIF/GPS from staged images before every commit.
+# Before every commit: shrink very large photos and strip EXIF/GPS from staged images.
 files=$(git diff --cached --name-only --diff-filter=ACM | grep -iE '\.(jpe?g|png|heic|heif)$')
 [ -z "$files" ] && exit 0
 if ! command -v node >/dev/null 2>&1; then
   echo "pre-commit: 需要 Node.js 才能移除照片的定位資訊（https://nodejs.org）。" >&2
   exit 1
+fi
+# Camera originals are much larger than the site ever shows; keep the long side at 2560px.
+if command -v sips >/dev/null 2>&1; then
+  echo "$files" | grep -iE '\.(jpe?g|png)$' | while IFS= read -r f; do
+    w=$(sips -g pixelWidth "$f" 2>/dev/null | awk '/pixelWidth/{print $2}')
+    h=$(sips -g pixelHeight "$f" 2>/dev/null | awk '/pixelHeight/{print $2}')
+    if [ -n "$w" ] && [ -n "$h" ] && { [ "$w" -gt 2560 ] || [ "$h" -gt 2560 ]; }; then
+      sips -Z 2560 "$f" >/dev/null && echo "✓ 已縮小：$f"
+    fi
+  done
 fi
 echo "$files" | tr '\n' '\0' | xargs -0 node tools/strip-exif.mjs || exit 1
 echo "$files" | tr '\n' '\0' | xargs -0 git add --
