@@ -54,4 +54,8 @@ photos:
     caption: 郊外的牧場
   - image: remarkables.jpg
     caption: 雲壓在 The Remarkables 上
+  - image: udon.jpg
+    caption: 皇后鎮的烏龍麵
+  - image: flat-white.jpg
+    caption: Flat white 與香蕉蛋糕
 ---
