@@ -33,6 +33,7 @@ experiences:
     responsibilities:
     - 以中英文詞語聯想資料庫建構語意向量空間。
     - 應用分佈語義學方法，評估翻譯詞對的跨語言語意對齊。
+    - 發展以詞語聯想為基礎的翻譯等價指標，以保留的人類評分與第二組評分資料檢驗，並公開以合成資料示範的 [demo](https://github.com/chunyunglo/two-bridges-demo)。
 - company:
     name: 國立臺灣大學心理學系系學會
     location: 台北，臺灣

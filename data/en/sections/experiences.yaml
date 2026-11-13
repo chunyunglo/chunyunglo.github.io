@@ -33,6 +33,7 @@ experiences:
     responsibilities:
     - Constructed Chinese and English semantic vector spaces from word-association databases.
     - Applied distributional-semantic methods to evaluate cross-lingual alignment between translation pairs.
+    - Developed an association-based measure of translation equivalence, tested it on held-out human ratings and a second rating set, and released a [public demo](https://github.com/chunyunglo/two-bridges-demo) on synthetic data.
 - company:
     name: NTU Psychology Student Association
     location: Taipei, Taiwan

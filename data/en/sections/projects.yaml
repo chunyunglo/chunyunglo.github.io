@@ -21,6 +21,12 @@ projects:
   timeline: "2026 - Present"
   summary: "Investigates how watching naturalistic video together shapes the semantic structure of free recall, using large-language-model and semantic-representation analyses of shared experience."
   tags: ["language", "methods", "LLM", "semantic analysis"]
+- name: Translation Equivalence from Word Associations
+  role: Research internship project, with Simon De Deyne
+  timeline: "2026"
+  summary: "Estimates how close the meanings of an English word and its Mandarin translation are from free-association norms alone, using a bilingual dictionary as two bridges between the languages. The method was developed on one half of the human ratings, fixed, and tested once on the other half. A public demo runs the whole pipeline on synthetic data."
+  repo: "https://github.com/chunyunglo/two-bridges-demo"
+  tags: ["language", "methods", "word associations", "cross-lingual semantics"]
 - name: Semantic Convergence in Shared Experience
   role: Research analysis and oral presentation
   timeline: "2025"

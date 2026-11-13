@@ -21,6 +21,12 @@ projects:
   timeline: "2026 - 至今"
   summary: "探討共同觀看自然情境影片如何影響自由回憶的語意結構；以大型語言模型與語意表徵分析共享經驗。"
   tags: ["language", "methods", "LLM", "semantic analysis"]
+- name: 以詞語聯想估計翻譯詞的語意等價
+  role: 研究實習專案，與 Simon De Deyne 合作
+  timeline: "2026"
+  summary: "只用中英文自由聯想常模，估計一個英文詞與其中文翻譯的語意有多接近；以雙語詞典作為連接兩個語言的兩座橋。方法先在一半的人類評分上開發並固定，再於另一半上只評分一次。公開 demo 以合成資料跑完整個流程。"
+  repo: "https://github.com/chunyunglo/two-bridges-demo"
+  tags: ["language", "methods", "word associations", "cross-lingual semantics"]
 - name: 共享經驗中的語意收斂
   role: 研究分析與口頭發表
   timeline: "2025"
