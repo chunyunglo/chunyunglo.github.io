@@ -1,13 +1,15 @@
 ---
-title: "Monash 交換心得（二）：課程與研究實習"
+title: "澳洲交換心得｜Monash 蒙納許大學（二）：課程與研究實習"
 date: 2026-07-02T10:00:00+08:00
-tags: ["交換學生", "Monash", "墨爾本", "研究"]
+tags: ["交換學生", "澳洲交換", "澳洲留學", "Monash", "墨爾本", "研究"]
 series: monash-2026
-description: "在 Monash 修的三門課，以及在墨爾本大學 Complex Human Data Hub 的研究實習。"
+description: "澳洲 Monash University 交換的上課方式與評分、修過的三門課心得，以及在墨爾本大學 Complex Human Data Hub 的研究實習經驗。"
 coverAlt: "Monash Learning & Teaching Building 的教室"
 slug: monash-exchange-2
 lang: zh
 ---
+
+這篇是澳洲交換系列的第二篇，整理我在 Monash University 修課的方式與心得，以及交換期間在墨爾本大學研究實習的經驗。
 
 ## 上課方式與評分
 
