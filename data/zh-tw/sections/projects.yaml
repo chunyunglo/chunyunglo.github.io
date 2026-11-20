@@ -1,39 +1,73 @@
 section:
-  name: 研究專案
+  name: 作品與專案
   id: projects
   enable: true
-  weight: 6
+  weight: 2
   showOnNavbar: true
 
 buttons:
 - name: 全部
   filter: "all"
-- name: 語言與共享經驗
-  filter: "language"
-- name: 決策與社會互動
-  filter: "decision"
-- name: 方法開發
-  filter: "methods"
+- name: 工具與自動化
+  filter: "tools"
+- name: 研究分析
+  filter: "research"
 
+# problem / approach / result are shown as labeled rows; highlight is the one-line takeaway.
+# Keep lab work at the level already public: no unpublished data, numbers, findings or internal details.
 projects:
-- name: 共享觀影與回憶的語意結構
-  role: 國科會大專學生研究計畫
-  timeline: "2026 - 至今"
-  summary: "探討共同觀看自然情境影片如何影響自由回憶的語意結構；以大型語言模型與語意表徵分析共享經驗。"
-  tags: ["language", "methods", "LLM", "semantic analysis"]
+- name: 實驗參與者提醒系統
+  role: 流程自動化
+  timeline: "2025 - 至今"
+  highlight: 將人工通知流程轉為自動化作業
+  problem: "實驗前需逐一聯繫參與者並確認出席，人工作業耗時，且在參與者人數增加時容易產生疏漏。"
+  approach: "整合 LINE 與 Google 試算表，建立依實驗排程自動發送提醒的系統；僅在出現例外狀況時通知負責人員，以降低例行性的人工介入。"
+  result: "提醒流程不再需要人工逐筆處理；新增實驗時只需調整設定，無須修改程式。"
+  tags: ["tools", "LINE", "Google 試算表", "流程自動化"]
+- name: 結合規則與 AI 的資料品質檢核
+  role: 課堂專題原型
+  timeline: "2026"
+  highlight: 以規則與 AI 分工篩檢，再交由人工覆核
+  problem: "大量紀錄中常見欄位缺漏或內容前後矛盾的情形；完全仰賴人工檢查效率不足，完全交由 AI 判斷則難以確保可靠性。"
+  approach: "以明確規則篩出確定有誤的紀錄，再由 AI 判讀規則難以涵蓋的模糊案例，最後將標記結果交由人工覆核。"
+  result: "以模擬案例比較僅用規則、僅用 AI 與兩者並用三種流程的檢核效果。"
+  tags: ["tools", "資料品質", "AI 應用"]
+- name: 個人網站與內容編輯器
+  role: 獨立建置與維護
+  timeline: "2025 - 至今"
+  highlight: 運用 AI 程式開發工具獨立完成建置
+  problem: "需要一個整合經歷、文章與相簿的中英雙語網站，並能在不修改程式碼的情況下持續更新內容。"
+  approach: "以 AI 程式開發工具建置本網站，並另外開發內容編輯器，支援撰寫文章與上傳相簿。"
+  result: "網站持續維護中，文章與相簿皆透過此編輯器發布。"
+  repo: "https://github.com/chunyunglo/chunyunglo.github.io"
+  tags: ["tools", "網站開發", "AI 程式開發"]
 - name: 以詞語聯想估計翻譯詞的語意等價
   role: 研究實習專案，與 Simon De Deyne 合作
   timeline: "2026"
-  summary: "只用中英文自由聯想常模，估計一個英文詞與其中文翻譯的語意有多接近；以雙語詞典作為連接兩個語言的兩座橋。方法先在一半的人類評分上開發並固定，再於另一半上只評分一次。公開 demo 以合成資料跑完整個流程。"
+  highlight: 公開 demo 以合成資料示範完整分析流程
+  problem: "如何在不依賴平行語料的情況下，估計一個英文詞與其中文翻譯在語意上的接近程度？"
+  approach: "僅使用中英文自由聯想常模，並以雙語詞典作為連接兩種語言的橋梁。方法先於一半的人類評分資料上開發並固定，再於另一半資料上進行單次評估，以避免過度配適。"
+  result: "公開 demo 以合成資料完整呈現分析流程。"
   repo: "https://github.com/chunyunglo/two-bridges-demo"
-  tags: ["language", "methods", "word associations", "cross-lingual semantics"]
+  tags: ["research", "跨語言語意", "詞語聯想"]
+- name: 共享觀影與回憶的語意結構
+  role: 國科會大專學生研究計畫
+  timeline: "2026 - 至今"
+  highlight: 國科會大專學生研究計畫
+  problem: "共同觀看自然情境影片的經驗，是否會影響個體事後自由回憶的語意結構？"
+  approach: "運用大型語言模型與語意表徵方法，分析共享經驗對回憶內容的影響。"
+  tags: ["research", "大型語言模型", "語意分析"]
 - name: 共享經驗中的語意收斂
-  role: 研究分析與口頭發表
+  role: 第一作者
   timeline: "2025"
-  summary: "分析共同經驗後的對話，探討人們如何在互動中逐步建立共同理解，並以自然語言與時間序列方法描繪其動態歷程。"
-  tags: ["language", "methods", "interaction", "time series"]
-- name: 權力轉換下的行為策略
-  role: 計算建模與研討會發表
+  highlight: 2025 臺灣心理學會年會口頭發表
+  problem: "人們在共同經歷一件事之後，如何透過對話逐步建立共同理解？"
+  approach: "結合自然語言處理與時間序列方法，描繪對話過程中語意變化的動態歷程。"
+  tags: ["research", "對話分析", "時間序列"]
+- name: 權力轉換下的資源分配策略
+  role: 第一作者
   timeline: "2026"
-  summary: "以多回合公共財與獨裁者賽局探討權力狀態改變時的資源分配行為；使用分群與強化學習建模策略差異。"
-  tags: ["decision", "methods", "reinforcement learning", "clustering"]
+  highlight: 2026 臺灣心理學會年會發表
+  problem: "當權力逐步趨於平等時，原本有權與無權的個體會如何調整資源分配行為？"
+  approach: "以多回合公共財與獨裁者賽局資料，運用分群與計算模型刻畫不同的分配策略。"
+  tags: ["research", "決策行為", "計算建模"]

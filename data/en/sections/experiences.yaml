@@ -16,11 +16,10 @@ experiences:
   - designation: Undergraduate Research Assistant
     start: 2025
     responsibilities:
-    - Develop Python workflows for natural-language, sequential-behavior, time-series, and multimodal human data.
-    - Engineer semantic, syntactic, temporal, and behavioral features from speech and interaction observations; support data alignment and visualization.
-    - Apply topic modeling, clustering, event segmentation, reinforcement learning, and hierarchical Bayesian modeling to shared-experience and decision-behavior research.
-    - Run dyadic interaction and virtual-reality studies; collect physiological and behavioral data with BIOPAC and head-mounted cameras.
-    - Evaluate analyses using explicit baselines, held-out comparisons, permutation and sensitivity procedures, uncertainty estimates, and diagnostic checks.
+    - Build Python analysis pipelines for conversational, decision-making, and experimental data, covering data cleaning, statistical analysis, and visualization.
+    - Presented two studies as first author at the Taiwanese Psychological Association annual meetings and contributed to several co-authored presentations.
+    - Conduct dyadic interaction and virtual-reality experiments, manage participant scheduling and follow-up, and automated the reminder workflow.
+    - Validate findings against explicit baselines and repeated checks to ensure reliable conclusions.
 - company:
     name: Complex Human Data Hub
     location: Melbourne, Australia
@@ -31,9 +30,9 @@ experiences:
     start: 2026
     end: 2026
     responsibilities:
-    - Constructed Chinese and English semantic vector spaces from word-association databases.
-    - Applied distributional-semantic methods to evaluate cross-lingual alignment between translation pairs.
-    - Developed an association-based measure of translation equivalence, tested it on held-out human ratings and a second rating set, and released a [public demo](https://github.com/chunyunglo/two-bridges-demo) on synthetic data.
+    - Independently secured this research internship during my exchange and collaborated with an international team entirely in English.
+    - Developed a method for estimating translation equivalence from Chinese and English word-association data.
+    - Released a [public demo](https://github.com/chunyunglo/two-bridges-demo) that runs the full pipeline on synthetic data.
 - company:
     name: NTU Psychology Student Association
     location: Taipei, Taiwan

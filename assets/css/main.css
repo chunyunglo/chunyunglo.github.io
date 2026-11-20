@@ -519,3 +519,19 @@ main:focus { outline: none; }
   .hero { clip-path: none; overflow: hidden; }
   .hero-bg { position: absolute; }
 }
+
+/* Project cards: problem / approach / result */
+.projects-grid .card { display: flex; flex-direction: column; }
+.project .highlight {
+  margin: .5rem 0 0; padding: .45rem .75rem; border-radius: .6rem;
+  background: var(--accent-soft); color: var(--ink); font-weight: 600; font-size: .92rem;
+}
+.par { margin: 1rem 0 0; display: grid; gap: .65rem; }
+.par div { display: grid; grid-template-columns: 3.2rem 1fr; gap: .5rem; }
+.par dt { font-size: .8rem; font-weight: 700; color: var(--accent); letter-spacing: .02em; padding-top: .15rem; }
+.par dd { margin: 0; color: var(--ink-2); font-size: .95rem; line-height: 1.65; }
+html[lang="en"] .par div { grid-template-columns: 4.8rem 1fr; }
+.card-foot { margin-top: auto; padding-top: 1rem; display: flex; align-items: flex-end; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+.card-foot .chips { margin: 0; }
+.card-link { display: inline-flex; align-items: center; gap: .3rem; font-size: .88rem; white-space: nowrap; }
+@media (max-width: 480px) { .par div, html[lang="en"] .par div { grid-template-columns: 1fr; gap: .1rem; } }

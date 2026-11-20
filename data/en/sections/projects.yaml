@@ -1,39 +1,73 @@
 section:
-  name: Research Projects
+  name: Projects
   id: projects
   enable: true
-  weight: 6
+  weight: 2
   showOnNavbar: true
 
 buttons:
 - name: All
   filter: "all"
-- name: Language & Shared Experience
-  filter: "language"
-- name: Decision & Social Interaction
-  filter: "decision"
-- name: Methods Development
-  filter: "methods"
+- name: Tools & Automation
+  filter: "tools"
+- name: Research & Analysis
+  filter: "research"
 
+# problem / approach / result are shown as labeled rows; highlight is the one-line takeaway.
+# Keep lab work at the level already public: no unpublished data, numbers, findings or internal details.
 projects:
-- name: Shared Viewing and Semantic Structure in Memory
-  role: NSTC Undergraduate Research Project
-  timeline: "2026 - Present"
-  summary: "Investigates how watching naturalistic video together shapes the semantic structure of free recall, using large-language-model and semantic-representation analyses of shared experience."
-  tags: ["language", "methods", "LLM", "semantic analysis"]
-- name: Translation Equivalence from Word Associations
+- name: Participant Reminder System
+  role: Workflow automation
+  timeline: "2025 - present"
+  highlight: Converted a manual notification process into an automated workflow
+  problem: "Contacting each participant before a session and confirming attendance by hand was time-consuming and became error-prone as studies grew."
+  approach: "Integrated LINE and Google Sheets into a system that sends reminders according to the study schedule and notifies staff only when an exception requires attention."
+  result: "Reminders no longer require manual handling, and new studies are added through configuration rather than code changes."
+  tags: ["tools", "LINE", "Google Sheets", "workflow automation"]
+- name: Rule-and-AI Data Quality Screening
+  role: Course project prototype
+  timeline: "2026"
+  highlight: Rules and AI divide the screening before human review
+  problem: "Large record sets often contain missing fields or internal contradictions. Manual review alone is inefficient, while relying solely on AI raises reliability concerns."
+  approach: "Explicit rules flag records that are definitively invalid, AI evaluates ambiguous cases the rules cannot cover, and all flagged records are passed to human reviewers."
+  result: "Compared rules only, AI only, and the combined workflow on simulated cases."
+  tags: ["tools", "data quality", "applied AI"]
+- name: Personal Website and Content Editor
+  role: Independently built and maintained
+  timeline: "2025 - present"
+  highlight: Built independently with AI-assisted development tools
+  problem: "Needed a bilingual site combining experience, writing, and photo albums that could be updated without editing code."
+  approach: "Built this site with AI-assisted development tools and developed a companion editor for writing posts and uploading albums."
+  result: "The site is actively maintained, with all posts and albums published through the editor."
+  repo: "https://github.com/chunyunglo/chunyunglo.github.io"
+  tags: ["tools", "web development", "AI-assisted development"]
+- name: Estimating Translation Equivalence from Word Associations
   role: Research internship project, with Simon De Deyne
   timeline: "2026"
-  summary: "Estimates how close the meanings of an English word and its Mandarin translation are from free-association norms alone, using a bilingual dictionary as two bridges between the languages. The method was developed on one half of the human ratings, fixed, and tested once on the other half. A public demo runs the whole pipeline on synthetic data."
+  highlight: Public demo presents the full pipeline on synthetic data
+  problem: "How can the semantic closeness between an English word and its Chinese translation be estimated without parallel corpora?"
+  approach: "Uses only Chinese and English free-association norms, with bilingual dictionaries bridging the two languages. The method was developed and frozen on half of the human ratings, then evaluated once on the other half to avoid overfitting."
+  result: "A public demo presents the complete pipeline on synthetic data."
   repo: "https://github.com/chunyunglo/two-bridges-demo"
-  tags: ["language", "methods", "word associations", "cross-lingual semantics"]
+  tags: ["research", "cross-lingual semantics", "word associations"]
+- name: Shared Viewing and Semantic Structure in Memory
+  role: NSTC Undergraduate Research Project
+  timeline: "2026 - present"
+  highlight: NSTC undergraduate research project
+  problem: "Does watching naturalistic films together shape the semantic structure of later free recall?"
+  approach: "Applies large language models and semantic representations to examine how shared experience influences recall."
+  tags: ["research", "large language models", "semantic analysis"]
 - name: Semantic Convergence in Shared Experience
-  role: Research analysis and oral presentation
+  role: First author
   timeline: "2025"
-  summary: "Analyzed post-experience conversation to examine how people progressively establish common understanding, using natural-language and time-series approaches to characterize the dynamics."
-  tags: ["language", "methods", "interaction", "time series"]
-- name: Behavioral Strategies Under Changing Power
-  role: Computational modeling and conference presentation
+  highlight: Oral presentation, Taiwanese Psychological Association 2025
+  problem: "How do people build common understanding through conversation after a shared experience?"
+  approach: "Combines natural language processing and time-series methods to characterize how meaning evolves over a conversation."
+  tags: ["research", "conversation analysis", "time series"]
+- name: Resource Allocation Strategies under Shifting Power
+  role: First author
   timeline: "2026"
-  summary: "Examines resource-allocation behavior as power status changes in multi-round public-goods and dictator games, using clustering and reinforcement-learning models to characterize strategy differences."
-  tags: ["decision", "methods", "reinforcement learning", "clustering"]
+  highlight: Taiwanese Psychological Association 2026
+  problem: "As power becomes equal, how do previously powerful and powerless individuals adjust their allocation behavior?"
+  approach: "Uses multi-round public goods and dictator game data, applying clustering and computational models to characterize distinct allocation strategies."
+  tags: ["research", "decision-making", "computational modeling"]

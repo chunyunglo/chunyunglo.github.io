@@ -27,7 +27,7 @@
       {{- end }}
       <p class="lede">{{ $about.interests | default $about.summary }}</p>
       <ul class="hero-links">
-        <li><a class="btn btn-primary" href="#{{ $s.experiences.section.id }}">{{ i18n "explore" }} {{ partial "icon.html" "arrow" }}</a></li>
+        <li><a class="btn btn-primary" href="#{{ $s.projects.section.id }}">{{ i18n "explore" }} {{ partial "icon.html" "arrow" }}</a></li>
         <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }}<span class="btn-label"> GitHub</span></a></li>
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
@@ -56,11 +56,44 @@
       {{- end }}
     </section>
   </div>
-  <a class="scroll-cue" href="#{{ $s.experiences.section.id }}" aria-label="{{ i18n "explore" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="scroll-cue" href="#{{ $s.projects.section.id }}" aria-label="{{ i18n "explore" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </section>
 
-{{- with $s.experiences }}{{ if .section.enable }}
+{{- with $s.projects }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap reveal">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    {{- with .buttons }}
+    <div class="filters" role="group" aria-label="{{ i18n "tags" }}" data-filter-group="#{{ $s.projects.section.id }} .project">
+      {{- range $i, $b := . }}<button type="button" data-filter="{{ .filter }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}">{{ .name }}</button>{{ end }}
+    </div>
+    {{- end }}
+    <div class="cards two projects-grid">
+      {{- range .projects }}
+      <article class="card project" data-tags="{{ delimit .tags " " }}">
+        <p class="when">{{ .timeline }}{{ with .role }} · {{ . }}{{ end }}</p>
+        <h3>{{ .name }}</h3>
+        {{- with .highlight }}<p class="highlight">{{ . }}</p>{{ end }}
+        {{- if or .problem .approach .result }}
+        <dl class="par">
+          {{- with .problem }}<div><dt>{{ i18n "problem" }}</dt><dd>{{ . }}</dd></div>{{ end }}
+          {{- with .approach }}<div><dt>{{ i18n "approach" }}</dt><dd>{{ . }}</dd></div>{{ end }}
+          {{- with .result }}<div><dt>{{ i18n "result" }}</dt><dd>{{ . }}</dd></div>{{ end }}
+        </dl>
+        {{- else }}{{ with .summary }}<p>{{ . }}</p>{{ end }}{{ end }}
+        <div class="card-foot">
+          <ul class="chips small">{{ range .tags }}{{ if not (in (slice "tools" "research") .) }}<li>{{ . }}</li>{{ end }}{{ end }}</ul>
+          {{- with .repo }}<a class="card-link" href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a>{{ end }}
+        </div>
+      </article>
+      {{- end }}
+    </div>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.experiences }}{{ if .section.enable }}
+<section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
   <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <ol class="timeline">
@@ -83,6 +116,19 @@
       {{- end }}
       {{- end }}
     </ol>
+  </div>
+</section>
+{{- end }}{{ end }}
+
+{{- with $s.skills }}{{ if .section.enable }}
+<section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
+  <div class="wrap reveal">
+    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
+    <dl class="skills">
+      {{- range .skills }}
+      <div><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
+      {{- end }}
+    </dl>
   </div>
 </section>
 {{- end }}{{ end }}
@@ -143,44 +189,6 @@
       </li>
       {{- end }}
     </ol>
-  </div>
-</section>
-{{- end }}{{ end }}
-
-{{- with $s.projects }}{{ if .section.enable }}
-<section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
-    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
-    {{- with .buttons }}
-    <div class="filters" role="group" aria-label="{{ i18n "tags" }}" data-filter-group="#{{ $s.projects.section.id }} .project">
-      {{- range $i, $b := . }}<button type="button" data-filter="{{ .filter }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}">{{ .name }}</button>{{ end }}
-    </div>
-    {{- end }}
-    <div class="cards three">
-      {{- range .projects }}
-      <article class="card project" data-tags="{{ delimit .tags " " }}">
-        <p class="when">{{ .timeline }}</p>
-        <h3>{{ .name }}</h3>
-        <p class="org">{{ .role }}</p>
-        <p>{{ .summary }}</p>
-        {{- with .repo }}<p><a href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a></p>{{ end }}
-        <ul class="chips small">{{ range .tags }}{{ if not (in (slice "language" "decision" "methods") .) }}<li>{{ . }}</li>{{ end }}{{ end }}</ul>
-      </article>
-      {{- end }}
-    </div>
-  </div>
-</section>
-{{- end }}{{ end }}
-
-{{- with $s.skills }}{{ if .section.enable }}
-<section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
-    <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
-    <dl class="skills">
-      {{- range .skills }}
-      <div><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
-      {{- end }}
-    </dl>
   </div>
 </section>
 {{- end }}{{ end }}

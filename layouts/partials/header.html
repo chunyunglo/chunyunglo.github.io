@@ -8,7 +8,7 @@
     <nav id="site-nav" class="site-nav" aria-label="{{ i18n "primaryNav" }}">
       <ul>
         {{- $s := $data.sections }}
-        {{- range where (slice $s.about $s.experiences $s.education $s.publications $s.projects $s.skills) "section.showOnNavbar" true }}
+        {{- range where (slice $s.about $s.projects $s.experiences $s.skills $s.education $s.publications) "section.showOnNavbar" true }}
         <li><a href="{{ $anchor }}#{{ .section.id }}">{{ .section.name }}</a></li>
         {{- end }}
         {{- with site.GetPage "/blog" }}

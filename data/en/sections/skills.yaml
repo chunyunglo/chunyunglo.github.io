@@ -1,8 +1,8 @@
 section:
-  name: Methods & Skills
+  name: Skills & Tools
   id: skills
   enable: true
-  weight: 5
+  weight: 4
   showOnNavbar: true
   filter: true
 
@@ -17,24 +17,21 @@ buttons:
   filter: "research"
 
 skills:
-- name: Python & Data Analysis
-  summary: "Build reproducible preparation, analysis, and modeling workflows with NumPy, Pandas, SciPy, scikit-learn, PyTorch, PyMC, and statsmodels."
-  categories: ["programming"]
-- name: Natural Language Processing
-  summary: "Develop lexical, TF-IDF, contextual-embedding, topic, syntactic, and sequence representations; analyze semantic similarity, trajectories, and conversational alignment."
+- name: Data Processing & Analysis
+  summary: "Prepare raw data for analysis, conduct statistical testing, clustering, and comparative analyses, and present results through visualization. Tools include Python (Pandas, scikit-learn, statsmodels) and Google Sheets."
+  categories: ["programming", "research"]
+- name: Verification & Quality Control
+  summary: "Confirm the accuracy of data and results through baselines, record-level checks, and repeated verification before drawing conclusions."
+  categories: ["research"]
+- name: Text & Conversation Analysis
+  summary: "Analyze large volumes of text and conversation with natural language processing and large language models, including semantic similarity and change over time."
   categories: ["language", "research"]
-- name: Temporal & Sequential Analysis
-  summary: "Model change across conversational turns, decision rounds, and moving windows with autocorrelation, FFT, MFDFA, recurrence analysis, and event or state segmentation."
+- name: Applied AI & Workflow Automation
+  summary: "Experienced in applying Claude, ChatGPT, and Gemini to research, writing, and data organization; integrate services such as LINE and Google Sheets into automated workflows; build websites with AI-assisted development tools."
+  categories: ["programming"]
+- name: Experimental Design & Data Collection
+  summary: "Experienced in designing and running experiments and recruiting and scheduling participants; familiar with PsychoPy, web-based experiments, BIOPAC physiological recording, and virtual reality."
   categories: ["research"]
-- name: Statistical & Computational Modeling
-  summary: "Apply regression, non-parametric tests, permutation procedures, clustering, dimensionality reduction, reinforcement learning, and hierarchical Bayesian models to dependent data."
-  categories: ["research"]
-- name: Validation & Visualization
-  summary: "Use held-out, null, shuffled, and pseudo-pair baselines with sensitivity analysis, uncertainty estimation, and diagnostics; communicate results in Matplotlib, Seaborn, and Plotly."
-  categories: ["programming", "research"]
-- name: Research Systems & Data Collection
-  summary: "Experienced with PsychoPy, HTML experiments, BIOPAC, and multimodal and dyadic data workflows."
-  categories: ["programming", "research"]
-- name: Languages
-  summary: "Native Mandarin; English: IELTS 7.5 and TOEIC 935, with experience in academic reading, technical communication, and international collaboration."
+- name: Communication & Languages
+  summary: "Native Mandarin; English IELTS 7.5, TOEIC 935. Experienced in oral and poster presentations at academic conferences and in English-language collaboration at an overseas research institution."
   categories: ["language"]

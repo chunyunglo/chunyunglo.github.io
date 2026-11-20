@@ -11,10 +11,10 @@ company:
   name: Department of Psychology, National Taiwan University
   url: "https://www.ntu.edu.tw"
 
-summary: 'I am a psychology undergraduate and computational research assistant at National Taiwan University. I analyze natural-language, sequential-behavior, time-series, and multimodal human data, combining behavioral theory, statistical inference, and computational modeling to develop interpretable, carefully validated workflows. My interests include social interaction, shared experience, decision-making, and the dynamic structure of human data.'
+summary: 'I am a fourth-year psychology student at National Taiwan University and a research assistant in a computational psychology lab. I break research questions into analyzable steps, collect and prepare appropriate data, verify it carefully, and communicate conclusions clearly. My experience spans conversational interaction, group decision-making, and cross-lingual semantics. I also use AI tools to turn repetitive tasks into automated workflows.'
 
 # Short line shown on the home page (the full summary is used for search results).
-interests: 'My research focuses on social interaction, shared experience, decision-making, and the dynamic structure of human data.'
+interests: 'I break questions into analyzable steps and draw conclusions only after careful verification, with experience spanning conversational interaction, group decision-making, and cross-lingual semantics. I also build automated workflows with AI tools.'
 
 socialLinks:
 - name: GitHub
