@@ -83,7 +83,10 @@
         {{- else }}{{ with .summary }}<p>{{ . }}</p>{{ end }}{{ end }}
         <div class="card-foot">
           <ul class="chips small">{{ range .tags }}{{ if not (in (slice "tools" "research") .) }}<li>{{ . }}</li>{{ end }}{{ end }}</ul>
-          {{- with .repo }}<a class="card-link" href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a>{{ end }}
+          <span class="card-links">
+            {{- range .links }}<a class="card-link" href="{{ .url }}">{{ .name }}</a>{{ end }}
+            {{- with .repo }}<a class="card-link" href="{{ . }}">{{ partial "icon.html" "github" }} {{ i18n "code" }}</a>{{ end }}
+          </span>
         </div>
       </article>
       {{- end }}

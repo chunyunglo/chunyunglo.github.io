@@ -16,22 +16,28 @@ buttons:
 # problem / approach / result are shown as labeled rows; highlight is the one-line takeaway.
 # Keep lab work at the level already public: no unpublished data, numbers, findings or internal details.
 projects:
+- name: "Behavior Decoded: An AI-Run Science Channel"
+  role: Social media automation
+  timeline: "2026 - present"
+  highlight: Paper selection, production, fact-checking, publishing, and channel management are fully automated
+  problem: "New computational research on human behavior rarely reaches the public, and running a science channel by hand requires substantial time for selecting papers, writing scripts, editing, and publishing."
+  approach: "Each day the system selects a new paper on computational studies of human behavior from arXiv and journal feeds. Claude reads the full text and writes Chinese and English scripts, which are then voiced, animated, and rendered as vertical short videos for YouTube Shorts, Instagram Reels, and Threads. Before publishing, a second Claude pass checks every line against the paper and sampled frames are reviewed for errors; if any check fails, nothing is posted."
+  result: "The channel updates daily. The system also replies to comments, reads channel analytics, and adjusts its topic selection and strategy every week based on performance."
+  links:
+  - name: YouTube
+    url: "https://www.youtube.com/@Human-_-Behavior-_-Decode"
+  - name: Instagram
+    url: "https://www.instagram.com/human__behavior__decode/"
+  repo: "https://github.com/chunyunglo/paper-shorts"
+  tags: ["tools", "Claude", "social media", "automated video"]
 - name: Participant Reminder System
-  role: Workflow automation
+  role: LINE bot workflow automation
   timeline: "2025 - present"
   highlight: Converted a manual notification process into an automated workflow
   problem: "Contacting each participant before a session and confirming attendance by hand was time-consuming and became error-prone as studies grew."
-  approach: "Integrated LINE and Google Sheets into a system that sends reminders according to the study schedule and notifies staff only when an exception requires attention."
-  result: "Reminders no longer require manual handling, and new studies are added through configuration rather than code changes."
+  approach: "Integrated LINE, Google Sheets, and Gmail: when participants add the LINE account, the system matches them to their sign-up records and sends reminders according to the study schedule, emailing staff only when an exception requires attention."
+  result: "Reminders no longer require manual handling, and a new study is added with a single row in a settings sheet, with no code changes."
   tags: ["tools", "LINE", "Google Sheets", "workflow automation"]
-- name: Rule-and-AI Data Quality Screening
-  role: Course project prototype
-  timeline: "2026"
-  highlight: Rules and AI divide the screening before human review
-  problem: "Large record sets often contain missing fields or internal contradictions. Manual review alone is inefficient, while relying solely on AI raises reliability concerns."
-  approach: "Explicit rules flag records that are definitively invalid, AI evaluates ambiguous cases the rules cannot cover, and all flagged records are passed to human reviewers."
-  result: "Compared rules only, AI only, and the combined workflow on simulated cases."
-  tags: ["tools", "data quality", "applied AI"]
 - name: Personal Website and Content Editor
   role: Independently built and maintained
   timeline: "2025 - present"
@@ -67,7 +73,7 @@ projects:
 - name: Resource Allocation Strategies under Shifting Power
   role: First author
   timeline: "2026"
-  highlight: Taiwanese Psychological Association 2026
+  highlight: Poster, Taiwanese Psychological Association 2026
   problem: "As power becomes equal, how do previously powerful and powerless individuals adjust their allocation behavior?"
   approach: "Uses multi-round public goods and dictator game data, applying clustering and computational models to characterize distinct allocation strategies."
   tags: ["research", "decision-making", "computational modeling"]

@@ -16,22 +16,28 @@ buttons:
 # problem / approach / result are shown as labeled rows; highlight is the one-line takeaway.
 # Keep lab work at the level already public: no unpublished data, numbers, findings or internal details.
 projects:
+- name: 行為解碼 Behavior Decoded：AI 自動經營的科普頻道
+  role: 社群媒體自動化
+  timeline: "2026 - 至今"
+  highlight: 從選題、製作、查核到發布與經營，全程由 AI 自動完成
+  problem: "計算社會科學與行為研究的新論文很多，但多數停留在學術圈，一般大眾不容易接觸；若以人工持續經營科普頻道，選題、撰稿、剪輯與發布都需要大量時間。"
+  approach: "每天自動從 arXiv 與期刊挑選一篇以計算方法研究人類行為的新論文，由 Claude 閱讀全文並撰寫中英文腳本，再自動配音、生成畫面並輸出直式短影音，發布到 YouTube Shorts、Instagram Reels 與 Threads。上片前由另一個 Claude 逐句對照論文查核內容，並抽取畫面檢查字幕與數字，任何一關未通過就不發布。"
+  result: "頻道每日自動更新；系統也會自動回覆留言、讀取後台數據，並每週依成效調整選題與經營策略。"
+  links:
+  - name: YouTube
+    url: "https://www.youtube.com/@Human-_-Behavior-_-Decode"
+  - name: Instagram
+    url: "https://www.instagram.com/human__behavior__decode/"
+  repo: "https://github.com/chunyunglo/paper-shorts"
+  tags: ["tools", "Claude", "社群媒體", "影片自動生成"]
 - name: 實驗參與者提醒系統
-  role: 流程自動化
+  role: LINE bot 流程自動化
   timeline: "2025 - 至今"
   highlight: 將人工通知流程轉為自動化作業
   problem: "實驗前需逐一聯繫參與者並確認出席，人工作業耗時，且在參與者人數增加時容易產生疏漏。"
-  approach: "整合 LINE 與 Google 試算表，建立依實驗排程自動發送提醒的系統；僅在出現例外狀況時通知負責人員，以降低例行性的人工介入。"
-  result: "提醒流程不再需要人工逐筆處理；新增實驗時只需調整設定，無須修改程式。"
+  approach: "串接 LINE、Google 試算表與 Gmail：參與者加入 LINE 好友後，系統自動對應其報名資料，並依實驗排程在實驗前自動發送提醒；僅在出現例外狀況時寄信通知負責人員。"
+  result: "提醒流程不再需要人工逐筆處理；新增實驗時只需在設定表加入一列，無須修改程式。"
   tags: ["tools", "LINE", "Google 試算表", "流程自動化"]
-- name: 結合規則與 AI 的資料品質檢核
-  role: 課堂專題原型
-  timeline: "2026"
-  highlight: 以規則與 AI 分工篩檢，再交由人工覆核
-  problem: "大量紀錄中常見欄位缺漏或內容前後矛盾的情形；完全仰賴人工檢查效率不足，完全交由 AI 判斷則難以確保可靠性。"
-  approach: "以明確規則篩出確定有誤的紀錄，再由 AI 判讀規則難以涵蓋的模糊案例，最後將標記結果交由人工覆核。"
-  result: "以模擬案例比較僅用規則、僅用 AI 與兩者並用三種流程的檢核效果。"
-  tags: ["tools", "資料品質", "AI 應用"]
 - name: 個人網站與內容編輯器
   role: 獨立建置與維護
   timeline: "2025 - 至今"
@@ -67,7 +73,7 @@ projects:
 - name: 權力轉換下的資源分配策略
   role: 第一作者
   timeline: "2026"
-  highlight: 2026 臺灣心理學會年會發表
+  highlight: 2026 臺灣心理學會年會海報發表
   problem: "當權力逐步趨於平等時，原本有權與無權的個體會如何調整資源分配行為？"
   approach: "以多回合公共財與獨裁者賽局資料，運用分群與計算模型刻畫不同的分配策略。"
   tags: ["research", "決策行為", "計算建模"]
