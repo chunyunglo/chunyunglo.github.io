@@ -43,6 +43,3 @@ end: 完
 problem: 背景
 approach: 方法
 result: 成果
-statProjects: 項作品與專案
-statPubs: 項研究與發表
-statOutOf: "滿分 {{ .Max }}"

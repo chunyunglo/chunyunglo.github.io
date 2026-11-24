@@ -43,6 +43,3 @@ end: Fin
 problem: Context
 approach: Approach
 result: Outcome
-statProjects: projects
-statPubs: research outputs
-statOutOf: "out of {{ .Max }}"

@@ -19,22 +19,11 @@
         <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }}<span class="btn-label"> GitHub</span></a></li>
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
-      <dl class="hero-stats">
-        {{- with $s.projects.projects }}<div><dt>{{ len . }}</dt><dd>{{ i18n "statProjects" }}</dd></div>{{ end }}
-        {{- with $s.publications.publications }}<div><dt>{{ len . }}</dt><dd>{{ i18n "statPubs" }}</dd></div>{{ end }}
-        {{- with $s.education.degrees }}{{ with (index . 0).grade }}{{ if .achieved }}<div><dt>{{ .achieved }}</dt><dd>{{ .scale }}（{{ i18n "statOutOf" (dict "Max" .outOf) }}）</dd></div>{{ end }}{{ end }}{{ end }}
-      </dl>
     </div>
     <figure class="hero-visual">
-      <span class="hero-frame">
-      {{- with resources.Get "images/site/hero.jpg" }}
-      {{- $s1 := .Fill "720x900 webp Center q78" }}{{ $s2 := .Fill "1080x1350 webp Center q76" }}
-      <img class="hero-photo" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 720w, {{ $s2.RelPermalink }} 1080w" sizes="(max-width: 52rem) 90vw, 38vw" width="{{ $s2.Width }}" height="{{ $s2.Height }}" alt="" fetchpriority="high">
-      {{- end }}
-      </span>
       {{- with resources.Get (strings.TrimPrefix "/" $author.image) }}
-      {{- $sz := int (math.Min 480 (math.Min .Width .Height)) }}{{ $img := .Fill (printf "%dx%d webp Center" $sz $sz) }}
-      <img class="avatar" src="{{ $img.RelPermalink }}" width="120" height="120" alt="{{ $author.name }}" decoding="async">
+      {{- $p1 := .Crop "640x800 webp TopLeft q82" }}
+      <span class="hero-frame"><img class="hero-photo" src="{{ $p1.RelPermalink }}" width="{{ $p1.Width }}" height="{{ $p1.Height }}" alt="{{ $author.name }}" fetchpriority="high"></span>
       {{- end }}
     </figure>
   </div>
@@ -43,14 +32,14 @@
 
 {{- with $posts }}
 <section class="section writing-strip" aria-labelledby="h-writing">
-  <div class="wrap reveal">
+  <div class="wrap">
     <div class="section-head">
       <h2 class="section-title" id="h-writing">{{ i18n "recentPosts" }}</h2>
       {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
     </div>
     <ol class="post-strip">
       {{- range $i, $p := first 4 . }}
-      <li class="stagger" style="--i: {{ $i }}">
+      <li style="--i: {{ $i }}">
         <a href="{{ $p.RelPermalink }}">
           <span class="thumb">{{ with partial "cover.html" $p }}{{ $t := .Fill "640x400 webp Center q78" }}<img src="{{ $t.RelPermalink }}" width="320" height="200" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr $p.Title 0 1 }}</span>{{ end }}</span>
           <span class="pl-text">
@@ -67,7 +56,7 @@
 
 {{- with $s.projects }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
+  <div class="wrap">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     {{- with .buttons }}
     <div class="filters" role="group" aria-label="{{ i18n "tags" }}" data-filter-group="#{{ $s.projects.section.id }} .project">
@@ -76,7 +65,7 @@
     {{- end }}
     <div class="cards two projects-grid">
       {{- range $i, $_ := .projects }}
-      <article class="card project tilt{{ if eq $i 0 }} featured{{ end }}" style="--i: {{ $i }}" data-tags="{{ delimit .tags " " }}">
+      <article class="card project{{ if eq $i 0 }} featured{{ end }}" style="--i: {{ $i }}" data-tags="{{ delimit .tags " " }}">
         <div class="project-head">
         <p class="when">{{ .timeline }}{{ with .role }} · {{ . }}{{ end }}</p>
         <h3>{{ .name }}</h3>
@@ -105,13 +94,13 @@
 
 {{- with $s.experiences }}{{ if .section.enable }}
 <section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
+  <div class="wrap">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <ol class="timeline draw-line">
       {{- range .experiences }}
       {{- $c := .company }}
       {{- range .positions }}
-      <li class="timeline-item stagger">
+      <li class="timeline-item">
         <div class="tl-head">
           {{ partial "logo.html" (dict "src" $c.logo "alt" "") }}
           <div>
@@ -133,11 +122,11 @@
 
 {{- with $s.skills }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
+  <div class="wrap">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <dl class="skills">
       {{- range $i, $_ := .skills }}
-      <div class="stagger" style="--i: {{ $i }}"><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
+      <div style="--i: {{ $i }}"><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
       {{- end }}
     </dl>
   </div>
@@ -146,11 +135,11 @@
 
 {{- with $s.education }}{{ if .section.enable }}
 <section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
+  <div class="wrap">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <div class="cards two">
       {{- range $i, $_ := .degrees }}
-      <article class="card stagger" style="--i: {{ $i }}">
+      <article class="card" style="--i: {{ $i }}">
         <div class="tl-head">
           {{ partial "logo.html" (dict "src" .institution.logo "alt" "") }}
           <div>
@@ -179,7 +168,7 @@
 
 {{- with $s.publications }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
-  <div class="wrap reveal">
+  <div class="wrap">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <ol class="pubs">
       {{- range sort .publications "publishedIn.date" "desc" }}

@@ -73,18 +73,12 @@ if (typed && !reduceMotion) {
   }
 }
 
-// Fade sections in as they scroll into view.
-const reveals = document.querySelectorAll('.reveal, .stagger, .jg-item')
+// Album lobby: each cover is unveiled once as it comes into view (the page's one scroll moment).
+const reveals = document.querySelectorAll('.g-entry')
 if ('IntersectionObserver' in window && !reduceMotion) {
   const io = new IntersectionObserver((entries) => {
-    // Items that arrive together enter one after another, in reading order.
-    let n = 0
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return
-      if (!e.target.classList.contains('reveal')) e.target.style.setProperty('--i', Math.min(n++, 6))
-      e.target.classList.add('visible'); io.unobserve(e.target)
-    })
-  }, { threshold: 0.01, rootMargin: '0px 0px -4% 0px' })
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target) } })
+  }, { threshold: 0.15 })
   reveals.forEach((el) => io.observe(el))
 } else {
   reveals.forEach((el) => el.classList.add('visible'))
@@ -170,32 +164,10 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
   }
 }
 
-// Cards that tilt towards the pointer.
-if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll('.tilt').forEach((card) => {
-    let raf = 0
-    card.addEventListener('pointermove', (e) => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
-        const r = card.getBoundingClientRect()
-        const x = (e.clientX - r.left) / r.width; const y = (e.clientY - r.top) / r.height
-        card.classList.add('tilting')
-        card.style.transform = `perspective(900px) rotateX(${(0.5 - y) * 5}deg) rotateY(${(x - 0.5) * 6}deg) translateY(-3px)`
-        card.style.setProperty('--mx', x * 100 + '%'); card.style.setProperty('--my', y * 100 + '%')
-      })
-    })
-    card.addEventListener('pointerleave', () => {
-      cancelAnimationFrame(raf)
-      card.classList.remove('tilting'); card.style.transform = ''
-    })
-  })
-}
-
 // Scroll-linked effects: the reading progress bar and the experience timeline's line.
 {
   const lines = [...document.querySelectorAll('.timeline.draw-line')]
-  const heroPhoto = document.querySelector('.hero-photo')
-  const bar = document.createElement('div')
+  const bar = document.querySelector('article.post') ? document.createElement('div') : null
   if (bar) { bar.className = 'progress'; bar.setAttribute('aria-hidden', 'true'); document.body.append(bar) }
   let queued = false
   const update = () => {
@@ -203,10 +175,6 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
     const max = document.documentElement.scrollHeight - innerHeight
     if (bar) bar.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max).toFixed(4) : 0)
     if (reduceMotion) return
-    if (heroPhoto) {
-      const r = heroPhoto.parentNode.getBoundingClientRect()
-      if (r.bottom > 0) heroPhoto.style.setProperty('--hy', (-7.5 - Math.min(1, Math.max(-1, (innerHeight / 2 - (r.top + r.height / 2)) / innerHeight)) * 7).toFixed(2) + '%')
-    }
     const mark = innerHeight * 0.7
     lines.forEach((ol) => {
       const r = ol.getBoundingClientRect()
@@ -220,8 +188,7 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
   update()
 }
 
-// Highlight the navigation link for the section currently being read, and show a back-to-top
-// button once the visitor has scrolled well past the first screen.
+// Highlight the navigation link for the section currently being read.
 {
   const links = [...document.querySelectorAll('.site-nav a[href*="#"]')]
   const targets = links.map((a) => document.getElementById(a.hash.slice(1))).filter(Boolean)
@@ -234,13 +201,4 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
     }, { rootMargin: '-45% 0px -50% 0px' })
     targets.forEach((t) => spy.observe(t))
   }
-  const top = document.createElement('button')
-  top.type = 'button'; top.className = 'to-top'
-  top.setAttribute('aria-label', document.documentElement.lang.startsWith('zh') ? '回到頂端' : 'Back to top')
-  top.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-  top.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }) })
-  document.body.append(top)
-  let shown = false
-  const check = () => { const s = scrollY > innerHeight * 1.2; if (s !== shown) { shown = s; top.classList.toggle('show', s) } }
-  window.addEventListener('scroll', check, { passive: true }); check()
 }
