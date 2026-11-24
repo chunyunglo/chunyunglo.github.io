@@ -84,7 +84,7 @@ if ('IntersectionObserver' in window && !reduceMotion) {
       if (!e.target.classList.contains('reveal')) e.target.style.setProperty('--i', Math.min(n++, 6))
       e.target.classList.add('visible'); io.unobserve(e.target)
     })
-  }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' })
+  }, { threshold: 0.01, rootMargin: '0px 0px -4% 0px' })
   reveals.forEach((el) => io.observe(el))
 } else {
   reveals.forEach((el) => el.classList.add('visible'))
