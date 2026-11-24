@@ -47,12 +47,6 @@ if (header && toggle && nav) {
     if (nav.classList.contains('open') && !header.contains(e.target)) setOpen(false)
   })
 
-  // Transparent header only while the home page is scrolled to the very top.
-  if (document.body.classList.contains('is-home') && document.querySelector('.hero')) {
-    const update = () => header.classList.toggle('over-hero', window.scrollY < 24)
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-  }
 }
 
 // Typing carousel for the summary lines.
@@ -75,7 +69,7 @@ if (typed && !reduceMotion) {
       else n += deleting ? -1 : 1
       setTimeout(tick, delay)
     }
-    setTimeout(tick, 2500)
+    setTimeout(tick, 4500)
   }
 }
 
@@ -102,140 +96,6 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
   })
 })
 
-// Liquid glass on the two home cards (see the CSS comment for the method).
-{
-  const photo = document.querySelector('.hero-bg')
-  const panels = [...document.querySelectorAll('.hero .panel')]
-  if (photo && panels.length) {
-    const NS = 'http://www.w3.org/2000/svg'
-    const defs = document.createElementNS(NS, 'svg')
-    defs.setAttribute('width', '0'); defs.setAttribute('height', '0'); defs.setAttribute('aria-hidden', 'true')
-    defs.style.position = 'absolute'
-    document.body.append(defs)
-    const iw = Number(photo.dataset.w) || 1920
-    const ih = Number(photo.dataset.h) || 1440
-    const url = `url("${photo.currentSrc || photo.src}")`
-
-    // Displacement map for a rounded slab: neutral (no shift) in the flat middle; inside the
-    // bezel each pixel samples further inward along the surface normal, following a convex
-    // squircle profile, so the photo is compressed and bent at the edges like thick glass.
-    const makeMap = (w, h, radius, bezel) => {
-      const k = 1 // full-resolution map keeps the bent edge smooth
-      const W = Math.max(2, Math.round(w * k)); const H = Math.max(2, Math.round(h * k))
-      const c = document.createElement('canvas'); c.width = W; c.height = H
-      const ctx = c.getContext('2d'); const img = ctx.createImageData(W, H); const d = img.data
-      const hx = w / 2; const hy = h / 2; const r = Math.min(radius, hx, hy)
-      const sdf = (x, y) => {
-        const qx = Math.abs(x - hx) - (hx - r); const qy = Math.abs(y - hy) - (hy - r)
-        return Math.min(Math.max(qx, qy), 0) + Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) - r
-      }
-      const rn = Math.min(Math.max(r, bezel * 1.6), hx, hy) // rounder shape for the normals avoids creases along the diagonals
-      const sdfN = (x, y) => {
-        const qx = Math.abs(x - hx) - (hx - rn); const qy = Math.abs(y - hy) - (hy - rn)
-        return Math.min(Math.max(qx, qy), 0) + Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) - rn
-      }
-      for (let j = 0; j < H; j++) {
-        for (let i = 0; i < W; i++) {
-          const x = (i + 0.5) / k; const y = (j + 0.5) / k
-          const dist = -sdf(x, y) // distance inside the edge
-          let dx = 0; let dy = 0
-          if (dist > 0 && dist < bezel) {
-            const e = 0.75
-            let nx = sdfN(x - e, y) - sdfN(x + e, y); let ny = sdfN(x, y - e) - sdfN(x, y + e) // inward normal (smoothed)
-            const n = Math.hypot(nx, ny) || 1; nx /= n; ny /= n
-            const t = 1 - dist / bezel // 0 where the flat middle starts, 1 at the rim
-            // Smootherstep profile: zero slope and curvature where the flat middle begins, so there is no visible seam.
-            const mag = t * t * t * (t * (t * 6 - 15) + 10)
-            dx = nx * mag; dy = ny * mag
-          }
-          const o = (j * W + i) * 4
-          d[o] = 128 + dx * 127; d[o + 1] = 128 + dy * 127; d[o + 2] = 128; d[o + 3] = 255
-        }
-      }
-      ctx.putImageData(img, 0, 0)
-      return c
-    }
-
-    // Each card gets a plain photo layer for the clear middle, plus four thin strips along the
-    // rim that carry the refraction filter. Filtering only the rim keeps the per-frame work small
-    // (an SVG filter over the whole card was what made scrolling stutter on Retina screens).
-    const mkLayer = (cls) => {
-      const l = document.createElement('span')
-      l.className = cls; l.setAttribute('aria-hidden', 'true')
-      l.style.setProperty('--photo', url)
-      return l
-    }
-    let fid = 0
-    const setups = panels.map((el) => {
-      const base = mkLayer('lg-refract')
-      const strips = ['top', 'bottom', 'left', 'right'].map((side) => {
-        const l = mkLayer('lg-refract lg-rim')
-        const f = document.createElementNS(NS, 'filter')
-        const id = `lg-rim-${fid++}`
-        f.setAttribute('id', id); f.setAttribute('x', '0'); f.setAttribute('y', '0')
-        f.setAttribute('width', '100%'); f.setAttribute('height', '100%')
-        f.setAttribute('color-interpolation-filters', 'sRGB')
-        defs.append(f)
-        l.style.setProperty('--lg-filter', `url(#${id})`)
-        return { side, l, f, x: 0, y: 0 }
-      })
-      el.prepend(base, ...strips.map((s) => s.l))
-      return { el, base, strips }
-    })
-
-    const build = ({ el, strips }) => {
-      const w = el.offsetWidth; const h = el.offsetHeight
-      if (!w || !h) return
-      const bezel = Math.min(22, Math.min(w, h) * 0.06)
-      const s = bezel // max inward shift is scale / 2; with this profile the image never folds
-      const map = makeMap(w, h, 30, bezel) // full-card map, cut into the four strips below
-      const band = Math.ceil(bezel * 1.6) // a little extra so corner samples stay inside the strip
-      for (const st of strips) {
-        const r = st.side === 'top' ? [0, 0, w, band]
-          : st.side === 'bottom' ? [0, h - band, w, band]
-            : st.side === 'left' ? [0, band, band, h - 2 * band]
-              : [w - band, band, band, h - 2 * band]
-        ;[st.x, st.y] = r
-        Object.assign(st.l.style, { left: `${r[0]}px`, top: `${r[1]}px`, width: `${r[2]}px`, height: `${r[3]}px` })
-        const c = document.createElement('canvas'); c.width = r[2]; c.height = r[3]
-        c.getContext('2d').drawImage(map, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3])
-        st.f.innerHTML = `
-          <feImage href="${c.toDataURL()}" x="0" y="0" width="${r[2]}" height="${r[3]}" preserveAspectRatio="none" result="map"/>
-          <feDisplacementMap in="SourceGraphic" in2="map" scale="${s}" xChannelSelector="R" yChannelSelector="G"/>`
-      }
-    }
-
-    // Keep the photo inside each card lined up with the background behind it.
-    // Desktop: the background is fixed and CSS (background-attachment: fixed) does the work.
-    // Touch screens ignore that, and realigning from script on every scroll frame re-ran the
-    // refraction filter each frame, which made phones stutter. There the background scrolls with
-    // the hero instead, so the alignment (and the filtered rim) is computed once per resize.
-    const hero = photo.closest('.hero')
-    const align = () => {
-      const box = hero.getBoundingClientRect()
-      const W = box.width; const H = box.height
-      const sc = Math.max(W / iw, H / ih); const bw = iw * sc; const bh = ih * sc
-      const ox = (W - bw) / 2; const oy = (H - bh) / 2
-      const size = `${bw.toFixed(1)}px ${bh.toFixed(1)}px`
-      for (const { el, base, strips } of setups) {
-        const r = el.getBoundingClientRect()
-        const x = r.left - box.left; const y = r.top - box.top
-        base.style.setProperty('--bgs', size)
-        base.style.setProperty('--bgp', `${(ox - x).toFixed(1)}px ${(oy - y).toFixed(1)}px`)
-        for (const st of strips) {
-          st.l.style.setProperty('--bgs', size)
-          st.l.style.setProperty('--bgp', `${(ox - x - st.x).toFixed(1)}px ${(oy - y - st.y).toFixed(1)}px`)
-        }
-      }
-    }
-    const needsAlign = !window.matchMedia('(hover: hover)').matches
-    const rebuild = () => { setups.forEach(build); if (needsAlign) align() }
-    new ResizeObserver(rebuild).observe(hero)
-    rebuild()
-
-  }
-}
-
 // Exhibition corridor: the photos hang on the walls of a 3D hallway, and scrolling walks the
 // visitor down it. Each work swings out from the wall as the visitor reaches it; the far wall
 // holds a lit doorway to the next exhibition.
@@ -259,20 +119,24 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
     door.hidden = false; hud.hidden = false
     let tiles = []; let items = []; let P = 900; let camEnd = 1; let cam = 0; let target = 0; let running = false; let current = -1
 
-    const it0 = (li) => li.querySelector('img').complete
+    // The works hang one behind another down a dark hall, facing the visitor and alternating
+    // a little to the left and right. Scrolling walks forward: each work comes out of the dark,
+    // is seen straight on at full size, then slides past and fades away.
+    let gap = 1
     const build = () => {
       tiles.forEach((t) => t.el.remove()); tiles = []; items = []
       const vw = stage.clientWidth; const vh = stage.clientHeight
-      P = Math.max(vw, vh) * 0.62
+      P = Math.max(900, vh * 1.1)
       stage.style.setProperty('--cd-p', P + 'px')
-      const hw = Math.max(vw * 0.5, 330); const hh = vh * 0.5
-      const h0 = hh * 0.92; const gap = h0 * 1.2
-      const start = P * 0.9
-      const depth = start + works.length * gap + gap * 1.6
-      camEnd = depth - P * 1.05
-      cd.style.height = (vh + camEnd) + 'px'
-      const L = gap * 2
-      // dir: which way the fog gradient runs across the tile (near edge to far edge).
+      const narrow = vw < 700
+      const hh = vh * 0.5; const hw = Math.max(vw * 0.75, hh * 1.4)
+      const maxW = narrow ? vw * 0.86 : Math.min(vw * 0.58, 980)
+      const maxH = vh * (narrow ? 0.5 : 0.6)
+      gap = P * 0.85
+      const start = P * 0.25
+      const doorZ = start + (works.length - 1) * gap + gap * 1.3
+      camEnd = doorZ - P * 0.25
+      cd.style.height = (vh + camEnd * 0.9) + 'px'
       const add = (cls, w, h, tf, z0, z1, dir) => {
         const el = document.createElement('div')
         el.className = 'cd-tile ' + cls
@@ -281,58 +145,59 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
         world.append(el); tiles.push({ el, z0, z1 })
         return el
       }
-      for (let z = 0; z < depth; z += L) {
-        const len = Math.min(L, depth - z)
-        add('cd-wall', len + 1, hh * 2, `translate3d(${-hw}px,${-hh}px,${-z}px) rotateY(90deg)`, -z, -z - len, 'to right')
-        add('cd-wall is-r', len + 1, hh * 2, `translate3d(${hw}px,${-hh}px,${-z - len}px) rotateY(-90deg)`, -z, -z - len, 'to left')
-        add('cd-floor', hw * 2, len + 1, `translate3d(${-hw}px,${hh}px,${-z - len}px) rotateX(90deg)`, -z, -z - len, 'to top')
-        add('cd-ceil', hw * 2, len + 1, `translate3d(${-hw}px,${-hh}px,${-z}px) rotateX(-90deg)`, -z, -z - len, 'to bottom')
+      const L = gap
+      for (let z = -P; z < doorZ; z += L) {
+        add('cd-floor', hw * 2, L + 1, `translate3d(${-hw}px,${hh}px,${-z - L}px) rotateX(90deg)`, -z, -z - L, 'to top')
+        add('cd-ceil', hw * 2, L + 1, `translate3d(${-hw}px,${-hh}px,${-z}px) rotateX(-90deg)`, -z, -z - L, 'to bottom')
       }
-      const end = add('cd-end', hw * 2, hh * 2, `translate3d(${-hw}px,${-hh}px,${-depth}px)`, -depth, -depth)
+      const endW = Math.min(vw * 0.9, hh * 2.4)
+      const end = add('cd-end', endW, hh * 2, `translate3d(${-endW / 2}px,${-hh}px,${-doorZ}px)`, -doorZ, -doorZ)
       end.style.setProperty('--dh', hh * 2 + 'px')
       end.append(door)
       works.forEach((li, i) => {
         const ar = parseFloat(li.style.getPropertyValue('--ar')) || 1.5
-        const h = Math.min(h0, (h0 * 1.9) / ar); const w = h * ar
-        const right = i % 2 === 1
-        const z = -(start + i * gap)
-        li.classList.toggle('is-r', right)
+        let w = maxW; let h = w / ar
+        if (h > maxH) { h = maxH; w = h * ar }
+        const side = narrow ? 0 : (i % 2 ? 1 : -1)
+        li.classList.remove('is-r')
         li.style.setProperty('--w', w + 'px'); li.style.setProperty('--h', h + 'px')
-        li.style.transformOrigin = right ? '100% 50%' : '0 50%'
-        const minAngle = Math.acos(Math.min(1, (hw * 0.62) / w)) * 180 / Math.PI
-        items.push({ li, z, w, h, right, x: right ? hw - w : -hw, y: -h * 0.62, minAngle: Math.max(minAngle, 38), img: li.querySelector('img'), loaded: it0(li), caption: li.querySelector('.photo').dataset.caption || '' })
+        li.style.transformOrigin = '50% 50%'
+        const x = side * vw * 0.13 - w / 2
+        const y = -h / 2 - vh * 0.04
+        li.style.transform = `translate3d(${x}px,${y}px,${-(start + i * gap)}px)`
+        items.push({ li, z: -(start + i * gap), img: li.querySelector('img'), loaded: false, caption: li.querySelector('.photo').dataset.caption || '' })
       })
-      target = Math.min(camEnd, Math.max(0, -cd.getBoundingClientRect().top))
+      target = Math.min(camEnd, Math.max(0, -cd.getBoundingClientRect().top / 0.9))
       cam = target
       render()
     }
 
-    const fog = (d) => Math.min(0.94, Math.max(0, d - P * 1.2) / (P * 5.5))
+    const fog = (d) => Math.min(0.94, Math.max(0, d - P * 1.2) / (P * 3.5))
     const render = () => {
       world.style.transform = `translate3d(0,0,${cam}px)`
-      const far = P * 9
+      const far = P * 6
       tiles.forEach((t) => {
         const near = P - (t.z0 + cam); const back = P - (t.z1 + cam)
         const show = back > 20 && near < far
         t.el.style.visibility = show ? '' : 'hidden'
         if (show) {
-          t.el.style.setProperty('--f0', fog(near).toFixed(3))
+          t.el.style.setProperty('--f0', fog(Math.max(near, 0)).toFixed(3))
           t.el.style.setProperty('--f1', fog(back).toFixed(3))
         }
       })
-      let best = -1; let bestT = 0
+      let best = -1; let bestD = Infinity
       items.forEach((it, i) => {
-        const dist = P - (it.z + cam) // from the visitor's eye to the work's near edge
-        const show = dist > P * 0.08 && dist < far
+        const rel = it.z + cam // 0 = seen at full size; positive = closer than that
+        const show = rel < P * 0.22 && rel > -far
         it.li.style.visibility = show ? '' : 'hidden'
         if (!show) return
-        let t = (P * 2.7 - dist) / (P * 1.8)
-        t = Math.min(1, Math.max(0, t)); t = t * t * (3 - 2 * t)
-        const a = 90 - (90 - it.minAngle) * t
-        it.li.style.transform = `translate3d(${it.x}px,${it.y}px,${it.z}px) rotateY(${it.right ? -a : a}deg)`
+        const dist = P - rel
+        const out = rel > P * 0.08 ? Math.min(1, (rel - P * 0.08) / (P * 0.14)) : 0
+        it.li.style.opacity = (1 - out).toFixed(3)
         it.li.style.setProperty('--fog', fog(dist).toFixed(3))
-        if (!it.loaded) { it.loaded = true; it.img.loading = 'eager' }
-        if (t > bestT && dist > P * 0.45) { bestT = t; best = i }
+        if (!it.loaded && dist < far) { it.loaded = true; it.img.loading = 'eager' }
+        const d = Math.abs(rel + gap * 0.1)
+        if (d < bestD && rel < P * 0.4) { bestD = d; best = i }
       })
       if (best !== current) {
         current = best
@@ -351,7 +216,7 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
       else running = false
     }
     const onScroll = () => {
-      target = Math.min(camEnd, Math.max(0, -cd.getBoundingClientRect().top))
+      target = Math.min(camEnd, Math.max(0, -cd.getBoundingClientRect().top / 0.9))
       if (!running) { running = true; requestAnimationFrame(loop) }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -453,6 +318,7 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
 // Scroll-linked effects: the reading progress bar and the experience timeline's line.
 {
   const lines = [...document.querySelectorAll('.timeline.draw-line')]
+  const heroPhoto = document.querySelector('.hero-photo')
   const bar = document.querySelector('.cd-on') ? null : document.createElement('div')
   if (bar) { bar.className = 'progress'; bar.setAttribute('aria-hidden', 'true'); document.body.append(bar) }
   let queued = false
@@ -461,6 +327,10 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
     const max = document.documentElement.scrollHeight - innerHeight
     if (bar) bar.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max).toFixed(4) : 0)
     if (reduceMotion) return
+    if (heroPhoto) {
+      const r = heroPhoto.parentNode.getBoundingClientRect()
+      if (r.bottom > 0) heroPhoto.style.setProperty('--hy', (-7.5 - Math.min(1, Math.max(-1, (innerHeight / 2 - (r.top + r.height / 2)) / innerHeight)) * 7).toFixed(2) + '%')
+    }
     const mark = innerHeight * 0.7
     lines.forEach((ol) => {
       const r = ol.getBoundingClientRect()

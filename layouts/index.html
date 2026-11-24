@@ -6,22 +6,10 @@
 
 {{- $posts := partial "blog-pages.html" . -}}
 <section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
-  {{- with resources.Get "images/site/hero.jpg" }}
-  {{- $s1 := .Resize "1280x webp q72" }}{{ $s2 := .Resize "1920x webp q72" }}{{ $s3 := .Resize "2560x webp q70" }}
-  <img class="hero-bg" data-w="{{ $s2.Width }}" data-h="{{ $s2.Height }}" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 1280w, {{ $s2.RelPermalink }} 1920w, {{ $s3.RelPermalink }} 2560w" sizes="100vw" alt="" fetchpriority="high">
-  {{- end }}
   <div class="wrap hero-grid">
-    <div class="panel intro" data-glass>
-      <div class="intro-head">
-        {{- with resources.Get (strings.TrimPrefix "/" $author.image) }}
-        {{- $sz := int (math.Min 480 (math.Min .Width .Height)) }}{{ $img := .Fill (printf "%dx%d webp Center" $sz $sz) }}
-        <img class="avatar" src="{{ $img.RelPermalink }}" width="120" height="120" alt="{{ $author.name }}" decoding="async">
-        {{- end }}
-        <div>
-          <p class="eyebrow">{{ $author.greeting }}</p>
-          <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }}<span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
-        </div>
-      </div>
+    <div class="intro">
+      <p class="eyebrow">{{ $author.greeting }}</p>
+      <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }}<span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
       {{- with $author.summary }}
       <p class="typing">{{ range . }}<span class="ghost" aria-hidden="true">{{ . }}</span>{{ end }}<span><span class="typed" data-strings="{{ jsonify . }}">{{ index . 0 }}</span><span class="caret" aria-hidden="true"></span></span></p>
       {{- end }}
@@ -32,32 +20,45 @@
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
     </div>
-    <section class="panel writing" aria-labelledby="h-writing" data-glass>
-      <div class="section-head">
-        <h2 id="h-writing">{{ i18n "recentPosts" }}</h2>
-        {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
-      </div>
-      {{- with $posts }}
-      <ol class="post-list">
-        {{- range first 4 . }}
-        <li>
-          <a href="{{ .RelPermalink }}">
-            {{- with partial "cover.html" . }}{{ $t := .Fill "160x160 webp Center" }}<img src="{{ $t.RelPermalink }}" width="80" height="80" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr .Title 0 1 }}</span>{{ end }}
-            <span class="pl-text">
-              <span class="pl-title">{{ .Title }}</span>
-              <span class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>{{ if ne .Language.Lang site.Language.Lang }} · {{ (partial "lang.html" .Language.Lang).label }}{{ end }}</span>
-            </span>
-          </a>
-        </li>
-        {{- end }}
-      </ol>
-      {{- else }}
-      <p>{{ i18n "noPosts" }}</p>
+    <figure class="hero-visual">
+      <span class="hero-frame">
+      {{- with resources.Get "images/site/hero.jpg" }}
+      {{- $s1 := .Fill "720x900 webp Center q78" }}{{ $s2 := .Fill "1080x1350 webp Center q76" }}
+      <img class="hero-photo" src="{{ $s2.RelPermalink }}" srcset="{{ $s1.RelPermalink }} 720w, {{ $s2.RelPermalink }} 1080w" sizes="(max-width: 52rem) 90vw, 38vw" width="{{ $s2.Width }}" height="{{ $s2.Height }}" alt="" fetchpriority="high">
       {{- end }}
-    </section>
+      </span>
+      {{- with resources.Get (strings.TrimPrefix "/" $author.image) }}
+      {{- $sz := int (math.Min 480 (math.Min .Width .Height)) }}{{ $img := .Fill (printf "%dx%d webp Center" $sz $sz) }}
+      <img class="avatar" src="{{ $img.RelPermalink }}" width="120" height="120" alt="{{ $author.name }}" decoding="async">
+      {{- end }}
+    </figure>
   </div>
-  <a class="scroll-cue" href="#{{ $s.projects.section.id }}" aria-label="{{ i18n "explore" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="scroll-cue" href="#h-writing" aria-label="{{ i18n "recentPosts" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </section>
+
+{{- with $posts }}
+<section class="section writing-strip" aria-labelledby="h-writing">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <h2 class="section-title" id="h-writing">{{ i18n "recentPosts" }}</h2>
+      {{- with site.GetPage "/blog" }}<a class="more" href="{{ .RelPermalink }}">{{ i18n "allPosts" }} {{ partial "icon.html" "arrow" }}</a>{{ end }}
+    </div>
+    <ol class="post-strip">
+      {{- range $i, $p := first 4 . }}
+      <li class="stagger" style="--i: {{ $i }}">
+        <a href="{{ $p.RelPermalink }}">
+          <span class="thumb">{{ with partial "cover.html" $p }}{{ $t := .Fill "640x400 webp Center q78" }}<img src="{{ $t.RelPermalink }}" width="320" height="200" alt="" loading="lazy" decoding="async">{{ else }}<span class="thumb-fallback" aria-hidden="true">{{ substr $p.Title 0 1 }}</span>{{ end }}</span>
+          <span class="pl-text">
+            <span class="pl-title">{{ $p.Title }}</span>
+            <span class="meta"><time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006.01.02" }}</time>{{ if ne $p.Language.Lang site.Language.Lang }} · {{ (partial "lang.html" $p.Language.Lang).label }}{{ end }}</span>
+          </span>
+        </a>
+      </li>
+      {{- end }}
+    </ol>
+  </div>
+</section>
+{{- end }}
 
 {{- with $s.projects }}{{ if .section.enable }}
 <section class="section" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
