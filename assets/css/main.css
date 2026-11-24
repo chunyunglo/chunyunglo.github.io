@@ -490,24 +490,67 @@ main:focus { outline: none; }
 .ex-statement { width: min(100% - 2.5rem, 38rem); margin: clamp(4rem, 10vw, 8rem) auto; text-align: center; }
 .ex-lede { font-family: var(--g-serif); font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.6; color: var(--g-ink); margin: 0; }
 .ex-body { color: var(--g-muted); margin-top: 1.5rem; line-height: 1.9; }
-/* The works drift past in one long row (main.js scrolls the reel); hovering pauses it and
-   lifts the placard into view over the photo. */
-.ex-reel { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 1rem 0 2rem; }
-.ex-reel::-webkit-scrollbar { display: none; }
-.ex-track { list-style: none; margin: 0; padding: 0 0 0 6vw; display: flex; gap: clamp(1.25rem, 3vw, 2.75rem); width: max-content; }
-.ex-work { flex: none; height: clamp(16rem, 64vh, 42rem); }
-.ex-work .photo { position: relative; display: block; height: 100%; overflow: hidden; cursor: zoom-in; }
-.ex-work img { display: block; height: 100%; width: auto; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8); transition: transform 1.2s cubic-bezier(.2, .7, .2, 1), filter .6s ease; user-select: none; }
-.ex-reel:hover .ex-work img { filter: brightness(.55) saturate(.8); }
-.ex-reel .ex-work .photo:is(:hover, :focus-visible) img { filter: none; transform: scale(1.03); }
-.placard { position: absolute; inset: auto 0 0 0; display: flex; gap: 1rem; align-items: baseline; padding: 3.5rem 1.25rem 1.1rem; background: linear-gradient(transparent, rgba(0, 0, 0, .72)); color: var(--g-ink); font-size: .9rem; letter-spacing: .03em; opacity: 0; transform: translateY(1.25rem); transition: opacity .5s ease, transform .6s cubic-bezier(.2, .7, .2, 1); pointer-events: none; }
-.ex-work .photo:is(:hover, :focus-visible) .placard { opacity: 1; transform: none; }
-.placard-no { font-family: var(--g-serif); letter-spacing: .1em; color: rgba(236, 234, 228, .7); }
-.placard-title { font-family: var(--g-serif); font-size: 1.05rem; }
-@media (hover: none) {
-  .ex-work { height: clamp(14rem, 52vh, 30rem); }
-  .placard { opacity: 1; transform: none; padding-top: 2.5rem; font-size: .8rem; }
-}
+/* The corridor. Without JS (or with reduced motion) the works simply hang in a column of
+   rows; main.js adds .cd-on and builds a 3D hallway around them that the visitor walks down
+   by scrolling: walls, floor and ceiling are tiles placed in 3D, every work hangs on a wall
+   and swings out towards the visitor as they reach it. */
+.cd-track { list-style: none; margin: 0 auto; padding: 0; width: min(100% - 2.5rem, var(--wrap)); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2.5rem); align-items: end; }
+.cd-work { margin: 0; }
+.cd-work .photo { display: block; cursor: zoom-in; }
+.cd-work img { display: block; width: 100%; height: auto; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8); user-select: none; }
+.placard { display: flex; gap: .9rem; align-items: baseline; margin: .9rem 0 0; color: var(--g-ink); font-size: .9rem; letter-spacing: .03em; }
+.placard-no { font-family: var(--g-serif); letter-spacing: .1em; color: var(--g-muted); }
+.placard-title { font-family: var(--g-serif); font-size: 1.02rem; }
+
+.cd.cd-on { position: relative; }
+.cd-on .cd-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; perspective: var(--cd-p, 900px); perspective-origin: var(--cd-ox, 50%) var(--cd-oy, 50%); background: #0b0c0b; transition: perspective-origin .6s cubic-bezier(.2, .7, .2, 1); }
+.cd-on .cd-world { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+.cd-on .cd-world > * { position: absolute; left: 0; top: 0; transform-origin: 0 0; backface-visibility: hidden; }
+/* Fog: each tile darkens from its near edge (--f0) to its far edge (--f1), so the hallway fades
+   smoothly into the dark instead of in steps. */
+.cd-tile::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(var(--fd, to right), rgba(7, 8, 7, var(--f0, 0)), rgba(7, 8, 7, var(--f1, 0))); }
+.cd-on .cd-work::after { content: ""; position: absolute; inset: 0; background: #070807; opacity: var(--fog, 0); pointer-events: none; }
+.cd-wall { background: linear-gradient(180deg, #34332f 0%, #2c2b28 60%, #262522 82%, #151513 82.3%, #1a1917 100%); }
+.cd-wall.is-r { background: linear-gradient(180deg, #2f2e2a 0%, #282724 60%, #22211f 82%, #131311 82.3%, #171614 100%); }
+.cd-floor { background:
+    linear-gradient(90deg, rgba(0, 0, 0, .45), transparent 22%, transparent 78%, rgba(0, 0, 0, .45)),
+    repeating-linear-gradient(0deg, #2a2621 0 calc(25% - 2px), #1c1a16 calc(25% - 2px) 25%); }
+.cd-ceil { background:
+    linear-gradient(90deg, #121211 0 30%, #fff6e6 30% 70%, #121211 70%) center / 100% 6% no-repeat,
+    linear-gradient(90deg, rgba(0, 0, 0, .3), transparent 25%, transparent 75%, rgba(0, 0, 0, .3)),
+    #171716; }
+.cd-end { display: grid; place-items: center; background: radial-gradient(ellipse 50% 60% at 50% 55%, #33312c, #1d1d1b 70%); }
+.cd-on .cd-work { position: absolute; left: 0; top: 0; width: var(--w); height: var(--h); backface-visibility: hidden; }
+.cd-tile { pointer-events: none; }
+.cd-end { pointer-events: auto; }
+.cd-on .cd-work .photo { position: relative; height: 100%; }
+.cd-on .cd-work img { width: 100%; height: 100%; object-fit: cover; background: #1e1d1a; box-shadow: 0 0 0 calc(var(--h) * .02) #e9e5dc, 0 0 calc(var(--h) * .5) calc(var(--h) * .05) rgba(255, 236, 200, .1), 0 40px 80px -20px rgba(0, 0, 0, .9); }
+.cd-on .cd-work .photo:is(:hover, :focus-visible) img { box-shadow: 0 0 0 calc(var(--h) * .02) #fff, 0 40px 80px -20px rgba(0, 0, 0, .9); }
+.cd-on .placard { position: absolute; left: 0; top: 100%; margin-top: calc(var(--h) * .07); font-size: calc(var(--h) * .045); white-space: nowrap; color: rgba(236, 234, 228, .85); }
+.cd-on .placard-title { font-size: 1.1em; }
+.cd-on .cd-work.is-r .placard { left: auto; right: 0; }
+
+/* The far wall: a lit doorway to the next exhibition. */
+.cd-door { text-align: center; }
+.cd-on .cd-door { position: static; }
+.cd-door-fin { font-family: var(--g-serif); letter-spacing: .4em; color: var(--g-muted); margin: 0 0 1.5em; font-size: calc(var(--dh, 400px) * .04); }
+.cd-door-link { display: flex; flex-direction: column; justify-content: flex-end; gap: .4em; width: calc(var(--dh, 400px) * .46); height: calc(var(--dh, 400px) * .62); margin: 0 auto; padding: 1.2em; box-sizing: border-box; text-decoration: none; color: #1d1b17 !important; background: linear-gradient(180deg, #fff9ec, #f1e3c6); box-shadow: 0 0 calc(var(--dh, 400px) * .2) rgba(255, 236, 200, .35), inset 0 0 0 1px rgba(0, 0, 0, .1); font-size: calc(var(--dh, 400px) * .032); transition: box-shadow .6s ease, transform .6s ease; }
+.cd-door-link:hover, .cd-door-link:focus-visible { box-shadow: 0 0 calc(var(--dh, 400px) * .35) rgba(255, 236, 200, .6), inset 0 0 0 1px rgba(0, 0, 0, .1); }
+.cd-door-label { letter-spacing: .2em; text-transform: uppercase; font-size: .8em; opacity: .7; }
+.cd-door-title { font-family: var(--g-serif); font-size: 1.6em; line-height: 1.2; }
+.cd:not(.cd-on) .cd-door { margin: clamp(4rem, 10vw, 7rem) auto 0; --dh: 520px; }
+
+/* Heads-up display over the stage. */
+.cd-hud { position: absolute; inset: auto 0 0 0; padding: 0 clamp(1.25rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem); display: grid; gap: .6rem; pointer-events: none; z-index: 2; }
+.cd-hint { justify-self: center; margin: 0 0 1rem; font-size: .78rem; letter-spacing: .3em; color: var(--g-muted); transition: opacity .6s ease; animation: cd-bob 2.4s ease-in-out infinite; }
+.cd-hint::after { content: "↓"; display: block; text-align: center; margin-top: .4rem; letter-spacing: 0; }
+.cd-hud.walking .cd-hint { opacity: 0; }
+@keyframes cd-bob { 50% { transform: translateY(6px); } }
+.cd-now { margin: 0; display: flex; gap: 1rem; align-items: baseline; min-height: 1.6em; font-family: var(--g-serif); color: var(--g-ink); transition: opacity .4s ease; }
+.cd-now-no { letter-spacing: .15em; color: var(--g-muted); font-size: .9rem; }
+.cd-now-title { font-size: 1.05rem; }
+.cd-bar { display: block; height: 1px; background: var(--g-line); }
+.cd-bar span { display: block; height: 100%; width: 100%; background: var(--g-ink); transform-origin: 0 0; transform: scaleX(var(--cd-progress, 0)); }
 .ex-end { text-align: center; padding: clamp(6rem, 14vw, 11rem) 0 clamp(4rem, 8vw, 6rem); }
 .ex-fin { font-family: var(--g-serif); font-size: 1.1rem; letter-spacing: .4em; color: var(--g-muted); margin-bottom: 2.5rem; }
 .lb-count { position: absolute; top: 1.4rem; left: 1.5rem; margin: 0; font-family: var(--g-serif, Georgia, serif); color: rgba(255, 255, 255, .7); letter-spacing: .15em; font-size: .9rem; }
@@ -537,3 +580,89 @@ html[lang="en"] .par div { grid-template-columns: 4.8rem 1fr; }
 @media (max-width: 480px) { .par div, html[lang="en"] .par div { grid-template-columns: 1fr; gap: .1rem; } }
 .card-links { display: inline-flex; gap: .9rem; flex-wrap: wrap; }
 .projects-grid .card[hidden] { display: none; }
+
+/* ---------- Motion ----------
+   Page transitions, staggered entrances, the drawn timeline, tilting cards and the reading
+   progress bar. Everything here is switched off for visitors who ask for reduced motion. */
+@view-transition { navigation: auto; }
+.site-header { view-transition-name: site-header; }
+::view-transition-old(root) { animation: vt-out .28s ease both; }
+::view-transition-new(root) { animation: vt-in .45s cubic-bezier(.2, .7, .2, 1) both; }
+::view-transition-group(*) { animation-duration: .6s; animation-timing-function: cubic-bezier(.2, .7, .2, 1); }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+
+/* Reading progress, just under the header. */
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 60; pointer-events: none; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+.is-gallery .progress { background: var(--g-ink); }
+
+/* Hero: the name arrives letter by letter, then the rest of the card follows. */
+.js .hero h1 .ch { display: inline-block; animation: ch-in .8s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.25s + var(--c) * 70ms); }
+@keyframes ch-in { from { opacity: 0; transform: translateY(.45em) rotate(6deg); filter: blur(6px); } }
+.js .hero .intro > :not(.intro-head), .js .hero .alt-name, .js .hero .eyebrow, .js .hero .avatar { animation: fade-up .9s cubic-bezier(.2, .7, .2, 1) both; }
+.js .hero .avatar { animation-name: pop-in; animation-delay: .1s; }
+.js .hero .eyebrow { animation-delay: .2s; }
+.js .hero .alt-name { animation-delay: .55s; display: block; }
+.js .hero .intro > .typing { animation-delay: .7s; }
+.js .hero .intro > .lede { animation-delay: .82s; }
+.js .hero .intro > .hero-links { animation-delay: .94s; }
+.js .hero .post-list li { animation: fade-up .8s cubic-bezier(.2, .7, .2, 1) both; }
+.js .hero .post-list li:nth-child(1) { animation-delay: .5s; }
+.js .hero .post-list li:nth-child(2) { animation-delay: .6s; }
+.js .hero .post-list li:nth-child(3) { animation-delay: .7s; }
+.js .hero .post-list li:nth-child(4) { animation-delay: .8s; }
+@keyframes fade-up { from { opacity: 0; transform: translateY(14px); } }
+@keyframes pop-in { from { opacity: 0; transform: scale(.8); } }
+
+/* Section titles draw an underline when they come into view. */
+.section-title { position: relative; padding-bottom: .55rem; }
+.section-title::after { content: ""; position: absolute; left: 0; bottom: 0; width: 3rem; height: 3px; border-radius: 3px; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); transition: transform .9s cubic-bezier(.2, .7, .2, 1) .25s; }
+html:not(.js) .section-title::after, .reveal.visible .section-title::after { transform: none; }
+
+/* Items that enter one after another. */
+.js .stagger, .js .projects-grid .card { opacity: 0; translate: 0 22px; transition: opacity .7s ease, translate .8s cubic-bezier(.2, .7, .2, 1), transform .25s ease, box-shadow .25s ease, border-color .25s ease; transition-delay: calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms), 0s, 0s, 0s; }
+.js .stagger.visible, .js .visible .projects-grid .card { opacity: 1; translate: none; }
+
+/* Cards tilt towards the pointer, with a soft light where it rests. */
+.tilt { transform-style: preserve-3d; position: relative; }
+.tilt::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s ease; background: radial-gradient(28rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 14%, transparent), transparent 45%); }
+.tilt.tilting { transition: transform .12s linear, box-shadow .25s ease, border-color .25s ease, opacity .7s ease, translate .8s ease; }
+.tilt.tilting::before { opacity: 1; }
+
+/* Experience timeline: a line is drawn down the left side as the visitor scrolls, and each
+   entry's dot lights up as it is reached. */
+.timeline.draw-line { position: relative; padding-left: 2rem; }
+.timeline.draw-line::before, .timeline.draw-line::after { content: ""; position: absolute; left: .45rem; top: .5rem; bottom: .5rem; width: 2px; border-radius: 2px; }
+.timeline.draw-line::before { background: var(--line); }
+.timeline.draw-line::after { background: var(--accent); transform-origin: 50% 0; transform: scaleY(var(--tl, 1)); }
+.js .timeline.draw-line::after { transform: scaleY(var(--tl, 0)); }
+.draw-line .timeline-item { position: relative; }
+.draw-line .timeline-item::before { content: ""; position: absolute; left: calc(-2rem + .45rem - 5px); top: 1.9rem; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: border-color .4s ease, background .4s ease, box-shadow .4s ease; }
+.section.alt .draw-line .timeline-item::before { background: var(--surface-2); }
+.draw-line .timeline-item.reached::before { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
+@media (max-width: 40rem) { .timeline.draw-line { padding-left: 1.5rem; } .timeline.draw-line::before, .timeline.draw-line::after { left: .3rem; } .draw-line .timeline-item::before { left: calc(-1.5rem + .3rem - 5px); } }
+
+/* Album lobby: every exhibition sits behind a pair of doors that slide open as it comes into
+   view; clicking it carries the photo into the exhibition (view transition). */
+.g-entry-image { position: relative; }
+.g-entry-image img { view-transition-name: var(--vt, none); }
+.g-door { position: absolute; inset: 0; pointer-events: none; }
+.g-door::before, .g-door::after { content: ""; position: absolute; top: 0; bottom: 0; width: 50.5%; background: linear-gradient(90deg, #1d1e1c, #262724 40%, #1c1d1b); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05), inset 0 0 40px rgba(0, 0, 0, .6); transition: transform 1.5s cubic-bezier(.7, 0, .2, 1) .2s; }
+.g-door::before { left: 0; transform-origin: 0 50%; }
+.g-door::after { right: 0; transform-origin: 100% 50%; }
+html:not(.js) .g-door { display: none; }
+.g-entry.visible .g-door::before { transform: translateX(-101%); }
+.g-entry.visible .g-door::after { transform: translateX(101%); }
+.g-entry-image::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 240, 215, 0); transition: box-shadow .6s ease; }
+.g-entry a:hover .g-entry-image::after { box-shadow: inset 0 0 0 1px rgba(255, 240, 215, .35), inset 0 0 80px rgba(255, 236, 200, .12); }
+.g-entry .g-enter { transition: letter-spacing .5s ease, border-color .3s ease; }
+.g-entry a:hover .g-enter { letter-spacing: .3em; border-bottom-color: var(--g-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  .js .stagger, .js .projects-grid .card { opacity: 1; translate: none; }
+  .section-title::after { transform: none; }
+  .js .timeline.draw-line::after { transform: none; }
+  .g-door { display: none; }
+  .progress { display: none; }
+}

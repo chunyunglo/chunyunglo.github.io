@@ -14,10 +14,11 @@
     {{- if and (not $cover) $photos }}{{ $cover = (index $photos 0).img }}{{ end -}}
     <li class="g-entry reveal">
       <a href="{{ $a.RelPermalink }}">
-        <figure class="g-entry-image">
+        <figure class="g-entry-image" style="--vt: album-{{ $a.File.ContentBaseName | urlize }}">
           {{- with $cover }}{{ $s := .Fill "1600x1000 webp Center q80" }}{{ $m := .Fill "900x560 webp Center q78" }}
           <img src="{{ $s.RelPermalink }}" srcset="{{ $m.RelPermalink }} 900w, {{ $s.RelPermalink }} 1600w" sizes="(max-width: 900px) 100vw, 70vw" width="{{ $s.Width }}" height="{{ $s.Height }}" alt="" loading="lazy" decoding="async">
           {{- end }}
+          <span class="g-door" aria-hidden="true"></span>
         </figure>
         <div class="g-entry-text">
           <span class="g-number">{{ printf "%02d" (add $i 1) }}</span>

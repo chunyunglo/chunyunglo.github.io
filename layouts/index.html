@@ -69,8 +69,8 @@
     </div>
     {{- end }}
     <div class="cards two projects-grid">
-      {{- range .projects }}
-      <article class="card project" data-tags="{{ delimit .tags " " }}">
+      {{- range $i, $_ := .projects }}
+      <article class="card project tilt" style="--i: {{ $i }}" data-tags="{{ delimit .tags " " }}">
         <p class="when">{{ .timeline }}{{ with .role }} · {{ . }}{{ end }}</p>
         <h3>{{ .name }}</h3>
         {{- with .highlight }}<p class="highlight">{{ . }}</p>{{ end }}
@@ -99,11 +99,11 @@
 <section class="section alt" id="{{ .section.id }}" aria-labelledby="h-{{ .section.id }}">
   <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
-    <ol class="timeline">
+    <ol class="timeline draw-line">
       {{- range .experiences }}
       {{- $c := .company }}
       {{- range .positions }}
-      <li class="timeline-item">
+      <li class="timeline-item stagger">
         <div class="tl-head">
           {{ partial "logo.html" (dict "src" $c.logo "alt" "") }}
           <div>
@@ -128,8 +128,8 @@
   <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <dl class="skills">
-      {{- range .skills }}
-      <div><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
+      {{- range $i, $_ := .skills }}
+      <div class="stagger" style="--i: {{ $i }}"><dt>{{ .name }}</dt><dd>{{ .summary }}</dd></div>
       {{- end }}
     </dl>
   </div>
@@ -141,8 +141,8 @@
   <div class="wrap reveal">
     <h2 class="section-title" id="h-{{ .section.id }}">{{ .section.name }}</h2>
     <div class="cards two">
-      {{- range .degrees }}
-      <article class="card">
+      {{- range $i, $_ := .degrees }}
+      <article class="card stagger" style="--i: {{ $i }}">
         <div class="tl-head">
           {{ partial "logo.html" (dict "src" .institution.logo "alt" "") }}
           <div>
