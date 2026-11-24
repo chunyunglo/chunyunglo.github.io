@@ -21,45 +21,40 @@
   </section>
   {{- end }}
 
-  {{- /* The corridor: main.js turns this list into a 3D hallway that the visitor walks down by
-         scrolling. Without JS, or with reduced motion, it stays a plain wall of photos. */}}
   {{- $all := partial "album-pages.html" . -}}
   {{- $next := "" -}}{{- $found := false -}}
   {{- range $all }}{{ if $found }}{{ if not $next }}{{ $next = . }}{{ end }}{{ end }}{{ if eq .RelPermalink $.RelPermalink }}{{ $found = true }}{{ end }}{{ end -}}
-  <section class="cd" aria-label="{{ i18n "works" }}">
-    <div class="cd-stage">
-      <ol class="cd-track">
-        {{- range $i, $p := $photos }}
-        {{- $img := $p.img -}}
-        {{- $s := $img.Resize "x700 webp q80" -}}{{- $l := $img.Resize (printf "x%d webp q82" (cond (gt $img.Height 1400) 1400 $img.Height)) -}}
-        {{- $full := cond (gt $img.Width $img.Height) ($img.Resize (printf "%dx webp q85" (cond (gt $img.Width 2400) 2400 $img.Width))) ($img.Resize (printf "x%d webp q85" (cond (gt $img.Height 2400) 2400 $img.Height))) -}}
-        <li class="cd-work" style="--ar: {{ div (float $s.Width) $s.Height }}">
-          <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
-            <img src="{{ $s.RelPermalink }}" srcset="{{ $s.RelPermalink }} {{ $s.Width }}w, {{ $l.RelPermalink }} {{ $l.Width }}w" sizes="(max-width: 600px) 90vw, 50vw" width="{{ $s.Width }}" height="{{ $s.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="{{ if lt $i 6 }}eager{{ else }}lazy{{ end }}" decoding="async" draggable="false">
-          </a>
-          <p class="placard"><span class="placard-no">{{ printf "%02d" (add $i 1) }}</span>{{ with $p.caption }}<span class="placard-title">{{ . }}</span>{{ end }}</p>
-        </li>
-        {{- end }}
-      </ol>
-      <div class="cd-door" hidden>
-        <p class="cd-door-fin">— {{ i18n "end" }} —</p>
-        {{- with $next }}
-        <a class="cd-door-link" href="{{ .RelPermalink }}"><span class="cd-door-label">{{ i18n "nextAlbum" }}</span><span class="cd-door-title">{{ .Title }}</span></a>
-        {{- else }}
-        <a class="cd-door-link" href="{{ (site.GetPage "/album").RelPermalink }}"><span class="cd-door-label">{{ i18n "backToAlbums" }}</span><span class="cd-door-title">{{ i18n "album" }}</span></a>
-        {{- end }}
-      </div>
-      <div class="cd-hud" aria-hidden="true" hidden>
-        <p class="cd-hint">{{ i18n "walkHint" }}</p>
-        <p class="cd-now"><span class="cd-now-no"></span><span class="cd-now-title"></span></p>
-        <span class="cd-bar"><span></span></span>
-      </div>
-    </div>
+  {{- /* Justified rows: every photo keeps its full frame (no cropping), and each row fills the
+         width by letting wider photos take proportionally more space. */}}
+  <section class="ex-wall" aria-label="{{ i18n "works" }}">
+    <ol class="jg">
+      {{- range $i, $p := $photos }}
+      {{- $img := $p.img -}}
+      {{- $s := $img.Resize "x600 webp q80" -}}{{- $l := $img.Resize (printf "x%d webp q82" (cond (gt $img.Height 1200) 1200 $img.Height)) -}}
+      {{- $full := cond (gt $img.Width $img.Height) ($img.Resize (printf "%dx webp q85" (cond (gt $img.Width 2400) 2400 $img.Width))) ($img.Resize (printf "x%d webp q85" (cond (gt $img.Height 2400) 2400 $img.Height))) -}}
+      {{- $ar := div (float $s.Width) $s.Height }}
+      <li class="jg-item" style="--ar: {{ $ar }}">
+        <a class="photo" href="{{ $full.RelPermalink }}" data-full="{{ $full.RelPermalink }}" data-caption="{{ $p.caption }}" data-index="{{ $i }}">
+          <img src="{{ $s.RelPermalink }}" srcset="{{ $s.RelPermalink }} {{ $s.Width }}w, {{ $l.RelPermalink }} {{ $l.Width }}w" sizes="(max-width: 600px) 100vw, {{ math.Min 100 (math.Round (mul $ar 30)) }}vw" width="{{ $s.Width }}" height="{{ $s.Height }}" alt="{{ $p.caption | default (printf "%s %d" $.Title (add $i 1)) }}" loading="{{ if lt $i 6 }}eager{{ else }}lazy{{ end }}" decoding="async">
+        </a>
+        <p class="placard"><span class="placard-no">{{ printf "%02d" (add $i 1) }}</span>{{ with $p.caption }}<span class="placard-title">{{ . }}</span>{{ end }}</p>
+      </li>
+      {{- end }}
+    </ol>
   </section>
 
   <footer class="ex-end wrap">
     <p class="ex-fin">— {{ i18n "end" }} —</p>
-    {{- with $next }}<a class="g-enter" href="{{ .RelPermalink }}">{{ i18n "nextAlbum" }}：{{ .Title }} →</a>{{ else }}<a class="g-enter" href="{{ (site.GetPage "/album").RelPermalink }}">← {{ i18n "album" }}</a>{{ end }}
+    {{- with $next }}
+    {{- $nc := partial "cover.html" . -}}
+    {{- if not $nc }}{{ with partial "album-photos.html" . }}{{ $nc = (index . 0).img }}{{ end }}{{ end }}
+    <a class="ex-next" href="{{ .RelPermalink }}">
+      {{- with $nc }}{{ $t := .Fill "960x540 webp Center q78" }}<img src="{{ $t.RelPermalink }}" width="{{ $t.Width }}" height="{{ $t.Height }}" alt="" loading="lazy" decoding="async">{{ end }}
+      <span class="ex-next-text"><span class="g-kicker">{{ i18n "nextAlbum" }}</span><span class="ex-next-title">{{ .Title }}</span></span>
+    </a>
+    {{- else }}
+    <a class="g-enter" href="{{ (site.GetPage "/album").RelPermalink }}">← {{ i18n "album" }}</a>
+    {{- end }}
   </footer>
 </article>
 <dialog class="lightbox" aria-label="{{ .Title }}">

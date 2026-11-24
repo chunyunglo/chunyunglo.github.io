@@ -19,6 +19,11 @@
         <li><a class="btn" href="https://github.com/{{ site.Params.github }}" rel="me">{{ partial "icon.html" "github" }}<span class="btn-label"> GitHub</span></a></li>
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
+      <dl class="hero-stats">
+        {{- with $s.projects.projects }}<div><dt>{{ len . }}</dt><dd>{{ i18n "statProjects" }}</dd></div>{{ end }}
+        {{- with $s.publications.publications }}<div><dt>{{ len . }}</dt><dd>{{ i18n "statPubs" }}</dd></div>{{ end }}
+        {{- with $s.education.degrees }}{{ with (index . 0).grade }}{{ if .achieved }}<div><dt>{{ .achieved }}</dt><dd>{{ .scale }}（{{ i18n "statOutOf" (dict "Max" .outOf) }}）</dd></div>{{ end }}{{ end }}{{ end }}
+      </dl>
     </div>
     <figure class="hero-visual">
       <span class="hero-frame">
@@ -71,10 +76,12 @@
     {{- end }}
     <div class="cards two projects-grid">
       {{- range $i, $_ := .projects }}
-      <article class="card project tilt" style="--i: {{ $i }}" data-tags="{{ delimit .tags " " }}">
+      <article class="card project tilt{{ if eq $i 0 }} featured{{ end }}" style="--i: {{ $i }}" data-tags="{{ delimit .tags " " }}">
+        <div class="project-head">
         <p class="when">{{ .timeline }}{{ with .role }} · {{ . }}{{ end }}</p>
         <h3>{{ .name }}</h3>
         {{- with .highlight }}<p class="highlight">{{ . }}</p>{{ end }}
+        </div>
         {{- if or .problem .approach .result }}
         <dl class="par">
           {{- with .problem }}<div><dt>{{ i18n "problem" }}</dt><dd>{{ . }}</dd></div>{{ end }}

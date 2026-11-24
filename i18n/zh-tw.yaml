@@ -43,5 +43,6 @@ end: 完
 problem: 背景
 approach: 方法
 result: 成果
-backToAlbums: 回到展廳入口
-walkHint: 向下捲動，走進展覽
+statProjects: 項作品與專案
+statPubs: 項研究與發表
+statOutOf: "滿分 {{ .Max }}"

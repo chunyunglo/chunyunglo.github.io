@@ -43,5 +43,6 @@ end: Fin
 problem: Context
 approach: Approach
 result: Outcome
-backToAlbums: Back to the lobby
-walkHint: Scroll to walk through the exhibition
+statProjects: projects
+statPubs: research outputs
+statOutOf: "out of {{ .Max }}"
