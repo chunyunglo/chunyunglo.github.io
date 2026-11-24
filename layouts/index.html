@@ -8,6 +8,10 @@
 <section class="hero" id="{{ $about.section.id }}" aria-labelledby="hero-title">
   <div class="wrap hero-grid">
     <div class="intro">
+      {{- with resources.Get (strings.TrimPrefix "/" $author.image) }}
+      {{- $av := .Fill "320x320 webp Center q82" }}
+      <img class="avatar" src="{{ $av.RelPermalink }}" width="160" height="160" alt="{{ $author.name }}" fetchpriority="high">
+      {{- end }}
       <p class="eyebrow">{{ $author.greeting }}</p>
       <h1 id="hero-title">{{ $author.name }}{{ if eq site.Language.Lang "zh-tw" }}<span class="alt-name" lang="en">Chun-Yung Yong Lo</span>{{ end }}</h1>
       {{- with $author.summary }}
@@ -20,12 +24,41 @@
         <li><a class="btn" href="https://www.linkedin.com/in/{{ site.Params.linkedin }}/" rel="me">{{ partial "icon.html" "linkedin" }}<span class="btn-label"> LinkedIn</span></a></li>
       </ul>
     </div>
-    <figure class="hero-visual">
-      {{- with resources.Get (strings.TrimPrefix "/" $author.image) }}
-      {{- $p1 := .Crop "640x800 webp TopLeft q82" }}
-      <span class="hero-frame"><img class="hero-photo" src="{{ $p1.RelPermalink }}" width="{{ $p1.Width }}" height="{{ $p1.Height }}" alt="{{ $author.name }}" fetchpriority="high"></span>
-      {{- end }}
-    </figure>
+    {{- /* "Now": what is current, taken from the section data files. */}}
+    <aside class="now" aria-labelledby="h-now">
+      <h2 class="now-title" id="h-now">{{ i18n "nowTitle" }}</h2>
+      <ul class="now-list">
+        {{- with index $s.experiences.experiences 0 }}{{ $c := .company }}{{ with index .positions 0 }}
+        <li><a href="#{{ $s.experiences.section.id }}">
+          <span class="now-label">{{ i18n "nowResearch" }}</span>
+          <span class="now-main">{{ .designation }}</span>
+          <span class="now-sub">{{ $c.name }}</span>
+        </a></li>
+        {{- end }}{{ end }}
+        {{- with index $s.projects.projects 0 }}
+        <li><a href="#{{ $s.projects.section.id }}">
+          <span class="now-label">{{ i18n "nowProject" }}</span>
+          <span class="now-main">{{ .name }}</span>
+          {{- with .highlight }}<span class="now-sub">{{ . }}</span>{{ end }}
+        </a></li>
+        {{- end }}
+        {{- $pubs := where (sort $s.publications.publications "publishedIn.date" "desc") "publishedIn.url" "!=" nil }}
+        {{- with $pubs }}{{ with index . 0 }}
+        <li><a href="#{{ $s.publications.section.id }}">
+          <span class="now-label">{{ i18n "nowPub" }}</span>
+          <span class="now-main" lang="en">{{ .title }}</span>
+          <span class="now-sub">{{ .publishedIn.name }}</span>
+        </a></li>
+        {{- end }}{{ end }}
+        {{- with index $s.education.degrees 0 }}
+        <li><a href="#{{ $s.education.section.id }}">
+          <span class="now-label">{{ i18n "nowStudy" }}</span>
+          <span class="now-main">{{ .institution.name }}{{ if eq site.Language.Lang "zh-tw" }}{{ else }}, {{ end }}{{ .name }}</span>
+          <span class="now-sub">{{ .timeframe }}</span>
+        </a></li>
+        {{- end }}
+      </ul>
+    </aside>
   </div>
   <a class="scroll-cue" href="#h-writing" aria-label="{{ i18n "recentPosts" }}"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </section>

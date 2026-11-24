@@ -269,11 +269,19 @@ main:focus { outline: none; }
 @keyframes blink { 50% { opacity: 0; } }
 .lede { font-size: 1.06rem; line-height: 1.85; color: var(--ink-2); max-width: 36rem; margin: 0; }
 .hero-links { display: flex; flex-wrap: wrap; gap: .6rem; list-style: none; padding: 0; margin: 2rem 0 0; }
-.hero-visual { position: relative; margin: 0; justify-self: end; width: min(100%, 26rem); }
-/* An offset tinted panel behind the portrait gives it depth without any effect over the photo. */
-.hero-visual::before { content: ""; position: absolute; inset: 1.5rem -1.5rem -1.5rem 1.5rem; border-radius: 32px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent); z-index: -1; }
-.hero-frame { display: block; aspect-ratio: 4 / 5; border-radius: 32px; overflow: hidden; background: var(--surface-2); box-shadow: 0 40px 80px -40px rgba(20, 35, 45, .5); }
-.hero-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero .avatar { display: block; width: clamp(6.5rem, 9vw, 8.5rem); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 50%; margin-bottom: 1.5rem; border: 4px solid var(--surface); box-shadow: 0 0 0 1px var(--line), 0 18px 40px -20px rgba(20, 35, 45, .45); }
+
+/* "Now": four current items beside the introduction, each a link to its section. */
+.now { align-self: center; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: clamp(1.4rem, 2.6vw, 2rem); box-shadow: var(--shadow); }
+.now-title { display: flex; align-items: center; gap: .6rem; margin: 0 0 1rem; font-size: .85rem; font-weight: 700; letter-spacing: .06em; color: var(--muted); }
+.now-title::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: #3fa66b; box-shadow: 0 0 0 4px color-mix(in srgb, #3fa66b 20%, transparent); }
+.now-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.now-list li + li { border-top: 1px solid var(--line); }
+.now-list a { display: grid; gap: .2rem; padding: .95rem .25rem; margin: 0 -.25rem; color: inherit; text-decoration: none; border-radius: 12px; transition: background-color .15s ease; }
+.now-list a:hover { background: var(--accent-soft); }
+.now-label { font-size: .78rem; font-weight: 700; color: var(--accent); letter-spacing: .04em; }
+.now-main { font-weight: 650; line-height: 1.45; }
+.now-sub { font-size: .88rem; color: var(--muted); line-height: 1.5; }
 .scroll-cue { position: absolute; left: 50%; bottom: .75rem; translate: -50% 0; color: var(--muted); width: 3rem; height: 3rem; display: grid; place-items: center; border-radius: 50%; animation: bounce 2s ease-in-out infinite; }
 .scroll-cue:hover { color: var(--accent); }
 @keyframes bounce { 50% { transform: translateY(6px); } }
@@ -281,10 +289,6 @@ main:focus { outline: none; }
   .hero { padding-top: 2.5rem; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero { min-height: 0; }
-  .hero-visual { order: -1; width: min(52%, 12.5rem); justify-self: start; }
-  .hero-visual::before { inset: 1rem -1rem -1rem 1rem; border-radius: 26px; }
-  .hero-frame { border-radius: 26px; }
-  .hero .eyebrow { margin-top: 2rem; }
   .scroll-cue { display: none; }
 }
 @media (max-width: 30rem) {
@@ -465,12 +469,12 @@ html[lang="en"] .par div { grid-template-columns: 4.8rem 1fr; }
 .js .hero .intro > *, .js .hero .alt-name { animation: fade-up .9s cubic-bezier(.2, .7, .2, 1) both; }
 .js .hero .intro > h1 { animation: none; }
 .js .hero .intro > .eyebrow { animation-delay: .1s; }
+.js .hero .intro > .avatar { animation-name: pop-in; animation-delay: 0s; }
 .js .hero .alt-name { animation-delay: .5s; }
 .js .hero .intro > .typing { animation-delay: .65s; }
 .js .hero .intro > .lede { animation-delay: .78s; }
 .js .hero .intro > .hero-links { animation-delay: .9s; }
-.js .hero-frame { animation: visual-in 1.4s cubic-bezier(.2, .7, .2, 1) .15s both; }
-.js .hero-visual::before { animation: fade-up 1s cubic-bezier(.2, .7, .2, 1) .5s both; }
+.js .hero .now { animation: fade-up 1s cubic-bezier(.2, .7, .2, 1) .5s both; }
 @keyframes visual-in { from { opacity: 0; clip-path: inset(12% 12% 12% 12% round 28px); } to { clip-path: inset(0 0 0 0 round 0); } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(14px); } }
 @keyframes pop-in { from { opacity: 0; transform: scale(.6); } }
